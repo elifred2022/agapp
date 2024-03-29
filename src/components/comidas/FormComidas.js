@@ -1,6 +1,7 @@
 import { useState } from "react";
+import { BiSolidSave } from "react-icons/bi";
 
-export default function FormComidas({ onAddTask }) {
+export default function AddTask({ onAddTask }) {
   const [nombre, setNombre] = useState("");
   const [comida, setComida] = useState("");
   const [valorComida, setValorComida] = useState("");
@@ -35,6 +36,7 @@ export default function FormComidas({ onAddTask }) {
         onKeyDown={handleKeyDown}
       />
       <button
+        className="my-button_agregar"
         onClick={() => {
           setNombre("");
           setComida("");
@@ -42,7 +44,7 @@ export default function FormComidas({ onAddTask }) {
           onAddTask(nombre, comida, valorComida);
         }}
       >
-        Agregar
+        <BiSolidSave />
       </button>
     </>
   );

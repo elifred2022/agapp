@@ -2,6 +2,7 @@ import { useReducer, useEffect, useState } from "react";
 import FormComidas from "./components/comidas/FormComidas.js";
 import ListaComidas from "./components/comidas/ListaComidas.js";
 import Reducer from "./reducer/Reducer.js";
+import Header from "./components/header/Header.js";
 
 export default function TaskApp() {
   // const storedElementos = JSON.parse(localStorage.getItem("elementos")) || [];
@@ -39,7 +40,8 @@ export default function TaskApp() {
 
   return (
     <>
-      <h1>Funcion; agregar, editar, eliminar con reducer</h1>
+      <Header />
+      <h1 className="verde">Ingrese asistentes y consumo individual</h1>
       <FormComidas onAddTask={handleAddTask} />
       <ListaComidas
         elementos={elementos}

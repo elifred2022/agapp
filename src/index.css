@@ -1,0 +1,162 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+      monospace;
+  }
+  
+  .App {
+    max-width: 1550px;
+    width: 100%;
+    min-height: 100vh;
+    margin: 0 auto;
+    box-sizing: 0 5px 6px #08a05ca4;
+    padding: 0 15px;
+    box-sizing: border-box;
+  }
+  
+  
+  body {
+    background: #202020;
+    color: white;
+  }
+  
+  /************HEADER********/
+  
+  header {
+    width: 100%;
+    min-height: 100px;
+    overflow: hidden;
+    display: flex;
+    /*flex-direction: column; /* prueba no iba */
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    position: fixed;
+    box-sizing: border-box;
+    background-color: white;
+    box-shadow: 0 5px 10px #c78306a4;
+    background: black;
+    color: yellow; 
+    position: relative;
+  }
+
+  /********/
+
+.formulario {
+  display: flex;
+  padding: 1.5px;
+  box-sizing: border-box;
+  color: yellow;
+}
+
+.formCabecera b {
+  display: flex;
+  padding: 1.5px;
+  margin-right: 15px;
+  margin-left: 15px;
+  box-sizing: border-box;
+}
+
+.formBebidas {
+  display: flex;
+  padding: 1.5px;
+  box-sizing: border-box;
+  color: yellow;
+}
+
+.formBebidas b {
+  display: flex;
+  padding: 1.5px;
+  margin-right: 15px;
+  margin-left: 15px;
+  box-sizing: border-box;
+}
+
+.formBebidas span {
+  display: flex;
+  padding: 1.5px;
+  margin-right: 45px;
+  margin-left: 45px;
+  box-sizing: border-box;
+}
+
+
+  /**** estilos d tablas **/
+.styled-table {
+  border-collapse: collapse; /* Collapses the borders to make them look like a single border */
+  width: 100%; /* Optional: Sets the width of the table */
+}
+
+.styled-table th,
+.styled-table td, tr {
+  border: 1px solid yellow; /* Adds a solid yellow border to all cells */
+  padding: 8px; /* Optional: Adds some padding to the cells */
+  text-align: left; /* Optional: Aligns the text to the left */
+}
+
+.styled-table th, td, tr {
+  background-color: black; /* Optional: Sets the background color of the header cells */
+  color: yellow; /* Optional: Sets the text color of the header cells */
+}
+
+/********/
+
+.yellow{
+  color: yellow; 
+}
+
+.verde{
+  color: rgb(0, 255, 102); 
+}
+
+/*** botones ***/
+
+.my-button_agregar {
+
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  font-size: 20px;
+  color: rgb(0, 255, 102);
+  
+}
+
+.my-button_agregar:hover {
+  color: rgb(0, 255, 102);
+  color: white;
+}
+
+.my-button_agregar:active {
+  color: rgb(0, 255, 102);
+}
+
+.my-button_eliminar {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-size: 20px;
+  color: #f00;
+}
+
+.my-button_eliminar:hover {
+  color: white; 
+  
+   /*olor: white;*/
+}
+
+.my-button_eliminar:active {
+  background-color: red;
+}
+
+  
