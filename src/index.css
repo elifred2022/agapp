@@ -7,6 +7,8 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+
+  
   
   code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
@@ -21,6 +23,7 @@
     box-sizing: 0 5px 6px #08a05ca4;
     padding: 0 15px;
     box-sizing: border-box;
+    
   }
   
   
@@ -40,14 +43,21 @@
     justify-content: space-around;
     align-items: center;
     flex-wrap: wrap;
-    position: fixed;
     box-sizing: border-box;
     background-color: white;
     box-shadow: 0 5px 10px #c78306a4;
     background: black;
     color: yellow; 
-    position: relative;
+    position: fixed;
+    top: 0; /* Lo posiciona en la parte superior */
+    z-index: 1000; 
+    
   }
+
+  main {
+    margin-top: 80px; /* Espacio adicional en la parte superior para evitar que el contenido principal se oculte detrás del encabezado */
+    padding: 20px;
+}
 
   /********/
 
@@ -56,9 +66,11 @@
   padding: 1.5px;
   box-sizing: border-box;
   color: yellow;
+  justify-content: center;
+  
 }
 
-.formCabecera b {
+ input {
   display: flex;
   padding: 1.5px;
   margin-right: 15px;
@@ -152,11 +164,40 @@
 .my-button_eliminar:hover {
   color: white; 
   
-   /*olor: white;*/
+   
 }
 
 .my-button_eliminar:active {
   background-color: red;
+}
+
+.my-button_editar {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-size: 20px;
+  color: rgb(255, 230, 0);
+}
+
+.my-button_editar:hover {
+  color: white; 
+  
+  color: rgb(255, 251, 0);
+  color: white;
+}
+
+.my-button_editar:active {
+  background-color: red;
+}
+
+.botonera {
+  display: flex;
+  padding: 1.5px;
+  margin-right: 5px;
+  margin-left: 5px;
+  box-sizing: border-box;
+  justify-content: space-around;
 }
 
   

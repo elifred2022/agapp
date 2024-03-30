@@ -7,7 +7,6 @@ export default function ListaComidas({
   elementos,
   onChangeTask,
   onDeleteTask,
-  task,
 }) {
   return (
     <>
@@ -101,18 +100,20 @@ function Task({ task, onChange, onDelete, index }) {
           <td>${task.valorComida}</td>
 
           <td>
-            <button
-              className="my-button_agregar"
-              onClick={() => setIsEditing(true)}
-            >
-              <FaEdit />
-            </button>
-            <button
-              className="my-button_eliminar"
-              onClick={() => onDelete(task.id)}
-            >
-              <MdAutoDelete />
-            </button>
+            <div className="botonera">
+              <button
+                className="my-button_editar"
+                onClick={() => setIsEditing(true)}
+              >
+                <FaEdit />
+              </button>
+              <button
+                className="my-button_eliminar"
+                onClick={() => onDelete(task.id)}
+              >
+                <MdAutoDelete />
+              </button>
+            </div>
           </td>
         </tr>
       </>

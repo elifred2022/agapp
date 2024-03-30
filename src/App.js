@@ -41,13 +41,16 @@ export default function TaskApp() {
   return (
     <>
       <Header />
-      <h1 className="verde">Ingrese asistentes y consumo individual</h1>
-      <FormComidas onAddTask={handleAddTask} />
-      <ListaComidas
-        elementos={elementos}
-        onChangeTask={handleChangeTask}
-        onDeleteTask={handleDeleteTask}
-      />
+
+      <main>
+        <h1 className="verde">Ingrese asistentes y consumo individual</h1>
+        <FormComidas onAddTask={handleAddTask} />
+        <ListaComidas
+          elementos={elementos}
+          onChangeTask={handleChangeTask}
+          onDeleteTask={handleDeleteTask}
+        />
+      </main>
     </>
   );
 }
