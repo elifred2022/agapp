@@ -1,8 +1,9 @@
 import { useReducer, useEffect, useState } from "react";
-import FormComidas from "./components/comidas/FormComidas.js";
-import ListaComidas from "./components/comidas/ListaComidas.js";
 import Reducer from "./reducer/Reducer.js";
 import Header from "./components/header/Header.js";
+import FormComidas from "./components/comidas/FormComidas.js";
+import ListaComidas from "./components/comidas/ListaComidas.js";
+import CalcComidas from "./components/comidas/CalcComidas.js";
 
 export default function TaskApp() {
   // const storedElementos = JSON.parse(localStorage.getItem("elementos")) || [];
@@ -14,7 +15,7 @@ export default function TaskApp() {
     localStorage.setItem("elementos", JSON.stringify(elementos));
   }, [elementos]);
 
-  function handleAddTask(nombre, comida, valorComida) {
+  function handleAddComida(nombre, comida, valorComida) {
     dispatch({
       type: "added",
       id: nextId++,
@@ -44,12 +45,13 @@ export default function TaskApp() {
 
       <main>
         <h1 className="verde">Ingrese asistentes y consumo individual</h1>
-        <FormComidas onAddTask={handleAddTask} />
+        <FormComidas onAddComidas={handleAddComida} />
         <ListaComidas
           elementos={elementos}
           onChangeTask={handleChangeTask}
           onDeleteTask={handleDeleteTask}
         />
+        <CalcComidas elementos={elementos} />
       </main>
     </>
   );

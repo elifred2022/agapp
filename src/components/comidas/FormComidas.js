@@ -1,14 +1,17 @@
 import { useState } from "react";
 import { BiSolidSave } from "react-icons/bi";
 
-export default function FormComidas({ onAddTask }) {
+export default function FormComidas({ onAddComidas }) {
   const [nombre, setNombre] = useState("");
   const [comida, setComida] = useState("");
   const [valorComida, setValorComida] = useState("");
+  const [porcentaje, setPorcentaje] = useState(0);
+  const [calcPorcentaje, setCalcPorcentaje] = useState(0);
+  const [valorcomidaConPorcentaje, setValorComidaConPorcentaje] = useState(0);
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
-      onAddTask(nombre, comida, valorComida);
+      onAddComidas(nombre, comida, valorComida);
       setNombre("");
       setComida("");
       setValorComida("");
@@ -42,7 +45,19 @@ export default function FormComidas({ onAddTask }) {
             setNombre("");
             setComida("");
             setValorComida("");
-            onAddTask(nombre, comida, valorComida);
+            setPorcentaje(0);
+            setCalcPorcentaje(calcPorcentaje);
+            setValorComidaConPorcentaje(valorcomidaConPorcentaje);
+            onAddComidas({
+              nombre,
+              comida,
+              valorComida,
+              porcentaje,
+              calcPorcentaje: (valorComida * porcentaje) / 100,
+              valorComidaConPorcentaje:
+                parseInt((valorComida * porcentaje) / 100) +
+                parseInt(valorComida),
+            });
           }}
         >
           <BiSolidSave />
