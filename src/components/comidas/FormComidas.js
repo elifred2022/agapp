@@ -5,9 +5,6 @@ export default function FormComidas({ onAddFoods }) {
   const [nombre, setNombre] = useState("");
   const [comida, setComida] = useState("");
   const [valorComida, setValorComida] = useState("");
-  const [porcentaje, setPorcentaje] = useState(0);
-  const [calcPorcentaje, setCalcPorcentaje] = useState(0);
-  const [valorcomidaConPorcentaje, setValorComidaConPorcentaje] = useState(0);
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
@@ -45,18 +42,11 @@ export default function FormComidas({ onAddFoods }) {
             setNombre("");
             setComida("");
             setValorComida("");
-            setPorcentaje(0);
-            setCalcPorcentaje(calcPorcentaje);
-            setValorComidaConPorcentaje(valorcomidaConPorcentaje);
+
             onAddFoods({
               nombre,
               comida,
               valorComida,
-              porcentaje,
-              calcPorcentaje: (valorComida * porcentaje) / 100,
-              valorComidaConPorcentaje:
-                parseInt((valorComida * porcentaje) / 100) +
-                parseInt(valorComida),
             });
           }}
         >
