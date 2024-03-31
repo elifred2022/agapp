@@ -4,20 +4,22 @@ import Header from "./components/header/Header.js";
 import FormComidas from "./components/comidas/FormComidas.js";
 import ListaComidas from "./components/comidas/ListaComidas.js";
 import CalcComidas from "./components/comidas/CalcComidas.js";
+import FormBebidas from "./components/bebidas/FormBebidas.js";
+import ListaBebidas from "./components/bebidas/ListaBebidas.js";
 
 export default function TaskApp() {
   // const storedElementos = JSON.parse(localStorage.getItem("elementos")) || [];
 
-  const [elementos, dispatch] = useReducer(Reducer, initialState);
+  const [foods, dispatch] = useReducer(Reducer, initialState);
 
   useEffect(() => {
     // Almacena los elementos d comida en localStorage cada vez que cambien
-    localStorage.setItem("elementos", JSON.stringify(elementos));
-  }, [elementos]);
+    localStorage.setItem("elementos", JSON.stringify(foods));
+  }, [foods]);
 
-  function handleAddComida(nombre, comida, valorComida) {
+  function handleAddFoods(nombre, comida, valorComida) {
     dispatch({
-      type: "added",
+      type: "food_added",
       id: nextId++,
       nombre: nombre,
       comida: comida,
@@ -25,17 +27,17 @@ export default function TaskApp() {
     });
   }
 
-  function handleChangeTask(elementos) {
+  function handleChangeFoods(foods) {
     dispatch({
-      type: "changed",
-      elementos: elementos,
+      type: "food_changed",
+      foods: foods,
     });
   }
 
-  function handleDeleteTask(elementosId) {
+  function handleDeleteFoods(foodsId) {
     dispatch({
-      type: "deleted",
-      id: elementosId,
+      type: "food_deleted",
+      id: foodsId,
     });
   }
 
@@ -45,13 +47,13 @@ export default function TaskApp() {
 
       <main>
         <h1 className="verde">Ingrese asistentes y consumo individual</h1>
-        <FormComidas onAddComidas={handleAddComida} />
+        <FormComidas onAddFoods={handleAddFoods} />
         <ListaComidas
-          elementos={elementos}
-          onChangeTask={handleChangeTask}
-          onDeleteTask={handleDeleteTask}
+          foods={foods}
+          onChangeFoods={handleChangeFoods}
+          onDeleteFoods={handleDeleteFoods}
         />
-        <CalcComidas elementos={elementos} />
+        <CalcComidas foods={foods} />
       </main>
     </>
   );

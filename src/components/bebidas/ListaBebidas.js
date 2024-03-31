@@ -4,9 +4,9 @@ import { FaEdit } from "react-icons/fa";
 import { BiSolidSave } from "react-icons/bi";
 
 export default function ListaBebidas({
-  elementosBebida,
-  onChangeBebida,
-  onDeleteBebida,
+  elementos,
+  onChangeComida,
+  onDeleteComida,
 }) {
   return (
     <>
@@ -17,18 +17,18 @@ export default function ListaBebidas({
             <th>Bebida</th>
             <th>Cantidad</th>
             <th>Valor bebida</th>
-            <th>Sub Total bebida</th>
+            <th>Total bebida</th>
             <th>Act.-</th>
           </tr>
         </thead>
         <tbody>
-          {elementosBebida.map((bebi, index) => (
+          {elementos.map((bebi, index) => (
             <Bebidas
               key={bebi.id}
               bebi={bebi}
-              onChange={onChangeBebida}
-              onDelete={onDeleteBebida}
-              elementosBebida={elementosBebida}
+              onChange={onChangeComida}
+              onDelete={onDeleteComida}
+              elementos={elementos}
               index={index}
             />
           ))}
@@ -99,6 +99,7 @@ function Bebidas({ bebi, onChange, onDelete, index }) {
           <td>{bebi.bebida}</td>
           <td>{bebi.cantidad}</td>
           <td>${bebi.valorUnitBebida}</td>
+          <td>{bebi.totalBebida}</td>
 
           <td>
             <div className="botonera">

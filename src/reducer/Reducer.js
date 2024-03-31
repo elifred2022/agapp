@@ -1,8 +1,8 @@
-export default function tasksReducer(elementos, action) {
+export default function foodReducer(foods, action) {
   switch (action.type) {
-    case "added": {
+    case "food_added": {
       return [
-        ...elementos,
+        ...foods,
         {
           id: action.id,
           nombre: action.nombre,
@@ -12,17 +12,17 @@ export default function tasksReducer(elementos, action) {
         },
       ];
     }
-    case "changed": {
-      return elementos.map((t) => {
-        if (t.id === action.elementos.id) {
-          return action.elementos;
+    case "food_changed": {
+      return foods.map((f) => {
+        if (f.id === action.foods.id) {
+          return action.foods;
         } else {
-          return t;
+          return f;
         }
       });
     }
-    case "deleted": {
-      return elementos.filter((t) => t.id !== action.id);
+    case "food_deleted": {
+      return foods.filter((f) => f.id !== action.id);
     }
     default: {
       throw Error("Unknown action: " + action.type);

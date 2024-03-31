@@ -1,18 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BiSolidSave } from "react-icons/bi";
 
-export default function FormBebidas({ onAddBebidas }) {
+export default function FormBebidas({ onAddComidas }) {
   const [bebida, setBebida] = useState("");
   const [cantidadBebida, setCantidadBebida] = useState("");
   const [valorUnitBebida, setValorUnitBebida] = useState("");
   const [totalBebida, setTotalBebida] = useState("");
 
+  useEffect(() => {
+    if (cantidadBebida && valorUnitBebida) {
+      setTotalBebida(parseFloat(cantidadBebida) * parseFloat(valorUnitBebida));
+    } else {
+      setTotalBebida("");
+    }
+  }, [cantidadBebida, valorUnitBebida]);
+
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
-      onAddBebidas(bebida, cantidadBebida, valorUnitBebida, totalBebida);
+      onAddComidas(bebida, cantidadBebida, valorUnitBebida, totalBebida);
       setBebida("");
       setCantidadBebida("");
       setValorUnitBebida("");
+      setTotalBebida("");
     }
   };
 
@@ -44,12 +53,7 @@ export default function FormBebidas({ onAddBebidas }) {
             setCantidadBebida("");
             setValorUnitBebida("");
             setTotalBebida("");
-            onAddBebidas({
-              bebida,
-              cantidadBebida,
-              valorUnitBebida,
-              totalBebida: valorUnitBebida * cantidadBebida,
-            });
+            onAddComidas(bebida, cantidadBebida, valorUnitBebida, totalBebida);
           }}
         >
           <BiSolidSave />

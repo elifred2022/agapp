@@ -1,10 +1,10 @@
 import React from "react";
 import { useState, useEffect } from "react";
 
-const TotalComidas = ({ elementos, arregloAlmacentotalComidas }) => {
+const TotalComidas = ({ foods, arregloAlmacentotalComidas }) => {
   const [totalComidasGral, setTotalComidasGral] = useState(0);
 
-  const totalComidas = elementos.reduce(
+  const totalComidas = foods.reduce(
     (acc, elem) => acc + parseInt(elem.valorComida),
     0
   );

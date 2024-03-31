@@ -3,11 +3,7 @@ import { MdAutoDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import { BiSolidSave } from "react-icons/bi";
 
-export default function ListaComidas({
-  elementos,
-  onChangeTask,
-  onDeleteTask,
-}) {
+export default function ListaComidas({ foods, onChangeFoods, onDeleteFoods }) {
   return (
     <>
       <table className="styled-table">
@@ -21,13 +17,13 @@ export default function ListaComidas({
           </tr>
         </thead>
         <tbody>
-          {elementos.map((task, index) => (
-            <Task
-              key={task.id}
-              task={task}
-              onChange={onChangeTask}
-              onDelete={onDeleteTask}
-              elementos={elementos}
+          {foods.map((food, index) => (
+            <Foods
+              key={food.id}
+              food={food}
+              onChange={onChangeFoods}
+              onDelete={onDeleteFoods}
+              foods={foods}
               index={index}
             />
           ))}
@@ -37,21 +33,21 @@ export default function ListaComidas({
   );
 }
 
-function Task({ task, onChange, onDelete, index }) {
+function Foods({ food, onChange, onDelete, index }) {
   const [isEditing, setIsEditing] = useState(false);
 
-  let taskContent;
+  let foodContent;
   if (isEditing) {
-    taskContent = (
+    foodContent = (
       <>
         <tr>
           <td>{index + 1}.-</td>
           <td>
             <input
-              value={task.nombre}
+              value={food.nombre}
               onChange={(e) => {
                 onChange({
-                  ...task,
+                  ...food,
                   nombre: e.target.value,
                 });
               }}
@@ -59,10 +55,10 @@ function Task({ task, onChange, onDelete, index }) {
           </td>
           <td>
             <input
-              value={task.comida}
+              value={food.comida}
               onChange={(e) => {
                 onChange({
-                  ...task,
+                  ...food,
                   comida: e.target.value,
                 });
               }}
@@ -70,10 +66,10 @@ function Task({ task, onChange, onDelete, index }) {
           </td>
           <td>
             <input
-              value={task.valorComida}
+              value={food.valorComida}
               onChange={(e) => {
                 onChange({
-                  ...task,
+                  ...food,
                   valorComida: e.target.value,
                 });
               }}
@@ -91,13 +87,13 @@ function Task({ task, onChange, onDelete, index }) {
       </>
     );
   } else {
-    taskContent = (
+    foodContent = (
       <>
         <tr>
           <td>{index + 1}.- </td>
-          <td>{task.nombre}</td>
-          <td>{task.comida}</td>
-          <td>${task.valorComida}</td>
+          <td>{food.nombre}</td>
+          <td>{food.comida}</td>
+          <td>${food.valorComida}</td>
 
           <td>
             <div className="botonera">
@@ -109,7 +105,7 @@ function Task({ task, onChange, onDelete, index }) {
               </button>
               <button
                 className="my-button_eliminar"
-                onClick={() => onDelete(task.id)}
+                onClick={() => onDelete(food.id)}
               >
                 <MdAutoDelete />
               </button>
@@ -119,5 +115,5 @@ function Task({ task, onChange, onDelete, index }) {
       </>
     );
   }
-  return <>{<>{taskContent}</>}</>;
+  return <>{<>{foodContent}</>}</>;
 }
