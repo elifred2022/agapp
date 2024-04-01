@@ -33,6 +33,30 @@ export default function Reducer(state, action) {
       };
     }
 
+    case "AGREGAR_BEBIDA":
+      return {
+        ...state,
+        bebidas: [...state.bebidas, action.payload],
+      };
+
+    case "EDITAR_BEBIDA": {
+      return {
+        ...state,
+        bebidas: state.bebidas.map((bebida) =>
+          bebida.id === action.payload.id ? action.payload : bebida
+        ),
+      };
+    }
+
+    case "ELIMINAR_BEBIDA": {
+      return {
+        ...state,
+        bebidas: state.bebidas.filter(
+          (bebida) => bebida.bebida !== action.payload.bebida
+        ),
+      };
+    }
+
     default: {
       throw Error("Unknown action: " + action.type);
     }

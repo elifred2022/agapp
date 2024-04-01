@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { MdAutoDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import { BiSolidSave } from "react-icons/bi";
 
 export default function ListaBebidas({
-  elementos,
-  onChangeComida,
-  onDeleteComida,
+  state,
+  dispatch,
+  onChangeBebidas,
+  onDeleteBebidas,
 }) {
   return (
     <>
@@ -22,14 +23,15 @@ export default function ListaBebidas({
           </tr>
         </thead>
         <tbody>
-          {elementos.map((bebi, index) => (
+          {state.bebidas.map((bebida, index) => (
             <Bebidas
-              key={bebi.id}
-              bebi={bebi}
-              onChange={onChangeComida}
-              onDelete={onDeleteComida}
-              elementos={elementos}
+              key={bebida.id}
+              bebida={bebida}
+              onChangeBebidas={onChangeBebidas}
+              onDelete={onDeleteBebidas}
+              state={state}
               index={index}
+              dispatch={dispatch}
             />
           ))}
         </tbody>
@@ -38,21 +40,39 @@ export default function ListaBebidas({
   );
 }
 
-function Bebidas({ bebi, onChange, onDelete, index }) {
+function Bebidas({ state, bebidas, onChangeBebidas, bebida, index, dispatch }) {
   const [isEditing, setIsEditing] = useState(false);
+  const [totalBebida, setTotalBebida] = useState(bebida.totalBebida);
 
-  let bebiContent;
+  useEffect(() => {
+    if (bebida.cantidadBebida && bebida.valorUnitBebida) {
+      setTotalBebida(
+        parseFloat(bebida.cantidadBebida) * parseFloat(bebida.valorUnitBebida)
+      );
+    } else {
+      setTotalBebida("");
+    }
+
+    onChangeBebidas({
+      type: "EDITAR_BEBIDA",
+      ...bebida,
+      totalBebida: totalBebida,
+    });
+  }, [isEditing, totalBebida]);
+
+  let drinkContent;
   if (isEditing) {
-    bebiContent = (
+    drinkContent = (
       <>
         <tr>
           <td>{index + 1}.-</td>
           <td>
             <input
-              value={bebi.bebida}
+              value={bebida.bebida}
               onChange={(e) => {
-                onChange({
-                  ...bebi,
+                onChangeBebidas({
+                  type: "EDITAR_BEBIDA",
+                  ...bebida,
                   bebida: e.target.value,
                 });
               }}
@@ -60,26 +80,29 @@ function Bebidas({ bebi, onChange, onDelete, index }) {
           </td>
           <td>
             <input
-              value={bebi.cantidad}
+              value={bebida.cantidadBebida}
               onChange={(e) => {
-                onChange({
-                  ...bebi,
-                  cantidad: e.target.value,
+                onChangeBebidas({
+                  type: "EDITAR_BEBIDA",
+                  ...bebida,
+                  cantidadBebida: e.target.value,
                 });
               }}
             />
           </td>
           <td>
             <input
-              value={bebi.valorUnitBebida}
+              value={bebida.valorUnitBebida}
               onChange={(e) => {
-                onChange({
-                  ...bebi,
+                onChangeBebidas({
+                  type: "EDITAR_BEBIDA",
+                  ...bebida,
                   valorUnitBebida: e.target.value,
                 });
               }}
             />
           </td>
+          <td>{totalBebida}</td>
           <td>
             <button
               className="my-button_agregar"
@@ -92,14 +115,14 @@ function Bebidas({ bebi, onChange, onDelete, index }) {
       </>
     );
   } else {
-    bebiContent = (
+    drinkContent = (
       <>
         <tr>
           <td>{index + 1}.- </td>
-          <td>{bebi.bebida}</td>
-          <td>{bebi.cantidad}</td>
-          <td>${bebi.valorUnitBebida}</td>
-          <td>{bebi.totalBebida}</td>
+          <td>{bebida.bebida}</td>
+          <td>{bebida.cantidadBebida}</td>
+          <td>${bebida.valorUnitBebida}</td>
+          <td>{totalBebida}</td>
 
           <td>
             <div className="botonera">
@@ -111,7 +134,9 @@ function Bebidas({ bebi, onChange, onDelete, index }) {
               </button>
               <button
                 className="my-button_eliminar"
-                onClick={() => onDelete(bebi.id)}
+                onClick={() =>
+                  dispatch({ type: "ELIMINAR_BEBIDA", payload: bebida })
+                }
               >
                 <MdAutoDelete />
               </button>
@@ -121,5 +146,5 @@ function Bebidas({ bebi, onChange, onDelete, index }) {
       </>
     );
   }
-  return <>{<>{bebiContent}</>}</>;
+  return <>{<>{drinkContent}</>}</>;
 }

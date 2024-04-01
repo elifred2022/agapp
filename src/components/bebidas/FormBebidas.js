@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 import { BiSolidSave } from "react-icons/bi";
 
-export default function FormBebidas({ onAddComidas }) {
+export default function FormBebidas({ onAddComidas, dispatch }) {
   const [bebida, setBebida] = useState("");
   const [cantidadBebida, setCantidadBebida] = useState("");
   const [valorUnitBebida, setValorUnitBebida] = useState("");
   const [totalBebida, setTotalBebida] = useState("");
+
+  const uniqueId = uuidv4();
 
   useEffect(() => {
     if (cantidadBebida && valorUnitBebida) {
@@ -17,7 +20,16 @@ export default function FormBebidas({ onAddComidas }) {
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
-      onAddComidas(bebida, cantidadBebida, valorUnitBebida, totalBebida);
+      dispatch({
+        type: "AGREGAR_BEBIDA",
+        payload: {
+          id: uniqueId,
+          bebida,
+          cantidadBebida,
+          valorUnitBebida,
+          totalBebida,
+        },
+      });
       setBebida("");
       setCantidadBebida("");
       setValorUnitBebida("");
@@ -29,7 +41,7 @@ export default function FormBebidas({ onAddComidas }) {
     <>
       <div className="formulario">
         <input
-          placeholder="Bebida"
+          placeholder="Agregar Bebida"
           value={bebida}
           onChange={(e) => setBebida(e.target.value)}
           onKeyDown={handleKeyDown}
@@ -53,7 +65,16 @@ export default function FormBebidas({ onAddComidas }) {
             setCantidadBebida("");
             setValorUnitBebida("");
             setTotalBebida("");
-            onAddComidas(bebida, cantidadBebida, valorUnitBebida, totalBebida);
+            dispatch({
+              type: "AGREGAR_BEBIDA",
+              payload: {
+                id: uniqueId,
+                bebida,
+                cantidadBebida,
+                valorUnitBebida,
+                totalBebida,
+              },
+            });
           }}
         >
           <BiSolidSave />

@@ -39,7 +39,7 @@ export default function ListaComidas({
   );
 }
 
-function Foods({ onChangeComidas, comida, index, dispatch, comidas, id }) {
+function Foods({ onChangeComidas, comida, index, dispatch }) {
   const [isEditing, setIsEditing] = useState(false);
 
   let foodContent;

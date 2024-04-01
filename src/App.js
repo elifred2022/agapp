@@ -8,9 +8,8 @@ import FormBebidas from "./components/bebidas/FormBebidas.js";
 import ListaBebidas from "./components/bebidas/ListaBebidas.js";
 
 export default function TaskApp() {
-  //const storedState = JSON.parse(localStorage.getItem("state")) || [];
-
   const [storedState, setStoredState] = useState(() => {
+    // funcion para recuperar datos del localstorage del state general
     const stored = JSON.parse(localStorage.getItem("state"));
     return stored || initialState;
   });
@@ -18,16 +17,18 @@ export default function TaskApp() {
   const [state, dispatch] = useReducer(Reducer, storedState);
 
   useEffect(() => {
+    // funcion para enviar los datos del state general al localstorage
     localStorage.setItem("state", JSON.stringify(state));
   }, [state]);
 
+  /* ESTE REDUCER LO ESTOY PASANDO CON DISPATCH EN EL componente FormComidas
   function handleAddComidas(index, nombre, comida, valorComida) {
     dispatch({
       type: "AGREGAR_COMIDA",
 
-      payload: { id: index, nombre, comida, valorComida }, //esta linea no hace dferencia
+      payload: { id: index, nombre, comida, valorComida },
     });
-  }
+  } */
 
   function handleChangeComidas(comidaId) {
     dispatch({
@@ -43,6 +44,20 @@ export default function TaskApp() {
     });
   }
 
+  function handleChangeBebidas(bebidaId) {
+    dispatch({
+      type: "EDITAR_BEBIDA",
+      payload: bebidaId,
+    });
+  }
+
+  function handleDeleteBebidas(bebidasId) {
+    dispatch({
+      type: "ELIMINAR_BEBIDA",
+      id: bebidasId,
+    });
+  }
+
   return (
     <>
       <Header />
@@ -53,11 +68,18 @@ export default function TaskApp() {
         <ListaComidas
           state={state}
           dispatch={dispatch}
-          onAddComidas={handleAddComidas}
           onDeleteComidas={handleDeleteComidas}
           onChangeComidas={handleChangeComidas}
         />
         <CalcComidas comidas={state.comidas} />
+        <h1 className="verde">Ingrese bebidas y consumo compartido</h1>
+        <FormBebidas dispatch={dispatch} />
+        <ListaBebidas
+          state={state}
+          dispatch={dispatch}
+          onChangeBebidas={handleChangeBebidas}
+          onDeleteBebidas={handleDeleteBebidas}
+        />
       </main>
     </>
   );
