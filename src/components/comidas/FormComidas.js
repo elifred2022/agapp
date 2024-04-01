@@ -1,16 +1,19 @@
 import { useState } from "react";
+import { v4 as uuidv4 } from "uuid"; // biblioteca para generar ID unico
 import { BiSolidSave } from "react-icons/bi";
 
-export default function FormComidas({ dispatch }) {
+export default function FormComidas({ dispatch, index }) {
   const [nombre, setNombre] = useState("");
   const [comida, setComida] = useState("");
   const [valorComida, setValorComida] = useState("");
+
+  const uniqueId = uuidv4(); // gegera un unico ID
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
       dispatch({
         type: "AGREGAR_COMIDA",
-        payload: { id: nextId++, nombre, comida, valorComida },
+        payload: { id: uniqueId, nombre, comida, valorComida }, // id: uniqueId genera id unico
       });
       setNombre("");
       setComida("");
@@ -44,7 +47,7 @@ export default function FormComidas({ dispatch }) {
           onClick={() => {
             dispatch({
               type: "AGREGAR_COMIDA",
-              payload: { id: nextId++, nombre, comida, valorComida },
+              payload: { id: uniqueId, nombre, comida, valorComida },
             });
             setNombre("");
             setComida("");

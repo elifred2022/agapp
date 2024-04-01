@@ -21,12 +21,11 @@ export default function TaskApp() {
     localStorage.setItem("state", JSON.stringify(state));
   }, [state]);
 
-  function handleAddComidas(nombre, comida, valorComida) {
+  function handleAddComidas(index, nombre, comida, valorComida) {
     dispatch({
       type: "AGREGAR_COMIDA",
-      payload: { nombre, comida, valorComida },
 
-      //payload: { id: nextId++, nombre, comida, valorComida }, esta linea no hace dferencia
+      payload: { id: index, nombre, comida, valorComida }, //esta linea no hace dferencia
     });
   }
 
@@ -64,7 +63,7 @@ export default function TaskApp() {
   );
 }
 
-//let nextId = 0;
+let nextId = 0;
 
 /*const initialState = {
   comidas: [],
