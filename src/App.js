@@ -6,6 +6,7 @@ import ListaComidas from "./components/comidas/ListaComidas.js";
 import CalcComidas from "./components/comidas/CalcComidas.js";
 import FormBebidas from "./components/bebidas/FormBebidas.js";
 import ListaBebidas from "./components/bebidas/ListaBebidas.js";
+import CalcBebidas from "./components/bebidas/CalcBebidas.js";
 
 export default function TaskApp() {
   const [storedState, setStoredState] = useState(() => {
@@ -79,6 +80,10 @@ export default function TaskApp() {
           dispatch={dispatch}
           onChangeBebidas={handleChangeBebidas}
           onDeleteBebidas={handleDeleteBebidas}
+        />
+        <CalcBebidas
+          indicesComidas={state.indicesComidas}
+          bebidas={state.bebidas}
         />
       </main>
     </>

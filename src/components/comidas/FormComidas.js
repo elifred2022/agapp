@@ -2,7 +2,7 @@ import { useState } from "react";
 import { v4 as uuidv4 } from "uuid"; // biblioteca para generar ID unico
 import { BiSolidSave } from "react-icons/bi";
 
-export default function FormComidas({ dispatch, index }) {
+export default function FormComidas({ dispatch, index, state }) {
   const [nombre, setNombre] = useState("");
   const [comida, setComida] = useState("");
   const [valorComida, setValorComida] = useState("");

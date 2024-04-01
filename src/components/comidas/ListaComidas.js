@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { MdAutoDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import { BiSolidSave } from "react-icons/bi";
@@ -9,6 +9,16 @@ export default function ListaComidas({
   onChangeComidas,
   onDeleteComidas,
 }) {
+  const [totalIndex, setTotalIndex] = useState(state.comidas.length);
+
+  useEffect(() => {
+    dispatch({ type: "AGREGAR_INDICE", payload: { totalIndex } }); // aqui fue q pude pasar  el valor de totalIndex al padre en el estado de indice en App
+  }, [totalIndex]);
+
+  useEffect(() => {
+    setTotalIndex(state.comidas.length);
+  }, [state.comidas]);
+
   return (
     <>
       <table className="styled-table">

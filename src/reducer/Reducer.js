@@ -1,6 +1,7 @@
 export const initialState = {
   comidas: [],
   bebidas: [],
+  indicesComidas: [],
 };
 /*
 export const actionTypes = {
@@ -56,6 +57,12 @@ export default function Reducer(state, action) {
         ),
       };
     }
+
+    case "AGREGAR_INDICE":
+      return {
+        ...state,
+        indicesComidas: [...state.indices, action.payload],
+      };
 
     default: {
       throw Error("Unknown action: " + action.type);
