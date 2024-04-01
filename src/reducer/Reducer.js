@@ -1,3 +1,12 @@
+export const initialState = {
+  comidas: [],
+  bebidas: [],
+};
+/*
+export const actionTypes = {
+  AGREGAR_COMIDA: "AGREGAR_COMIDA",
+};*/
+
 export default function Reducer(state, action) {
   switch (action.type) {
     case "AGREGAR_COMIDA":

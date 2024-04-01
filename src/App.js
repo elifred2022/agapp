@@ -1,5 +1,5 @@
 import { useReducer, useEffect, useState } from "react";
-import Reducer from "./reducer/Reducer.js";
+import Reducer, { initialState } from "./reducer/Reducer.js";
 import Header from "./components/header/Header.js";
 import FormComidas from "./components/comidas/FormComidas.js";
 import ListaComidas from "./components/comidas/ListaComidas.js";
@@ -8,16 +8,19 @@ import FormBebidas from "./components/bebidas/FormBebidas.js";
 import ListaBebidas from "./components/bebidas/ListaBebidas.js";
 
 export default function TaskApp() {
-  const storedComidas = JSON.parse(localStorage.getItem("state")) || [];
+  //const storedState = JSON.parse(localStorage.getItem("state")) || [];
 
-  const [state, dispatch] = useReducer(Reducer, initialState);
+  const [storedState, setStoredState] = useState(() => {
+    const stored = JSON.parse(localStorage.getItem("state"));
+    return stored || initialState;
+  });
+
+  const [state, dispatch] = useReducer(Reducer, storedState);
 
   useEffect(() => {
-    // Almacena los elementos en localStorage cada vez que cambien
-    localStorage.setItem("comidas", JSON.stringify(state));
+    localStorage.setItem("state", JSON.stringify(state));
   }, [state]);
 
-  // nno se estan usando estas funciones, estoy usando el dispatch de reducer en los compnentes
   function handleAddComidas(nombre, comida, valorComida) {
     dispatch({
       type: "AGREGAR_COMIDA",
@@ -60,9 +63,10 @@ export default function TaskApp() {
 }
 
 let nextId = 0;
-const initialState = {
+
+/*const initialState = {
   comidas: [],
   bebidas: [],
-};
+};*/
 
 //const initialState = JSON.parse(localStorage.getItem("state")) || [];

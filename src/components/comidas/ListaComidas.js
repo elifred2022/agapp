@@ -98,7 +98,7 @@ function Foods({ onChangeComidas, comida, index, dispatch, comidas }) {
   } else {
     foodContent = (
       <>
-        <tr>
+        <tr key={comida.id}>
           <td>{index + 1}.- </td>
           <td>{comida.nombre}</td>
           <td>{comida.comida}</td>
