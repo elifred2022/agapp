@@ -1,29 +1,31 @@
-export default function foodReducer(foods, action) {
+export default function Reducer(state, action) {
   switch (action.type) {
-    case "food_added": {
-      return [
-        ...foods,
-        {
-          id: action.id,
-          nombre: action.nombre,
-          comida: action.comida,
-          valorComida: action.valorComida,
-          done: false,
-        },
-      ];
+    case "AGREGAR_COMIDA":
+      return {
+        ...state,
+        comidas: [...state.comidas, action.payload],
+      };
+
+    case "EDITAR_COMIDA": {
+      return {
+        ...state,
+        comidas: state.comidas.map((comida) =>
+          comida.id === action.payload.id ? action.payload : comida
+        ),
+      };
     }
-    case "food_changed": {
-      return foods.map((f) => {
-        if (f.id === action.foods.id) {
-          return action.foods;
-        } else {
-          return f;
-        }
-      });
+
+    case "ELIMINAR_COMIDA": {
+      return {
+        ...state,
+        comidas: state.comidas.filter(
+          (comida) => comida.nombre !== action.payload.nombre
+        ),
+      };
+
+      /* return state.comidas.filter((f) => f.id !== action.id);*/
     }
-    case "food_deleted": {
-      return foods.filter((f) => f.id !== action.id);
-    }
+
     default: {
       throw Error("Unknown action: " + action.type);
     }

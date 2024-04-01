@@ -1,14 +1,17 @@
 import { useState } from "react";
 import { BiSolidSave } from "react-icons/bi";
 
-export default function FormComidas({ onAddFoods }) {
+export default function FormComidas({ dispatch }) {
   const [nombre, setNombre] = useState("");
   const [comida, setComida] = useState("");
   const [valorComida, setValorComida] = useState("");
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
-      onAddFoods(nombre, comida, valorComida);
+      dispatch({
+        type: "AGREGAR_COMIDA",
+        payload: { id: nextId++, nombre, comida, valorComida },
+      });
       setNombre("");
       setComida("");
       setValorComida("");
@@ -39,15 +42,13 @@ export default function FormComidas({ onAddFoods }) {
         <button
           className="my-button_agregar"
           onClick={() => {
+            dispatch({
+              type: "AGREGAR_COMIDA",
+              payload: { id: nextId++, nombre, comida, valorComida },
+            });
             setNombre("");
             setComida("");
             setValorComida("");
-
-            onAddFoods({
-              nombre,
-              comida,
-              valorComida,
-            });
           }}
         >
           <BiSolidSave />
@@ -56,3 +57,5 @@ export default function FormComidas({ onAddFoods }) {
     </>
   );
 }
+
+let nextId = 0;

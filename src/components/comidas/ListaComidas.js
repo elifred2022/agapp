@@ -3,7 +3,12 @@ import { MdAutoDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import { BiSolidSave } from "react-icons/bi";
 
-export default function ListaComidas({ foods, onChangeFoods, onDeleteFoods }) {
+export default function ListaComidas({
+  state,
+  dispatch,
+  onChangeComidas,
+  onDeleteComidas,
+}) {
   return (
     <>
       <table className="styled-table">
@@ -17,14 +22,15 @@ export default function ListaComidas({ foods, onChangeFoods, onDeleteFoods }) {
           </tr>
         </thead>
         <tbody>
-          {foods.map((food, index) => (
+          {state.comidas.map((comida, index) => (
             <Foods
-              key={food.id}
-              food={food}
-              onChange={onChangeFoods}
-              onDelete={onDeleteFoods}
-              foods={foods}
+              key={comida.id}
+              comida={comida}
+              onChangeComidas={onChangeComidas}
+              onDelete={onDeleteComidas}
+              state={state}
               index={index}
+              dispatch={dispatch}
             />
           ))}
         </tbody>
@@ -33,7 +39,7 @@ export default function ListaComidas({ foods, onChangeFoods, onDeleteFoods }) {
   );
 }
 
-function Foods({ food, onChange, onDelete, index }) {
+function Foods({ onChangeComidas, comida, index, dispatch, comidas }) {
   const [isEditing, setIsEditing] = useState(false);
 
   let foodContent;
@@ -44,10 +50,11 @@ function Foods({ food, onChange, onDelete, index }) {
           <td>{index + 1}.-</td>
           <td>
             <input
-              value={food.nombre}
+              value={comida.nombre}
               onChange={(e) => {
-                onChange({
-                  ...food,
+                onChangeComidas({
+                  type: "EDITAR_COMIDA",
+                  ...comida,
                   nombre: e.target.value,
                 });
               }}
@@ -55,10 +62,11 @@ function Foods({ food, onChange, onDelete, index }) {
           </td>
           <td>
             <input
-              value={food.comida}
+              value={comida.comida}
               onChange={(e) => {
-                onChange({
-                  ...food,
+                onChangeComidas({
+                  type: "EDITAR_COMIDA",
+                  ...comida,
                   comida: e.target.value,
                 });
               }}
@@ -66,10 +74,11 @@ function Foods({ food, onChange, onDelete, index }) {
           </td>
           <td>
             <input
-              value={food.valorComida}
+              value={comida.valorComida}
               onChange={(e) => {
-                onChange({
-                  ...food,
+                onChangeComidas({
+                  type: "EDITAR_COMIDA",
+                  ...comida,
                   valorComida: e.target.value,
                 });
               }}
@@ -91,9 +100,9 @@ function Foods({ food, onChange, onDelete, index }) {
       <>
         <tr>
           <td>{index + 1}.- </td>
-          <td>{food.nombre}</td>
-          <td>{food.comida}</td>
-          <td>${food.valorComida}</td>
+          <td>{comida.nombre}</td>
+          <td>{comida.comida}</td>
+          <td>${comida.valorComida}</td>
 
           <td>
             <div className="botonera">
@@ -103,9 +112,12 @@ function Foods({ food, onChange, onDelete, index }) {
               >
                 <FaEdit />
               </button>
+
               <button
                 className="my-button_eliminar"
-                onClick={() => onDelete(food.id)}
+                onClick={() =>
+                  dispatch({ type: "ELIMINAR_COMIDA", payload: comida })
+                }
               >
                 <MdAutoDelete />
               </button>

@@ -8,36 +8,34 @@ import FormBebidas from "./components/bebidas/FormBebidas.js";
 import ListaBebidas from "./components/bebidas/ListaBebidas.js";
 
 export default function TaskApp() {
-  // const storedElementos = JSON.parse(localStorage.getItem("elementos")) || [];
+  const storedComidas = JSON.parse(localStorage.getItem("state")) || [];
 
-  const [foods, dispatch] = useReducer(Reducer, initialState);
+  const [state, dispatch] = useReducer(Reducer, initialState);
 
   useEffect(() => {
-    // Almacena los elementos d comida en localStorage cada vez que cambien
-    localStorage.setItem("elementos", JSON.stringify(foods));
-  }, [foods]);
+    // Almacena los elementos en localStorage cada vez que cambien
+    localStorage.setItem("comidas", JSON.stringify(state));
+  }, [state]);
 
-  function handleAddFoods(nombre, comida, valorComida) {
+  // nno se estan usando estas funciones, estoy usando el dispatch de reducer en los compnentes
+  function handleAddComidas(nombre, comida, valorComida) {
     dispatch({
-      type: "food_added",
-      id: nextId++,
-      nombre: nombre,
-      comida: comida,
-      valorComida: valorComida,
+      type: "AGREGAR_COMIDA",
+      payload: { id: nextId++, nombre, comida, valorComida },
     });
   }
 
-  function handleChangeFoods(foods) {
+  function handleChangeComidas(comidaId) {
     dispatch({
-      type: "food_changed",
-      foods: foods,
+      type: "EDITAR_COMIDA",
+      payload: comidaId,
     });
   }
 
-  function handleDeleteFoods(foodsId) {
+  function handleDeleteComidas(comidasId) {
     dispatch({
-      type: "food_deleted",
-      id: foodsId,
+      type: "ELIMINAR_COMIDA",
+      id: comidasId,
     });
   }
 
@@ -47,17 +45,24 @@ export default function TaskApp() {
 
       <main>
         <h1 className="verde">Ingrese asistentes y consumo individual</h1>
-        <FormComidas onAddFoods={handleAddFoods} />
+        <FormComidas dispatch={dispatch} />
         <ListaComidas
-          foods={foods}
-          onChangeFoods={handleChangeFoods}
-          onDeleteFoods={handleDeleteFoods}
+          state={state}
+          dispatch={dispatch}
+          onAddComidas={handleAddComidas}
+          onDeleteComidas={handleDeleteComidas}
+          onChangeComidas={handleChangeComidas}
         />
-        <CalcComidas foods={foods} />
+        <CalcComidas comidas={state.comidas} />
       </main>
     </>
   );
 }
 
 let nextId = 0;
-const initialState = JSON.parse(localStorage.getItem("elementos")) || [];
+const initialState = {
+  comidas: [],
+  bebidas: [],
+};
+
+//const initialState = JSON.parse(localStorage.getItem("state")) || [];
