@@ -31,8 +31,6 @@ export default function Reducer(state, action) {
           (comida) => comida.nombre !== action.payload.nombre
         ),
       };
-
-      /* return state.comidas.filter((f) => f.id !== action.id);*/
     }
 
     default: {

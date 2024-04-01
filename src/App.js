@@ -24,7 +24,9 @@ export default function TaskApp() {
   function handleAddComidas(nombre, comida, valorComida) {
     dispatch({
       type: "AGREGAR_COMIDA",
-      payload: { id: nextId++, nombre, comida, valorComida },
+      payload: { nombre, comida, valorComida },
+
+      //payload: { id: nextId++, nombre, comida, valorComida }, esta linea no hace dferencia
     });
   }
 
@@ -62,7 +64,7 @@ export default function TaskApp() {
   );
 }
 
-let nextId = 0;
+//let nextId = 0;
 
 /*const initialState = {
   comidas: [],
