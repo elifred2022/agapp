@@ -1,7 +1,8 @@
 import React from "react";
 import { useState, useEffect } from "react";
 
-const TotalBebidas = ({
+const CalcBebidas = ({
+  dispatch,
   bebidas,
   indicesComidas,
   arregloAlmacentotalComidas,
@@ -13,9 +14,8 @@ const TotalBebidas = ({
     (acc, elem) => acc + parseInt(elem.totalBebida),
     0
   );
-  useEffect(() => {
-    // Ejecutar alguna lógica cuando los elementos cambian
 
+  useEffect(() => {
     const totalAsistentes = indicesComidas.reduce(
       (acc, elem) => (acc = parseInt(elem.totalIndex)),
       0
@@ -28,17 +28,21 @@ const TotalBebidas = ({
 
     setTotalBebidasGral(acumTotalBebidas);
 
+    dispatch({ type: "AGREGAR_BEBIDACU", payload: totalBebidasCu });
+
     // arregloAlmacentotalComidas({ totalComidas, totalComidasGral });
-  }, [acumTotalBebidas, totalBebidasCu, totalBebidasGral]);
+  }, [totalBebidasCu, totalBebidasGral, acumTotalBebidas, indicesComidas]);
 
   return (
-    <h2 className="yellow">
-      Total general en bebidas: $ {totalBebidasGral.toLocaleString()}
+    <>
+      <h2 className="yellow">
+        Total general en bebidas: $ {totalBebidasGral.toLocaleString()}
+      </h2>
       <h2 className="yellow">
         Cada persona paga por bebidas: $ {totalBebidasCu.toLocaleString()}
       </h2>
-    </h2>
+    </>
   );
 };
 
-export default TotalBebidas;
+export default CalcBebidas;

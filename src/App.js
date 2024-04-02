@@ -7,6 +7,7 @@ import CalcComidas from "./components/comidas/CalcComidas.js";
 import FormBebidas from "./components/bebidas/FormBebidas.js";
 import ListaBebidas from "./components/bebidas/ListaBebidas.js";
 import CalcBebidas from "./components/bebidas/CalcBebidas.js";
+import InformeFinal from "./components/informes/InformeFinal.js";
 
 export default function TaskApp() {
   const [storedState, setStoredState] = useState(() => {
@@ -64,7 +65,7 @@ export default function TaskApp() {
       <Header />
 
       <main>
-        <h1 className="verde">Ingrese asistentes y consumo individual</h1>
+        <h2 className="verde">Ingrese asistentes y consumo individual</h2>
         <FormComidas dispatch={dispatch} />
         <ListaComidas
           state={state}
@@ -73,7 +74,7 @@ export default function TaskApp() {
           onChangeComidas={handleChangeComidas}
         />
         <CalcComidas comidas={state.comidas} />
-        <h1 className="verde">Ingrese bebidas y consumo compartido</h1>
+        <h2 className="verde">Ingrese bebidas y consumo compartido</h2>
         <FormBebidas dispatch={dispatch} />
         <ListaBebidas
           state={state}
@@ -84,7 +85,12 @@ export default function TaskApp() {
         <CalcBebidas
           indicesComidas={state.indicesComidas}
           bebidas={state.bebidas}
+          dispatch={dispatch}
+          state={state}
         />
+        <h2 className="verde">Informe Final</h2>
+        <p>Porcentaje; 15%</p>
+        <InformeFinal state={state} montoBebidaCu={state.montoBebidaCu} />
       </main>
     </>
   );
