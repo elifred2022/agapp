@@ -90,7 +90,13 @@ export default function TaskApp() {
         />
         <h2 className="verde">Informe Final</h2>
         <p>Porcentaje; 15%</p>
-        <InformeFinal state={state} montoBebidaCu={state.montoBebidaCu} />
+        <InformeFinal
+          state={state}
+          montoBebidaCu={state.montoBebidaCu}
+          dispatch={dispatch}
+          bebidas={state.bebidas}
+          indicesComidas={state.indicesComidas}
+        />
       </main>
     </>
   );

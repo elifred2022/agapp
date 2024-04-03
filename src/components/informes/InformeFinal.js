@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { MdAutoDelete } from "react-icons/md";
-import { FaEdit } from "react-icons/fa";
+
 import { BiSolidSave } from "react-icons/bi";
 
 export default function ListaComidas({
@@ -9,16 +8,6 @@ export default function ListaComidas({
   onChangeComidas,
   onDeleteComidas,
 }) {
-  //const [totalIndex, setTotalIndex] = useState(state.comidas.length);
-
-  /* useEffect(() => {
-    dispatch({ type: "AGREGAR_INDICE", payload: { totalIndex } }); // aqui fue q pude pasar  el valor de totalIndex al padre en el estado de indice en App
-  }, [totalIndex]);
-
-  useEffect(() => {
-    setTotalIndex(state.comidas.length);
-  }, [state.comidas]); */
-
   return (
     <>
       <table className="styled-table">
@@ -28,8 +17,8 @@ export default function ListaComidas({
             <th>Nombre</th>
             <th>Importe plato</th>
             <th>Importe bebidas</th>
-            <th>Importe si paga en debito</th>
-            <th>Importe si paga en efectivo</th>
+            <th>Modo de pago</th>
+            <th>Importe a pagar</th>
           </tr>
         </thead>
         <tbody>
@@ -42,6 +31,8 @@ export default function ListaComidas({
               state={state}
               index={index}
               dispatch={dispatch}
+              bebidas={state.bebidas}
+              indicesComidas={state.indicesComidas}
             />
           ))}
         </tbody>
@@ -50,89 +41,83 @@ export default function ListaComidas({
   );
 }
 
-function Foods({
-  onChangeComidas,
-  comida,
-  index,
-  dispatch,
-  state,
-  montoBebidaCu,
-}) {
+function Foods({ onChangeComidas, comida, index, bebidas, indicesComidas }) {
   const [isEditing, setIsEditing] = useState(false);
+  const [isEfectivo, setIsEfectivo] = useState(false);
+  const [isDebito, setIsDebito] = useState(false);
+  const [resCu, setResCu] = useState("");
+  const [totalBebidasCu, setTotalBebidaCu] = useState(0);
 
-  let foodContent;
-  if (isEditing) {
-    foodContent = (
-      <>
-        <tr>
-          <td>{index + 1}.-</td>
-          <td>
-            <input
-              value={comida.nombre}
-              onChange={(e) => {
-                onChangeComidas({
-                  type: "EDITAR_COMIDA",
-                  ...comida,
-                  nombre: e.target.value,
-                });
-              }}
-            />
-          </td>
-          <td>
-            <input
-              value={comida.comida}
-              onChange={(e) => {
-                onChangeComidas({
-                  type: "EDITAR_COMIDA",
-                  ...comida,
-                  comida: e.target.value,
-                });
-              }}
-            />
-          </td>
-          <td>
-            <input
-              value={comida.valorComida}
-              onChange={(e) => {
-                onChangeComidas({
-                  type: "EDITAR_COMIDA",
-                  ...comida,
-                  valorComida: e.target.value,
-                });
-              }}
-            />
-          </td>
-          <td>
-            <button
-              className="my-button_agregar"
-              onClick={() => setIsEditing(false)}
-            >
-              <BiSolidSave />
-            </button>
-          </td>
-        </tr>
-      </>
-    );
-  } else {
-    foodContent = (
-      <>
-        <tr key={comida.id}>
-          <td>{index + 1}.- </td>
-          <td>{comida.nombre}</td>
-          <td>${comida.valorComida}</td>
+  const acumTotalBebidas = bebidas.reduce(
+    (acc, elem) => acc + parseInt(elem.totalBebida),
+    0
+  );
 
-          <td>
-            <p>aca debe ir importe de bebidas cu</p>
-          </td>
-          <td>
-            <p>boton select efec/debit</p>
-          </td>
-          <td>
-            <p>importe a pagar</p>
-          </td>
-        </tr>
-      </>
-    );
+  useEffect(() => {
+    const totalAsistentes = indicesComidas.reduce(
+      (acc, elem) => (acc = parseInt(elem.totalIndex)),
+      0
+    ); // quitando el + y dejando el = el contador de totalindex empieza en 1
+    const totalBebidasCu1 =
+      totalAsistentes > 0 ? acumTotalBebidas / totalAsistentes : 0; // asi co este codigo se evita inicializar en null totalAsistentes > 0 ? totalBebidas / totalAsistentes : 0;
+
+    setTotalBebidaCu(totalBebidasCu1); // tolocalstring para unidades de miles
+  }, [totalBebidasCu, acumTotalBebidas, indicesComidas]);
+
+  function handleChangeModoPago(checked, isDebito, isEfectivo) {
+    if (checked !== true && isEfectivo !== false) {
+      const pagoDebito =
+        parseInt(comida.valorComida) + parseInt(totalBebidasCu);
+      const pagoEfectivo = pagoDebito - (pagoDebito * 10) / 100;
+
+      setResCu(pagoEfectivo);
+    }
+    if (checked !== false) {
+      const pagoDebito =
+        parseInt(comida.valorComida) + parseInt(totalBebidasCu);
+
+      setResCu(pagoDebito);
+    }
   }
-  return <>{<>{foodContent}</>}</>;
+
+  let infoContent;
+  infoContent = (
+    <>
+      <tr key={comida.id}>
+        <td>{index + 1}.- </td>
+        <td>{comida.nombre}</td>
+        <td>$ {comida.valorComida}</td>
+        <td>
+          <p>$ {totalBebidasCu}</p>
+        </td>
+        <td>
+          <div className="botonera">
+            <p>
+              <input
+                className="debito"
+                type="checkbox"
+                onChange={(e) => handleChangeModoPago(e.target.checked)}
+                checked={false}
+              />
+              Debito
+            </p>
+            <p>
+              <input
+                className="efectivo"
+                type="checkbox"
+                onChange={(e) => handleChangeModoPago(e.target.checked)}
+                checked={true}
+              />
+              Efectivo
+            </p>
+          </div>
+        </td>
+        <td>
+          <p> $ {resCu}</p>
+        </td>
+      </tr>
+    </>
+  );
+
+  return <>{<>{infoContent}</>}</>;
 }
