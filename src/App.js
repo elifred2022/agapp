@@ -93,7 +93,6 @@ export default function TaskApp() {
         <InformeFinal
           state={state}
           montoBebidaCu={state.montoBebidaCu}
-          dispatch={dispatch}
           bebidas={state.bebidas}
           indicesComidas={state.indicesComidas}
         />
@@ -103,10 +102,3 @@ export default function TaskApp() {
 }
 
 let nextId = 0;
-
-/*const initialState = {
-  comidas: [],
-  bebidas: [],
-};*/
-
-//const initialState = JSON.parse(localStorage.getItem("state")) || [];

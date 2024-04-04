@@ -17,7 +17,7 @@ export default function ListaComidas({
             <th>Nombre</th>
             <th>Importe plato</th>
             <th>Importe bebidas</th>
-            <th>Modo de pago</th>
+            <th>Paga en efectivo?</th>
             <th>Importe a pagar</th>
           </tr>
         </thead>
@@ -42,9 +42,8 @@ export default function ListaComidas({
 }
 
 function Foods({ onChangeComidas, comida, index, bebidas, indicesComidas }) {
-  const [isEditing, setIsEditing] = useState(false);
-  const [isEfectivo, setIsEfectivo] = useState(false);
-  const [isDebito, setIsDebito] = useState(false);
+  const [isEfectivoCheck, setIsEfectivoCheck] = useState(false);
+
   const [resCu, setResCu] = useState("");
   const [totalBebidasCu, setTotalBebidaCu] = useState(0);
 
@@ -64,21 +63,28 @@ function Foods({ onChangeComidas, comida, index, bebidas, indicesComidas }) {
     setTotalBebidaCu(totalBebidasCu1); // tolocalstring para unidades de miles
   }, [totalBebidasCu, acumTotalBebidas, indicesComidas]);
 
-  function handleChangeModoPago(checked, isDebito, isEfectivo) {
-    if (checked !== true && isEfectivo !== false) {
+  useEffect(() => {
+    const pagoDebito = parseInt(comida.valorComida) + parseInt(totalBebidasCu);
+
+    setResCu(pagoDebito.toFixed(2));
+  }, [totalBebidasCu, acumTotalBebidas, indicesComidas]);
+
+  const handleChangeModoPago = (checked) => {
+    setIsEfectivoCheck(checked);
+
+    if (checked) {
       const pagoDebito =
         parseInt(comida.valorComida) + parseInt(totalBebidasCu);
       const pagoEfectivo = pagoDebito - (pagoDebito * 10) / 100;
 
-      setResCu(pagoEfectivo);
-    }
-    if (checked !== false) {
+      setResCu(pagoEfectivo.toFixed(2));
+    } else {
       const pagoDebito =
         parseInt(comida.valorComida) + parseInt(totalBebidasCu);
 
-      setResCu(pagoDebito);
+      setResCu(pagoDebito.toFixed(2));
     }
-  }
+  };
 
   let infoContent;
   infoContent = (
@@ -92,24 +98,14 @@ function Foods({ onChangeComidas, comida, index, bebidas, indicesComidas }) {
         </td>
         <td>
           <div className="botonera">
-            <p>
-              <input
-                className="debito"
-                type="checkbox"
-                onChange={(e) => handleChangeModoPago(e.target.checked)}
-                checked={false}
-              />
-              Debito
-            </p>
-            <p>
-              <input
-                className="efectivo"
-                type="checkbox"
-                onChange={(e) => handleChangeModoPago(e.target.checked)}
-                checked={true}
-              />
-              Efectivo
-            </p>
+            <input
+              value={isEfectivoCheck}
+              className="efectivo"
+              type="checkbox"
+              onChange={(e) => handleChangeModoPago(e.target.checked)}
+              checked={isEfectivoCheck}
+            />
+            <p>Si</p>
           </div>
         </td>
         <td>
@@ -121,3 +117,10 @@ function Foods({ onChangeComidas, comida, index, bebidas, indicesComidas }) {
 
   return <>{<>{infoContent}</>}</>;
 }
+
+/*
+
+
+ 
+
+          */
