@@ -8,8 +8,13 @@ import FormBebidas from "./components/bebidas/FormBebidas.js";
 import ListaBebidas from "./components/bebidas/ListaBebidas.js";
 import CalcBebidas from "./components/bebidas/CalcBebidas.js";
 import InformeFinal from "./components/informes/InformeFinal.js";
+import FromPorcentaje from "./components/porcentaje/FormPorcentaje.js";
+import ListaPorcentaje from "./components/porcentaje/ListaPorcentaje.js";
 
 export default function TaskApp() {
+  const storedAlmacenPorcentajeEfectivo =
+    JSON.parse(localStorage.getItem("almacenPorcentEfectivo")) || [];
+
   const [storedState, setStoredState] = useState(() => {
     // funcion para recuperar datos del localstorage del state general
     const stored = JSON.parse(localStorage.getItem("state"));
@@ -17,6 +22,10 @@ export default function TaskApp() {
   });
 
   const [state, dispatch] = useReducer(Reducer, storedState);
+
+  const [almacenPorcentEfectivo, setAlmacenPorcentEfectivo] = useState(
+    storedAlmacenPorcentajeEfectivo
+  );
 
   useEffect(() => {
     // funcion para enviar los datos del state general al localstorage
@@ -60,6 +69,19 @@ export default function TaskApp() {
     });
   }
 
+  const arregloAlmacenPorcentajeEfectivo = (nuevoAlmancenPorcentajeEfetivo) => {
+    setAlmacenPorcentEfectivo([
+      ...almacenPorcentEfectivo,
+      nuevoAlmancenPorcentajeEfetivo,
+    ]);
+  };
+
+  const eliminarPorcentaje = (index) => {
+    const nuevaPorcentaje = [...almacenPorcentEfectivo];
+    nuevaPorcentaje.splice(index, 1);
+    setAlmacenPorcentEfectivo(nuevaPorcentaje);
+  };
+
   return (
     <>
       <Header />
@@ -90,6 +112,13 @@ export default function TaskApp() {
         />
         <h2 className="verde">Informe Final</h2>
         <p>Porcentaje; 15%</p>
+        <FromPorcentaje
+          arregloAlmacenPorcentajeEfectivo={arregloAlmacenPorcentajeEfectivo}
+        />
+        <ListaPorcentaje
+          almacenPorcentEfectivo={almacenPorcentEfectivo}
+          eliminarPorcentaje={eliminarPorcentaje}
+        />
         <InformeFinal
           state={state}
           montoBebidaCu={state.montoBebidaCu}

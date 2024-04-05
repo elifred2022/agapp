@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
 
-import { BiSolidSave } from "react-icons/bi";
-
 export default function ListaComidas({
   state,
   dispatch,
@@ -43,7 +41,6 @@ export default function ListaComidas({
 
 function Foods({ onChangeComidas, comida, index, bebidas, indicesComidas }) {
   const [isEfectivoCheck, setIsEfectivoCheck] = useState(false);
-
   const [resCu, setResCu] = useState("");
   const [totalBebidasCu, setTotalBebidaCu] = useState(0);
 
@@ -61,6 +58,12 @@ function Foods({ onChangeComidas, comida, index, bebidas, indicesComidas }) {
       totalAsistentes > 0 ? acumTotalBebidas / totalAsistentes : 0; // asi co este codigo se evita inicializar en null totalAsistentes > 0 ? totalBebidas / totalAsistentes : 0;
 
     setTotalBebidaCu(totalBebidasCu1); // tolocalstring para unidades de miles
+  }, [totalBebidasCu, acumTotalBebidas, indicesComidas, resCu]);
+
+  useEffect(() => {
+    const pagoDebito = parseInt(comida.valorComida) + parseInt(totalBebidasCu);
+
+    setResCu(pagoDebito.toFixed(2));
   }, [totalBebidasCu, acumTotalBebidas, indicesComidas]);
 
   useEffect(() => {
@@ -117,10 +120,3 @@ function Foods({ onChangeComidas, comida, index, bebidas, indicesComidas }) {
 
   return <>{<>{infoContent}</>}</>;
 }
-
-/*
-
-
- 
-
-          */
