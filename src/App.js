@@ -8,6 +8,7 @@ import FormBebidas from "./components/bebidas/FormBebidas.js";
 import ListaBebidas from "./components/bebidas/ListaBebidas.js";
 import CalcBebidas from "./components/bebidas/CalcBebidas.js";
 import InformeFinal from "./components/informes/InformeFinal.js";
+import CalcInformeFinal from "./components/informes/CalcInformeFinal.js";
 import FormPorcentaje from "./components/porcentaje/FormPorcentaje.js";
 import ListaPorcentaje from "./components/porcentaje/ListaPorcentaje.js";
 
@@ -112,6 +113,7 @@ export default function TaskApp() {
           state={state}
           montoPorcentaje={state.montoPorcentaje}
           dispatch={dispatch}
+          resultadoFinal={state.resultadoFinal}
         />
         <h2 className="verde">Informe final</h2>
         <InformeFinal
@@ -120,7 +122,14 @@ export default function TaskApp() {
           bebidas={state.bebidas}
           indicesComidas={state.indicesComidas}
           montoPorcentaje={state.montoPorcentaje}
+          dispatch={dispatch}
+          resultadoFinal={state.resultadoFinal}
         />
+        {/*<CalcInformeFinal
+          state={state}
+          dispatch={dispatch}
+          resultadoFinal={state.resultadoFinal}
+  />*/}
       </main>
     </>
   );

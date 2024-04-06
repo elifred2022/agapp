@@ -4,6 +4,7 @@ export const initialState = {
   montoPorcentaje: [],
   indicesComidas: [],
   montoBebidaCu: [],
+  resultado: [],
 };
 
 export default function Reducer(state, action) {
@@ -75,6 +76,12 @@ export default function Reducer(state, action) {
       return {
         ...state,
         indicesComidas: [...state.indicesComidas, action.payload],
+      };
+
+    case "AGREGAR_RESULTADO":
+      return {
+        ...state,
+        resultado: [...state.resultado, action.payload],
       };
 
     case "AGREGAR_BEBIDACU":

@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 
-export default function ListaComidas({
+export default function InformeFinal({
   state,
   dispatch,
   montoPorcentaje,
   onChangeComidas,
   onDeleteComidas,
+  resultadoFinal,
 }) {
   return (
     <>
@@ -33,6 +34,7 @@ export default function ListaComidas({
               bebidas={state.bebidas}
               indicesComidas={state.indicesComidas}
               montoPorcentaje={montoPorcentaje}
+              resultadoFinal={resultadoFinal}
             />
           ))}
         </tbody>
@@ -48,10 +50,16 @@ function Foods({
   bebidas,
   indicesComidas,
   montoPorcentaje,
+  dispatch,
+  resultadoFinal,
 }) {
   const [isEfectivoCheck, setIsEfectivoCheck] = useState(false);
   const [resCu, setResCu] = useState("");
   const [totalBebidasCu, setTotalBebidaCu] = useState(0);
+
+  useEffect(() => {
+    dispatch({ type: "AGREGAR_RESULTADO", payload: { resCu } }); // aqui fue q pude pasar  el valor de resCu al state
+  }, [resCu]);
 
   const acumTotalBebidas = bebidas.reduce(
     (acc, elem) => acc + parseInt(elem.totalBebida),
