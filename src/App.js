@@ -123,7 +123,7 @@ export default function TaskApp() {
           indicesComidas={state.indicesComidas}
           montoPorcentaje={state.montoPorcentaje}
           dispatch={dispatch}
-          resultadoFinal={state.resultadoFinal}
+          resultado={state.resultado}
         />
         {/*<CalcInformeFinal
           state={state}

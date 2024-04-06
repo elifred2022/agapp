@@ -34,7 +34,7 @@ export default function InformeFinal({
               bebidas={state.bebidas}
               indicesComidas={state.indicesComidas}
               montoPorcentaje={montoPorcentaje}
-              resultadoFinal={resultadoFinal}
+              resultado={state.resultado}
             />
           ))}
         </tbody>
@@ -51,11 +51,12 @@ function Foods({
   indicesComidas,
   montoPorcentaje,
   dispatch,
-  resultadoFinal,
+  resultado,
 }) {
   const [isEfectivoCheck, setIsEfectivoCheck] = useState(false);
   const [resCu, setResCu] = useState("");
   const [totalBebidasCu, setTotalBebidaCu] = useState(0);
+  const [totalFinalGral, setTotalFinalGral] = useState(0);
 
   useEffect(() => {
     dispatch({ type: "AGREGAR_RESULTADO", payload: { resCu } }); // aqui fue q pude pasar  el valor de resCu al state
@@ -111,6 +112,19 @@ function Foods({
       setResCu(pagoDebito.toFixed(2));
     }
   };
+
+  useEffect(() => {
+    //const [totalFinalGral, setTotalFinalGral] = useState(0);
+
+    const totalFinal = resultado.reduce(
+      (acc, elem) => acc + parseInt(elem.resCu),
+      0
+    );
+    //const totalComidas = elementos.reduce((acc, elem) => acc + parseInt(elem.valorComida), 0);
+    setTotalFinalGral(totalFinal);
+
+    // arregloAlmacentotalComidas({ totalComidas, totalComidasGral });
+  }, []);
 
   let infoContent;
   infoContent = (
