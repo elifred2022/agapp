@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/agapp/static/css/main.2baf2ec5.css",
+    "main.js": "/agapp/static/js/main.5bafc6bf.js",
+    "index.html": "/agapp/index.html",
+    "main.2baf2ec5.css.map": "/agapp/static/css/main.2baf2ec5.css.map",
+    "main.5bafc6bf.js.map": "/agapp/static/js/main.5bafc6bf.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.2baf2ec5.css",
+    "static/js/main.5bafc6bf.js"
+  ]
+}
