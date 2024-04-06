@@ -200,4 +200,167 @@
   justify-content: space-around;
 }
 
+/***responsive****/
+
+/* Estilos para dispositivos móviles (pantallas pequeñas) */
+@media only screen and (max-width: 600px) {
+
+ 
+
+  header {
+    display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+  .formulario {
+    display: grid;
+  justify-content: center;
+  align-items: center;
+  
+  }
+
+  .label-container {
+    position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  }
+
+  .verde_name {
+    font-size: 18px;
+  }
+
+  /* Ajusta los márgenes y padding según tus necesidades */
+  .contenedor {
+    padding: 10px;
+  }
+
+  /* Ejemplo: ajusta el ancho de la lista de elementos */
+  .lista-elementos {
+    width: 100%;
+  }
+
+  /**** estilos d tablas **/
+.styled-table {
+  border-collapse: collapse; /* Collapses the borders to make them look like a single border */
+  width: 100%; /* Optional: Sets the width of the table */
+  justify-content: space-between;
+}
+
+.styled-table th,
+.styled-table td, tr {
+  border: 1px solid yellow; /* Adds a solid yellow border to all cells */
+  padding: 0.2px; /* Optional: Adds some padding to the cells */
+  text-align: justify; /* Optional: Aligns the text to the left */
+  justify-content: space-between;
+}
+
+.styled-table th, td, tr {
+  background-color: black; /* Optional: Sets the background color of the header cells */
+  color: yellow; /* Optional: Sets the text color of the header cells */
+  justify-content: space-between;
+}
+
+  .my-button_agregar {
+
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 7px;
+    margin:  auto;
+    font-size: 20px;
+    color: white;
+    background-color: #45a049;
+  }
+
+  /****BEBIDAS ***/
+
+  
+  .styled-table-bebida {
+    border-collapse: collapse; /* Collapses the borders to make them look like a single border */
+    width: 100%; /* Optional: Sets the width of the table */
+    justify-content: space-between;
+  }
+  
+  .styled-table-bebida th,
+  .styled-table-bebida td, tr {
+    border: 1px solid yellow; /* Adds a solid yellow border to all cells */
+    padding: 0.1px; /* Optional: Adds some padding to the cells */
+    text-align:justify; /* Optional: Aligns the text to the left */
+    justify-content: space-between;
+  }
+  
+  .styled-table-bebida th, td, tr {
+    background-color: black; /* Optional: Sets the background color of the header cells */
+    color: yellow; /* Optional: Sets the text color of the header cells */
+    justify-content: space-between;
+  }
+  
+   /*****INFORME**/
+
+   .styled-table-informe {
+    border-collapse: collapse; /* Collapses the borders to make them look like a single border */
+    width: 100%; /* Optional: Sets the width of the table */
+    justify-content: space-between;
+  }
+  
+  .styled-table-informe th,
+  .styled-table-informe td, tr {
+    border: 1px solid yellow; /* Adds a solid yellow border to all cells */
+    padding: 0.1px; /* Optional: Adds some padding to the cells */
+    text-align:justify; /* Optional: Aligns the text to the left */
+    justify-content: space-between;
+  }
+  
+  .styled-table-informe th, td, tr {
+    background-color: black; /* Optional: Sets the background color of the header cells */
+    color: yellow; /* Optional: Sets the text color of the header cells */
+    justify-content: space-between;
+  }
+
+}
+
+
+
+
+
+/* Estilos para tablets (pantallas medianas) */
+@media only screen and (min-width: 600px) and (max-width: 960px) {
+  .verde_name {
+    font-size: 24px;
+  }
+
+  /* Ajusta los márgenes y padding según tus necesidades */
+  .contenedor {
+    padding: 20px;
+  }
+
+  /* Ejemplo: ajusta el ancho de la lista de elementos */
+  .lista-elementos {
+    width: 70%;
+  }
+}
+
+/* Estilos para pantallas grandes (pantallas anchas) */
+@media only screen and (min-width: 960px) {
+  .verde_name {
+    font-size: 32px;
+  }
+
+  /* Ajusta los márgenes y padding según tus necesidades */
+  .contenedor {
+    padding: 30px;
+  }
+
+  /* Ejemplo: ajusta el ancho de la lista de elementos */
+  .lista-elementos {
+    width: 50%;
+  }
+
+ 
+
+}
   
