@@ -8,7 +8,7 @@ import FormBebidas from "./components/bebidas/FormBebidas.js";
 import ListaBebidas from "./components/bebidas/ListaBebidas.js";
 import CalcBebidas from "./components/bebidas/CalcBebidas.js";
 import InformeFinal from "./components/informes/InformeFinal.js";
-import FromPorcentaje from "./components/porcentaje/FormPorcentaje.js";
+import FormPorcentaje from "./components/porcentaje/FormPorcentaje.js";
 import ListaPorcentaje from "./components/porcentaje/ListaPorcentaje.js";
 
 export default function TaskApp() {
@@ -69,13 +69,6 @@ export default function TaskApp() {
     });
   }
 
-  const arregloAlmacenPorcentajeEfectivo = (nuevoAlmancenPorcentajeEfetivo) => {
-    setAlmacenPorcentEfectivo([
-      ...almacenPorcentEfectivo,
-      nuevoAlmancenPorcentajeEfetivo,
-    ]);
-  };
-
   const eliminarPorcentaje = (index) => {
     const nuevaPorcentaje = [...almacenPorcentEfectivo];
     nuevaPorcentaje.splice(index, 1);
@@ -110,20 +103,23 @@ export default function TaskApp() {
           dispatch={dispatch}
           state={state}
         />
-        <h2 className="verde">Informe Final</h2>
-        <p>Porcentaje; 15%</p>
-        <FromPorcentaje
-          arregloAlmacenPorcentajeEfectivo={arregloAlmacenPorcentajeEfectivo}
+        <h2 className="verde">Descuento por efectivo</h2>
+        <FormPorcentaje
+          dispatch={dispatch}
+          montoPorcentaje={state.montoPorcentaje}
         />
         <ListaPorcentaje
-          almacenPorcentEfectivo={almacenPorcentEfectivo}
-          eliminarPorcentaje={eliminarPorcentaje}
+          state={state}
+          montoPorcentaje={state.montoPorcentaje}
+          dispatch={dispatch}
         />
+        <h2 className="verde">Informe final</h2>
         <InformeFinal
           state={state}
           montoBebidaCu={state.montoBebidaCu}
           bebidas={state.bebidas}
           indicesComidas={state.indicesComidas}
+          montoPorcentaje={state.montoPorcentaje}
         />
       </main>
     </>

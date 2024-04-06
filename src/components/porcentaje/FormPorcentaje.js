@@ -1,17 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { CgAddR } from "react-icons/cg";
+import { useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
+import { BiSolidSave } from "react-icons/bi";
 
-const FromPorcentaje = ({
-  arregloAlmacenPorcentajeEfectivo,
-  almacenPorcentEfectivo,
-}) => {
+export default function FormPorcentaje({ dispatch, montoPorcentaje }) {
   const [descuento, setDescuento] = useState("");
   const [inputDisabled, setInputDisabled] = useState(false);
 
-  /* const traerPorcentajeEfectivo = almacenPorcentEfectivo.reduce(
-    (acc, elem) => (acc = parseInt(elem.descuento)),
-    0
-  );/*/
+  const uniqueId = uuidv4();
 
   useEffect(() => {
     // funcion para desactivar el input
@@ -20,37 +15,50 @@ const FromPorcentaje = ({
     } else {
       setInputDisabled(false);
     }
-  }, [almacenPorcentEfectivo]);
+  }, [montoPorcentaje]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    arregloAlmacenPorcentajeEfectivo({ descuento });
-    setDescuento("");
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      dispatch({
+        type: "AGREGAR_PORCENTAJE",
+        payload: {
+          descuento,
+          id: uniqueId,
+        },
+      });
+      setDescuento("");
+    }
   };
 
   return (
     <>
-      <form onSubmit={handleSubmit} className="formulario">
-        <label className="yellow">
-          % Desc. Pago Efectivo
-          <input
-            type="number"
-            value={descuento}
-            onChange={(e) => setDescuento(e.target.value)}
-            disabled={inputDisabled}
-          />
-        </label>
+      <div className="formulario">
+        <input
+          placeholder="Ingrese Porcentaje por efectivo"
+          value={descuento}
+          onChange={(e) => setDescuento(e.target.value)}
+          onKeyDown={handleKeyDown}
+          disabled={inputDisabled}
+        />
 
         <button
-          type="submit"
-          className="my-button_agregar"
           disabled={inputDisabled}
+          className="my-button_agregar"
+          onClick={() => {
+            setDescuento("");
+
+            dispatch({
+              type: "AGREGAR_PORCENTAJE",
+              payload: {
+                descuento,
+                id: uniqueId,
+              },
+            });
+          }}
         >
-          <CgAddR />
+          <BiSolidSave />
         </button>
-      </form>
+      </div>
     </>
   );
-};
-
-export default FromPorcentaje;
+}

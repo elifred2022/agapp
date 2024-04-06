@@ -1,13 +1,10 @@
 export const initialState = {
   comidas: [],
   bebidas: [],
+  montoPorcentaje: [],
   indicesComidas: [],
   montoBebidaCu: [],
 };
-/*
-export const actionTypes = {
-  AGREGAR_COMIDA: "AGREGAR_COMIDA",
-};*/
 
 export default function Reducer(state, action) {
   switch (action.type) {
@@ -31,6 +28,21 @@ export default function Reducer(state, action) {
         ...state,
         comidas: state.comidas.filter(
           (comida) => comida.nombre !== action.payload.nombre
+        ),
+      };
+    }
+
+    case "AGREGAR_PORCENTAJE":
+      return {
+        ...state,
+        montoPorcentaje: [...state.montoPorcentaje, action.payload],
+      };
+
+    case "ELIMINAR_PORCENTAJE": {
+      return {
+        ...state,
+        montoPorcentaje: state.montoPorcentaje.filter(
+          (porcent) => porcent.descuento !== action.payload.descuento
         ),
       };
     }

@@ -1,45 +1,56 @@
-import React, { useState, useEffect } from "react";
-import { IoMdTrash } from "react-icons/io";
+import { useState, useEffect } from "react";
+import { MdAutoDelete } from "react-icons/md";
+import { FaEdit } from "react-icons/fa";
+import { BiSolidSave } from "react-icons/bi";
 
-const ListaDescuento = ({
-  almacenPorcentEfectivo,
-  arregloAlmacenPorcentajeEfectivo,
-  eliminarPorcentaje,
-}) => {
-  //  const [descuento, setDescuento] = useState(0);
-
-  useEffect(() => {
-    //arregloAlmacenPorcentajeEfectivo({ descuento });
-  }, []);
-
+export default function ListaComidas({ state, dispatch }) {
   return (
     <>
-      <table className="styled-table-bebida">
+      <table className="styled-table">
         <thead>
           <tr>
-            <th>% Desc. Pago Efectivo</th>
+            <th>%</th>
             <th>Act.</th>
           </tr>
         </thead>
-
         <tbody>
-          {almacenPorcentEfectivo.map((elem, index) => (
-            <tr key={index}>
-              <td>{`${elem.descuento}`} %</td>
-              <td>
-                <button
-                  className="my-button_eliminar"
-                  onClick={() => eliminarPorcentaje(index)}
-                >
-                  <IoMdTrash />
-                </button>
-              </td>
-            </tr>
+          {state.montoPorcentaje.map((porcent, index) => (
+            <Porcentaje
+              key={porcent.id}
+              porcent={porcent}
+              state={state}
+              index={index}
+              dispatch={dispatch}
+              montoPorcentaje={state.montoPorcentaje}
+            />
           ))}
         </tbody>
       </table>
     </>
   );
-};
+}
 
-export default ListaDescuento;
+function Porcentaje({ dispatch, porcent, index, bebidas, indicesComidas }) {
+  let porcentContent;
+  porcentContent = (
+    <>
+      <tr key={porcent.id}>
+        <td>{porcent.descuento}</td>
+        <td>
+          <div className="botonera">
+            <button
+              className="my-button_eliminar"
+              onClick={() =>
+                dispatch({ type: "ELIMINAR_PORCENTAJE", payload: porcent })
+              }
+            >
+              <MdAutoDelete />
+            </button>
+          </div>
+        </td>
+      </tr>
+    </>
+  );
+
+  return <>{<>{porcentContent}</>}</>;
+}

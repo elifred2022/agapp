@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 export default function ListaComidas({
   state,
   dispatch,
+  montoPorcentaje,
   onChangeComidas,
   onDeleteComidas,
 }) {
@@ -31,6 +32,7 @@ export default function ListaComidas({
               dispatch={dispatch}
               bebidas={state.bebidas}
               indicesComidas={state.indicesComidas}
+              montoPorcentaje={montoPorcentaje}
             />
           ))}
         </tbody>
@@ -39,7 +41,14 @@ export default function ListaComidas({
   );
 }
 
-function Foods({ onChangeComidas, comida, index, bebidas, indicesComidas }) {
+function Foods({
+  onChangeComidas,
+  comida,
+  index,
+  bebidas,
+  indicesComidas,
+  montoPorcentaje,
+}) {
   const [isEfectivoCheck, setIsEfectivoCheck] = useState(false);
   const [resCu, setResCu] = useState("");
   const [totalBebidasCu, setTotalBebidaCu] = useState(0);
@@ -72,13 +81,19 @@ function Foods({ onChangeComidas, comida, index, bebidas, indicesComidas }) {
     setResCu(pagoDebito.toFixed(2));
   }, [totalBebidasCu, acumTotalBebidas, indicesComidas]);
 
+  const traerPorcentajeEfectivo = montoPorcentaje.reduce(
+    (acc, elem) => (acc = parseInt(elem.descuento)),
+    0
+  );
+
   const handleChangeModoPago = (checked) => {
     setIsEfectivoCheck(checked);
 
     if (checked) {
       const pagoDebito =
         parseInt(comida.valorComida) + parseInt(totalBebidasCu);
-      const pagoEfectivo = pagoDebito - (pagoDebito * 10) / 100;
+      const pagoEfectivo =
+        pagoDebito - (pagoDebito * traerPorcentajeEfectivo) / 100;
 
       setResCu(pagoEfectivo.toFixed(2));
     } else {
