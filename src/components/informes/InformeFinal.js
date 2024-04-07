@@ -73,11 +73,6 @@ function Foods({
     0
   );
 
-  const acumTotalComidas = comidas.reduce(
-    (acc, elem) => acc + parseInt(elem.valorComida),
-    0
-  );
-
   useEffect(() => {
     const totalAsistentes = indicesComidas.reduce(
       (acc, elem) => (acc = parseInt(elem.totalIndex)),
@@ -87,19 +82,14 @@ function Foods({
       totalAsistentes > 0 ? acumTotalBebidas / totalAsistentes : 0; // asi co este codigo se evita inicializar en null totalAsistentes > 0 ? totalBebidas / totalAsistentes : 0;
 
     setTotalBebidaCu(totalBebidasCu1); // tolocalstring para unidades de miles
-  }, [totalBebidasCu, acumTotalBebidas, indicesComidas, resCuDeb, resCuEfec]);
+  }, [totalBebidasCu, acumTotalBebidas, indicesComidas, resCuEfec, resCuDeb]);
 
   useEffect(() => {
     const pagoDebito = parseInt(comida.valorComida) + parseInt(totalBebidasCu);
 
     setResCuStore(pagoDebito.toFixed(2));
     dispatch({ type: "AGREGAR_RESULTADO", payload: { resCuStore } });
-  }, [indicesComidas]);
-
-  const traerPorcentajeEfectivo = montoPorcentaje.reduce(
-    (acc, elem) => (acc = parseInt(elem.descuento)),
-    0
-  );
+  }, [montoPorcentaje, totalBebidasCu]); //totalBebidasCu
 
   const handleChangeModoPago = (checked) => {
     setIsEfectivoCheck(checked);
@@ -122,6 +112,11 @@ function Foods({
       dispatch({ type: "AGREGAR_RESULTADO", payload: { resCuStore } });
     }
   };
+
+  const traerPorcentajeEfectivo = montoPorcentaje.reduce(
+    (acc, elem) => (acc = parseInt(elem.descuento)),
+    0
+  );
 
   let infoContent;
   infoContent = (

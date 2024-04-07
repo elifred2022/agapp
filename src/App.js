@@ -126,11 +126,6 @@ export default function TaskApp() {
           dispatch={dispatch}
           resultado={state.resultado}
         />
-        {/*<CalcInformeFinal
-          state={state}
-          dispatch={dispatch}
-          resultadoFinal={state.resultadoFinal}
-  />*/}
       </main>
     </>
   );
