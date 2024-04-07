@@ -37,6 +37,7 @@ export default function FormComidas({ dispatch, index, state }) {
           onKeyDown={handleKeyDown}
         />
         <input
+          type="number"
           placeholder="Agregar costo comida"
           value={valorComida}
           onChange={(e) => setValorComida(e.target.value)}

@@ -9,7 +9,7 @@ export default function ListaComidas({ state, dispatch }) {
       <table className="styled-table">
         <thead>
           <tr>
-            <th>%</th>
+            <th>% descuento por pago efectivo</th>
             <th>Act.</th>
           </tr>
         </thead>

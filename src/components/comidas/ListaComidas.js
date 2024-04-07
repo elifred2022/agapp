@@ -56,7 +56,7 @@ function Foods({ onChangeComidas, comida, index, dispatch }) {
   if (isEditing) {
     foodContent = (
       <>
-        <tr>
+        <tr className="formulario">
           <td>{index + 1}.-</td>
           <td>
             <input

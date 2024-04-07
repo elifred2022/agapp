@@ -47,12 +47,14 @@ export default function FormBebidas({ onAddComidas, dispatch }) {
           onKeyDown={handleKeyDown}
         />
         <input
+          type="number"
           placeholder="Cantidad"
           value={cantidadBebida}
           onChange={(e) => setCantidadBebida(e.target.value)}
           onKeyDown={handleKeyDown}
         />
         <input
+          type="number"
           placeholder="Costo"
           value={valorUnitBebida}
           onChange={(e) => setValorUnitBebida(e.target.value)}

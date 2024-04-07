@@ -34,6 +34,7 @@ export default function FormPorcentaje({ dispatch, montoPorcentaje }) {
     <>
       <div className="formulario">
         <input
+          type="number"
           placeholder="Ingrese Porcentaje por efectivo"
           value={descuento}
           onChange={(e) => setDescuento(e.target.value)}

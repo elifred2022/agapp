@@ -64,7 +64,7 @@ function Bebidas({ state, bebidas, onChangeBebidas, bebida, index, dispatch }) {
   if (isEditing) {
     drinkContent = (
       <>
-        <tr>
+        <tr className="formulario">
           <td>{index + 1}.-</td>
           <td>
             <input
