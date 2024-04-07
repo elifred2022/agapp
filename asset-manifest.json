@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/agapp/static/css/main.d74aa8cc.css",
-    "main.js": "/agapp/static/js/main.5bafc6bf.js",
+    "main.css": "/agapp/static/css/main.49a90a90.css",
+    "main.js": "/agapp/static/js/main.f28235fd.js",
     "index.html": "/agapp/index.html",
-    "main.d74aa8cc.css.map": "/agapp/static/css/main.d74aa8cc.css.map",
-    "main.5bafc6bf.js.map": "/agapp/static/js/main.5bafc6bf.js.map"
+    "main.49a90a90.css.map": "/agapp/static/css/main.49a90a90.css.map",
+    "main.f28235fd.js.map": "/agapp/static/js/main.f28235fd.js.map"
   },
   "entrypoints": [
-    "static/css/main.d74aa8cc.css",
-    "static/js/main.5bafc6bf.js"
+    "static/css/main.49a90a90.css",
+    "static/js/main.f28235fd.js"
   ]
 }
