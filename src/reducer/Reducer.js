@@ -39,6 +39,15 @@ export default function Reducer(state, action) {
         montoPorcentaje: [...state.montoPorcentaje, action.payload],
       };
 
+    case "EDITAR_PORCENTAJE": {
+      return {
+        ...state,
+        montoPorcentaje: state.montoPorcentaje.map((porcent) =>
+          porcent.id === action.payload.id ? action.payload : porcent
+        ),
+      };
+    }
+
     case "ELIMINAR_PORCENTAJE": {
       return {
         ...state,

@@ -10,6 +10,19 @@ export default function InformeFinal({
 }) {
   const [totalFinalGral, setTotalFinalGral] = useState(0);
 
+  const traerResCuStore = resultado.reduce(
+    (acc, elem) => acc + parseInt(elem.resCuStore),
+    0
+  );
+
+  function incrementTotalFinalGral() {
+    setTotalFinalGral((prevTotal) => (prevTotal = parseFloat(traerResCuStore)));
+  }
+
+  const handleIncrementTotal = () => {
+    incrementTotalFinalGral();
+  };
+
   return (
     <>
       <table className="styled-table">
@@ -43,7 +56,8 @@ export default function InformeFinal({
         </tbody>
       </table>
       <div>
-        <h2 className="yellow">Total a pagar: </h2>
+        <h2 className="yellow">Total a pagar: {totalFinalGral} </h2>
+        <button onClick={handleIncrementTotal}>Increment Total</button>
       </div>
     </>
   );

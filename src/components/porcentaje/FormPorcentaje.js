@@ -4,18 +4,9 @@ import { BiSolidSave } from "react-icons/bi";
 
 export default function FormPorcentaje({ dispatch, montoPorcentaje }) {
   const [descuento, setDescuento] = useState("");
-  const [inputDisabled, setInputDisabled] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const uniqueId = uuidv4();
-
-  useEffect(() => {
-    // funcion para desactivar el input
-    if (descuento > 0) {
-      setInputDisabled(true);
-    } else {
-      setInputDisabled(false);
-    }
-  }, [montoPorcentaje]);
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
@@ -27,7 +18,12 @@ export default function FormPorcentaje({ dispatch, montoPorcentaje }) {
         },
       });
       setDescuento("");
+      setIsDisabled(true);
     }
+  };
+
+  const disableInputAndButton = () => {
+    setIsDisabled(true);
   };
 
   return (
@@ -39,11 +35,10 @@ export default function FormPorcentaje({ dispatch, montoPorcentaje }) {
           value={descuento}
           onChange={(e) => setDescuento(e.target.value)}
           onKeyDown={handleKeyDown}
-          disabled={inputDisabled}
+          disabled={isDisabled}
         />
 
         <button
-          disabled={inputDisabled}
           className="my-button_agregar"
           onClick={() => {
             setDescuento("");
@@ -55,7 +50,9 @@ export default function FormPorcentaje({ dispatch, montoPorcentaje }) {
                 id: uniqueId,
               },
             });
+            setIsDisabled(true);
           }}
+          disabled={isDisabled}
         >
           <BiSolidSave />
         </button>

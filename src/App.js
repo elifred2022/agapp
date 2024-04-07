@@ -70,6 +70,13 @@ export default function TaskApp() {
     });
   }
 
+  function handleChangePorcentaje(porcent) {
+    dispatch({
+      type: "EDITAR_PORCENTAJE",
+      payload: porcent,
+    });
+  }
+
   const eliminarPorcentaje = (index) => {
     const nuevaPorcentaje = [...almacenPorcentEfectivo];
     nuevaPorcentaje.splice(index, 1);
@@ -114,6 +121,7 @@ export default function TaskApp() {
           montoPorcentaje={state.montoPorcentaje}
           dispatch={dispatch}
           resultadoFinal={state.resultadoFinal}
+          onChangePorcentaje={handleChangePorcentaje}
         />
         <h2 className="verde">Informe final</h2>
         <InformeFinal
