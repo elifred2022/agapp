@@ -120,6 +120,7 @@ export default function TaskApp() {
           state={state}
           montoBebidaCu={state.montoBebidaCu}
           bebidas={state.bebidas}
+          comidas={state.comidas}
           indicesComidas={state.indicesComidas}
           montoPorcentaje={state.montoPorcentaje}
           dispatch={dispatch}

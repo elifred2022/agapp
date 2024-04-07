@@ -35,12 +35,12 @@ const CalcBebidas = ({
 
   return (
     <>
-      <h2 className="yellow">
-        Total general en bebidas: $ {totalBebidasGral.toLocaleString()}
-      </h2>
-      <h2 className="yellow">
-        Cada persona paga por bebidas: $ {totalBebidasCu.toLocaleString()}
-      </h2>
+      <h3 className="yellow">
+        Total general en bebidas: $ {totalBebidasGral.toFixed(2)}
+      </h3>
+      <h3 className="yellow">
+        Cada persona paga por bebidas: $ {totalBebidasCu.toFixed(2)}
+      </h3>
     </>
   );
 };

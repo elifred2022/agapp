@@ -6,8 +6,10 @@ export default function InformeFinal({
   montoPorcentaje,
   onChangeComidas,
   onDeleteComidas,
-  resultadoFinal,
+  resultado,
 }) {
+  const [totalFinalGral, setTotalFinalGral] = useState(0);
+
   return (
     <>
       <table className="styled-table">
@@ -32,6 +34,7 @@ export default function InformeFinal({
               index={index}
               dispatch={dispatch}
               bebidas={state.bebidas}
+              comidas={state.comidas}
               indicesComidas={state.indicesComidas}
               montoPorcentaje={montoPorcentaje}
               resultado={state.resultado}
@@ -39,31 +42,39 @@ export default function InformeFinal({
           ))}
         </tbody>
       </table>
+      <div>
+        <h2 className="yellow">Total a pagar: </h2>
+      </div>
     </>
   );
 }
 
 function Foods({
+  state,
   onChangeComidas,
   comida,
   index,
   bebidas,
+  comidas,
   indicesComidas,
   montoPorcentaje,
   dispatch,
   resultado,
 }) {
   const [isEfectivoCheck, setIsEfectivoCheck] = useState(false);
-  const [resCu, setResCu] = useState("");
+  const [resCuDeb, setResCuDeb] = useState(0);
+  const [resCuEfec, setResCuEfec] = useState(0);
+  const [resCuStore, setResCuStore] = useState(0);
   const [totalBebidasCu, setTotalBebidaCu] = useState(0);
-  const [totalFinalGral, setTotalFinalGral] = useState(0);
-
-  useEffect(() => {
-    dispatch({ type: "AGREGAR_RESULTADO", payload: { resCu } }); // aqui fue q pude pasar  el valor de resCu al state
-  }, [resCu]);
+  const [totalComidasCu, setTotalComidasCu] = useState(0);
 
   const acumTotalBebidas = bebidas.reduce(
     (acc, elem) => acc + parseInt(elem.totalBebida),
+    0
+  );
+
+  const acumTotalComidas = comidas.reduce(
+    (acc, elem) => acc + parseInt(elem.valorComida),
     0
   );
 
@@ -76,19 +87,14 @@ function Foods({
       totalAsistentes > 0 ? acumTotalBebidas / totalAsistentes : 0; // asi co este codigo se evita inicializar en null totalAsistentes > 0 ? totalBebidas / totalAsistentes : 0;
 
     setTotalBebidaCu(totalBebidasCu1); // tolocalstring para unidades de miles
-  }, [totalBebidasCu, acumTotalBebidas, indicesComidas, resCu]);
+  }, [totalBebidasCu, acumTotalBebidas, indicesComidas, resCuDeb, resCuEfec]);
 
   useEffect(() => {
     const pagoDebito = parseInt(comida.valorComida) + parseInt(totalBebidasCu);
 
-    setResCu(pagoDebito.toFixed(2));
-  }, [totalBebidasCu, acumTotalBebidas, indicesComidas]);
-
-  useEffect(() => {
-    const pagoDebito = parseInt(comida.valorComida) + parseInt(totalBebidasCu);
-
-    setResCu(pagoDebito.toFixed(2));
-  }, [totalBebidasCu, acumTotalBebidas, indicesComidas]);
+    setResCuStore(pagoDebito.toFixed(2));
+    dispatch({ type: "AGREGAR_RESULTADO", payload: { resCuStore } });
+  }, [indicesComidas]);
 
   const traerPorcentajeEfectivo = montoPorcentaje.reduce(
     (acc, elem) => (acc = parseInt(elem.descuento)),
@@ -99,32 +105,23 @@ function Foods({
     setIsEfectivoCheck(checked);
 
     if (checked) {
+      // si paga en efectivo
       const pagoDebito =
         parseInt(comida.valorComida) + parseInt(totalBebidasCu);
       const pagoEfectivo =
         pagoDebito - (pagoDebito * traerPorcentajeEfectivo) / 100;
 
-      setResCu(pagoEfectivo.toFixed(2));
+      setResCuStore(pagoEfectivo.toFixed(2));
+      dispatch({ type: "AGREGAR_RESULTADO", payload: { resCuStore } });
     } else {
+      // si paga en debito
       const pagoDebito =
         parseInt(comida.valorComida) + parseInt(totalBebidasCu);
 
-      setResCu(pagoDebito.toFixed(2));
+      setResCuStore(pagoDebito.toFixed(2));
+      dispatch({ type: "AGREGAR_RESULTADO", payload: { resCuStore } });
     }
   };
-
-  useEffect(() => {
-    //const [totalFinalGral, setTotalFinalGral] = useState(0);
-
-    const totalFinal = resultado.reduce(
-      (acc, elem) => acc + parseInt(elem.resCu),
-      0
-    );
-    //const totalComidas = elementos.reduce((acc, elem) => acc + parseInt(elem.valorComida), 0);
-    setTotalFinalGral(totalFinal);
-
-    // arregloAlmacentotalComidas({ totalComidas, totalComidasGral });
-  }, []);
 
   let infoContent;
   infoContent = (
@@ -134,7 +131,7 @@ function Foods({
         <td>{comida.nombre}</td>
         <td>$ {comida.valorComida}</td>
         <td>
-          <p>$ {totalBebidasCu}</p>
+          <p>$ {totalBebidasCu.toFixed(2)}</p>
         </td>
         <td>
           <div className="botonera">
@@ -149,7 +146,7 @@ function Foods({
           </div>
         </td>
         <td>
-          <p> $ {resCu}</p>
+          <p> $ {resCuStore}</p>
         </td>
       </tr>
     </>

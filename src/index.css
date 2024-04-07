@@ -205,15 +205,25 @@
 /* Estilos para dispositivos móviles (pantallas pequeñas) */
 @media only screen and (max-width: 600px) {
 
- 
-
   header {
+    width: 100%;
+    min-height: 100px;
+    overflow: hidden;
     display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-
+    /*flex-direction: column; /* prueba no iba */
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    background-color: white;
+    box-shadow: 0 5px 10px #c78306a4;
+    background: black;
+    color: yellow; 
+    position: fixed;
+    top: 0; /* Lo posiciona en la parte superior */
+    z-index: 1000; 
+    
+  }
 
   .formulario {
     display: grid;

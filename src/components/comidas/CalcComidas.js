@@ -16,9 +16,9 @@ const TotalComidas = ({ comidas, arregloAlmacentotalComidas }) => {
   }, [totalComidas, totalComidasGral]);
 
   return (
-    <h2 className="yellow">
+    <h3 className="yellow">
       Total general en comidas: $ {totalComidasGral.toLocaleString()}
-    </h2>
+    </h3>
   );
 };
 
