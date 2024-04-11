@@ -112,11 +112,18 @@ function Foods({
       // si paga en efectivo
       const pagoDebito =
         parseInt(comida.valorComida) + parseInt(totalBebidasCu);
-      const pagoEfectivo =
-        pagoDebito - (pagoDebito * traerPorcentajeEfectivo) / 100;
 
-      setResCuStore(pagoEfectivo.toFixed(2));
-      dispatch({ type: "AGREGAR_RESULTADO", payload: { resCuStore } });
+      let pagoEfectivo = 0;
+
+      if (traerPorcentajeEfectivo > 0) {
+        pagoEfectivo =
+          pagoDebito - (pagoDebito * traerPorcentajeEfectivo) / 100;
+        setResCuStore(pagoEfectivo.toFixed(2));
+        dispatch({ type: "AGREGAR_RESULTADO", payload: { resCuStore } });
+      } else {
+        alert("Debe ingresar porcentaje");
+        setIsEfectivoCheck(false);
+      }
     } else {
       // si paga en debito
       const pagoDebito =
