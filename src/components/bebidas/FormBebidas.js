@@ -10,6 +10,8 @@ export default function FormBebidas({ onAddComidas, dispatch }) {
 
   const uniqueId = uuidv4();
 
+  const totalBebidasCuString = totalBebida.toString();
+
   useEffect(() => {
     if (cantidadBebida && valorUnitBebida) {
       setTotalBebida(parseFloat(cantidadBebida) * parseFloat(valorUnitBebida));
@@ -27,13 +29,13 @@ export default function FormBebidas({ onAddComidas, dispatch }) {
           bebida,
           cantidadBebida,
           valorUnitBebida,
-          totalBebida,
+          totalBebidasCuString,
         },
       });
       setBebida("");
       setCantidadBebida("");
       setValorUnitBebida("");
-      setTotalBebida("");
+      //setTotalBebida("");
     }
   };
 
@@ -74,7 +76,7 @@ export default function FormBebidas({ onAddComidas, dispatch }) {
                 bebida,
                 cantidadBebida,
                 valorUnitBebida,
-                totalBebida,
+                totalBebidasCuString,
               },
             });
           }}

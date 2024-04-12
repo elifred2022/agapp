@@ -10,6 +10,8 @@ const CalcBebidas = ({
   const [totalBebidasGral, setTotalBebidasGral] = useState(0);
   const [totalBebidasCu, setTotalBebidaCu] = useState(0);
 
+  const totalBebidasCuString = totalBebidasCu.toString(); // codigo para convertir el dato numerico a string
+
   const acumTotalBebidas = bebidas.reduce(
     (acc, elem) => acc + parseInt(elem.totalBebida),
     0
@@ -23,12 +25,12 @@ const CalcBebidas = ({
     const totalBebidasCu1 =
       totalAsistentes > 0 ? acumTotalBebidas / totalAsistentes : 0; // asi co este codigo se evita inicializar en null totalAsistentes > 0 ? totalBebidas / totalAsistentes : 0;
 
-    setTotalBebidaCu(totalBebidasCu1); // tolocalstring para unidades de miles
+    setTotalBebidaCu(parseInt(totalBebidasCu1)); // tolocalstring para unidades de miles
     // arregloCu({totalBebidasCu, totalBebidasTodas});
 
     setTotalBebidasGral(acumTotalBebidas);
 
-    dispatch({ type: "AGREGAR_BEBIDACU", payload: totalBebidasCu });
+    dispatch({ type: "AGREGAR_BEBIDACU", payload: totalBebidasCuString });
 
     // arregloAlmacentotalComidas({ totalComidas, totalComidasGral });
   }, [totalBebidasCu, totalBebidasGral, acumTotalBebidas, indicesComidas]);
