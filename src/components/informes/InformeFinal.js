@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 export default function InformeFinal({
   state,
@@ -7,22 +8,8 @@ export default function InformeFinal({
   onChangeComidas,
   onDeleteComidas,
   resultado,
+  resCuStore,
 }) {
-  const [totalFinalGral, setTotalFinalGral] = useState(0);
-
-  const traerResCuStore = resultado.reduce(
-    (acc, elem) => acc + parseInt(elem.resCuStore),
-    0
-  );
-
-  function incrementTotalFinalGral() {
-    setTotalFinalGral((prevTotal) => (prevTotal = parseFloat(traerResCuStore)));
-  }
-
-  const handleIncrementTotal = () => {
-    incrementTotalFinalGral();
-  };
-
   return (
     <>
       <table className="styled-table">
@@ -56,8 +43,8 @@ export default function InformeFinal({
         </tbody>
       </table>
       <div>
-        <h2 className="yellow">Total a pagar: {totalFinalGral} </h2>
-        <button onClick={handleIncrementTotal}>Increment Total</button>
+        <h2 className="yellow">Total a pagar: </h2>
+        <button>Calcular pago total</button>
       </div>
     </>
   );
@@ -75,6 +62,7 @@ function Foods({
   dispatch,
   resultado,
 }) {
+  const [isEditing, setIsEditing] = useState(false);
   const [isEfectivoCheck, setIsEfectivoCheck] = useState(false);
   const [resCuDeb, setResCuDeb] = useState(0);
   const [resCuEfec, setResCuEfec] = useState(0);
@@ -98,11 +86,16 @@ function Foods({
     setTotalBebidaCu(totalBebidasCu1); // tolocalstring para unidades de miles
   }, [totalBebidasCu, acumTotalBebidas, indicesComidas, resCuEfec, resCuDeb]);
 
+  const uniqueId = uuidv4();
+
   useEffect(() => {
     const pagoDebito = parseInt(comida.valorComida) + parseInt(totalBebidasCu);
 
-    setResCuStore(pagoDebito.toFixed(2));
-    dispatch({ type: "AGREGAR_RESULTADO", payload: { resCuStore } });
+    setResCuDeb(pagoDebito.toFixed(2));
+    dispatch({
+      type: "AGREGAR_RESULTADO",
+      payload: { id: uniqueId, resCuDeb },
+    });
   }, [montoPorcentaje, totalBebidasCu]); //totalBebidasCu
 
   const handleChangeModoPago = (checked) => {
@@ -118,8 +111,11 @@ function Foods({
       if (traerPorcentajeEfectivo > 0) {
         pagoEfectivo =
           pagoDebito - (pagoDebito * traerPorcentajeEfectivo) / 100;
-        setResCuStore(pagoEfectivo.toFixed(2));
-        dispatch({ type: "AGREGAR_RESULTADO", payload: { resCuStore } });
+        setResCuEfec(pagoEfectivo.toFixed(2));
+        dispatch({
+          type: "AGREGAR_RESULTADO",
+          payload: { resCuEfec },
+        });
       } else {
         alert("Debe ingresar porcentaje");
         setIsEfectivoCheck(false);
@@ -129,8 +125,11 @@ function Foods({
       const pagoDebito =
         parseInt(comida.valorComida) + parseInt(totalBebidasCu);
 
-      setResCuStore(pagoDebito.toFixed(2));
-      dispatch({ type: "AGREGAR_RESULTADO", payload: { resCuStore } });
+      setResCuDeb(pagoDebito.toFixed(2));
+      dispatch({
+        type: "AGREGAR_RESULTADO",
+        payload: { resCuDeb },
+      });
     }
   };
 
@@ -139,34 +138,72 @@ function Foods({
     0
   );
 
-  let infoContent;
-  infoContent = (
-    <>
-      <tr key={comida.id}>
-        <td>{index + 1}.- </td>
-        <td>{comida.nombre}</td>
-        <td>$ {comida.valorComida}</td>
-        <td>
-          <p>$ {totalBebidasCu.toFixed(2)}</p>
-        </td>
-        <td>
-          <div className="botonera">
-            <input
-              value={isEfectivoCheck}
-              className="efectivo"
-              type="checkbox"
-              onChange={(e) => handleChangeModoPago(e.target.checked)}
-              checked={isEfectivoCheck}
-            />
-            <p>Si</p>
-          </div>
-        </td>
-        <td>
-          <p> $ {resCuStore}</p>
-        </td>
-      </tr>
-    </>
-  );
+  let informeFianl;
 
-  return <>{<>{infoContent}</>}</>;
+  if (isEditing) {
+    informeFianl = (
+      <>
+        <tr key={comida.id}>
+          <td>{index + 1}.- </td>
+          <td>{comida.nombre}</td>
+          <td>$ {comida.valorComida}</td>
+          <td>
+            <p>$ {totalBebidasCu.toFixed(2)}</p>
+          </td>
+          <td>
+            <div className="botonera">
+              <input
+                value={isEfectivoCheck}
+                className="efectivo"
+                type="checkbox"
+                onChange={
+                  (e) =>
+                    setIsEditing(
+                      false
+                    ) /* handleChangeModoPago(e.target.checked)*/
+                }
+                checked={isEfectivoCheck}
+              />
+              <p>Si</p>
+            </div>
+          </td>
+          <td>
+            <p> $ {resCuEfec}</p>
+          </td>
+        </tr>
+      </>
+    );
+  } else {
+    informeFianl = (
+      <>
+        <tr key={comida.id}>
+          <td>{index + 1}.- </td>
+          <td>{comida.nombre}</td>
+          <td>$ {comida.valorComida}</td>
+          <td>
+            <p>$ {totalBebidasCu.toFixed(2)}</p>
+          </td>
+          <td>
+            <div className="botonera">
+              <input
+                value={isEfectivoCheck}
+                className="efectivo"
+                type="checkbox"
+                onChange={
+                  (e) => setIsEditing(true) //handleChangeModoPago(e.target.checked)
+                }
+                checked={isEfectivoCheck}
+              />
+              <p>Si</p>
+            </div>
+          </td>
+          <td>
+            <p> $ {resCuDeb}</p>
+          </td>
+        </tr>
+      </>
+    );
+  }
+
+  return <>{<>{informeFianl}</>}</>;
 }
