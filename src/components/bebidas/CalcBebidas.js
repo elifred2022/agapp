@@ -33,7 +33,12 @@ const CalcBebidas = ({
     dispatch({ type: "AGREGAR_BEBIDACU", payload: totalBebidasCuString });
 
     // arregloAlmacentotalComidas({ totalComidas, totalComidasGral });
-  }, [totalBebidasCu, totalBebidasGral, acumTotalBebidas, indicesComidas]);
+  }, [
+    totalBebidasCuString,
+    totalBebidasGral,
+    acumTotalBebidas,
+    indicesComidas,
+  ]);
 
   return (
     <>

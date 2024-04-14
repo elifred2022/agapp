@@ -70,6 +70,7 @@ function Foods({
   index,
   bebidas,
   comidas,
+  montoBebidaCu,
   indicesComidas,
   montoPorcentaje,
   dispatch,
@@ -82,8 +83,10 @@ function Foods({
   const [totalBebidasCu, setTotalBebidaCu] = useState(0);
   const [totalComidasCu, setTotalComidasCu] = useState(0);
 
+  const totalBebidasCuString = totalBebidasCu.toString();
+
   const acumTotalBebidas = bebidas.reduce(
-    (acc, elem) => acc + parseInt(elem.totalBebida),
+    (acc, elem) => acc + parseInt(elem.totalBebidasString),
     0
   );
 
@@ -99,19 +102,23 @@ function Foods({
   }, [totalBebidasCu, acumTotalBebidas, indicesComidas, resCuEfec, resCuDeb]);
 
   useEffect(() => {
-    const pagoDebito = parseInt(comida.valorComida) + parseInt(totalBebidasCu);
+    const pagoDebito =
+      parseInt(comida.valorComida) + parseInt(totalBebidasCuString);
 
     setResCuStore(pagoDebito.toFixed(2));
-    dispatch({ type: "AGREGAR_RESULTADO", payload: { resCuStore } });
-  }, [montoPorcentaje, totalBebidasCu]); //totalBebidasCu
+    dispatch({
+      type: "AGREGAR_RESULTADO",
+      payload: { resCuStore, totalBebidasCuString },
+    });
+  }, [montoPorcentaje, bebidas]); //totalBebidasCu
 
-  const handleChangeModoPago = (checked) => {
+  const handleChangeModoPago = (checked, resCuStore) => {
     setIsEfectivoCheck(checked);
 
     if (checked) {
       // si paga en efectivo
       const pagoDebito =
-        parseInt(comida.valorComida) + parseInt(totalBebidasCu);
+        parseInt(comida.valorComida) + parseInt(totalBebidasCuString);
 
       let pagoEfectivo = 0;
 
@@ -126,6 +133,7 @@ function Foods({
       }
     } else {
       // si paga en debito
+
       const pagoDebito =
         parseInt(comida.valorComida) + parseInt(totalBebidasCu);
 
@@ -147,6 +155,7 @@ function Foods({
         <td>{comida.nombre}</td>
         <td>$ {comida.valorComida}</td>
         <td>
+          <p>{} </p>
           <p>$ {totalBebidasCu.toFixed(2)}</p>
         </td>
         <td>

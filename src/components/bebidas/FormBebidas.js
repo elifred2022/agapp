@@ -10,7 +10,7 @@ export default function FormBebidas({ onAddComidas, dispatch }) {
 
   const uniqueId = uuidv4();
 
-  const totalBebidasCuString = totalBebida.toString();
+  const totalBebidasString = totalBebida.toString();
 
   useEffect(() => {
     if (cantidadBebida && valorUnitBebida) {
@@ -29,7 +29,7 @@ export default function FormBebidas({ onAddComidas, dispatch }) {
           bebida,
           cantidadBebida,
           valorUnitBebida,
-          totalBebidasCuString,
+          totalBebidasString,
         },
       });
       setBebida("");
@@ -68,7 +68,7 @@ export default function FormBebidas({ onAddComidas, dispatch }) {
             setBebida("");
             setCantidadBebida("");
             setValorUnitBebida("");
-            setTotalBebida("");
+            //setTotalBebida("");
             dispatch({
               type: "AGREGAR_BEBIDA",
               payload: {
@@ -76,7 +76,7 @@ export default function FormBebidas({ onAddComidas, dispatch }) {
                 bebida,
                 cantidadBebida,
                 valorUnitBebida,
-                totalBebidasCuString,
+                totalBebidasString,
               },
             });
           }}
