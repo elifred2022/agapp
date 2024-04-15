@@ -28,6 +28,8 @@ export default function ListaComidas({
             <th>Nombre</th>
             <th>Plato</th>
             <th>Valor/plato</th>
+            <th>Iporte por bebida</th>
+            <th>Iporte a pagar</th>
             <th>Act.</th>
           </tr>
         </thead>
@@ -41,6 +43,7 @@ export default function ListaComidas({
               state={state}
               index={index}
               dispatch={dispatch}
+              montoBebidaCu={state.montoBebidaCu}
             />
           ))}
         </tbody>
@@ -49,8 +52,19 @@ export default function ListaComidas({
   );
 }
 
-function Foods({ onChangeComidas, comida, index, dispatch }) {
+function Foods({ onChangeComidas, comida, index, dispatch, montoBebidaCu }) {
   const [isEditing, setIsEditing] = useState(false);
+  const [importePorPersona, setImportePorPersona] = useState("");
+
+  const importePorPersonaString = importePorPersona.toString();
+
+  const traerTotalBebidasCu = montoBebidaCu.reduce(
+    (acc, elem) => (acc = parseInt(elem.totalBebidasCuString)),
+    0
+  );
+
+  const calcImportePorPersona =
+    parseInt(comida.valorComida) + parseInt(traerTotalBebidasCu);
 
   let foodContent;
   if (isEditing) {
@@ -113,6 +127,8 @@ function Foods({ onChangeComidas, comida, index, dispatch }) {
           <td>{comida.nombre}</td>
           <td>{comida.comida}</td>
           <td>${comida.valorComida}</td>
+          <td>${traerTotalBebidasCu}</td>
+          <td>${calcImportePorPersona}</td>
 
           <td>
             <div className="botonera">

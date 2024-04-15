@@ -1,16 +1,13 @@
 import React from "react";
 import { useState, useEffect } from "react";
 
-const CalcBebidas = ({
-  dispatch,
-  bebidas,
-  indicesComidas,
-  arregloAlmacentotalComidas,
-}) => {
+const CalcBebidas = ({ dispatch, bebidas, indicesComidas, comidas }) => {
   const [totalBebidasGral, setTotalBebidasGral] = useState(0);
   const [totalBebidasCu, setTotalBebidaCu] = useState(0);
 
   const totalBebidasCuString = totalBebidasCu.toString(); // codigo para convertir el dato numerico a string
+
+  const totalBebidasGralString = totalBebidasGral.toString();
 
   const acumTotalBebidas = bebidas.reduce(
     (acc, elem) => acc + parseInt(elem.totalBebida),
@@ -26,18 +23,18 @@ const CalcBebidas = ({
       totalAsistentes > 0 ? acumTotalBebidas / totalAsistentes : 0; // asi co este codigo se evita inicializar en null totalAsistentes > 0 ? totalBebidas / totalAsistentes : 0;
 
     setTotalBebidaCu(parseInt(totalBebidasCu1)); // tolocalstring para unidades de miles
-    // arregloCu({totalBebidasCu, totalBebidasTodas});
+    dispatch({
+      type: "AGREGAR_BEBIDACU",
+      payload: { totalBebidasGralString, totalBebidasCuString },
+    });
 
     setTotalBebidasGral(acumTotalBebidas);
-
-    dispatch({ type: "AGREGAR_BEBIDACU", payload: totalBebidasCuString });
-
-    // arregloAlmacentotalComidas({ totalComidas, totalComidasGral });
   }, [
     totalBebidasCuString,
     totalBebidasGral,
     acumTotalBebidas,
     indicesComidas,
+    comidas,
   ]);
 
   return (

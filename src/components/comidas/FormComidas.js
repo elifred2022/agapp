@@ -1,23 +1,62 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid"; // biblioteca para generar ID unico
 import { BiSolidSave } from "react-icons/bi";
 
-export default function FormComidas({ dispatch, index, state }) {
+export default function FormComidas({
+  dispatch,
+  index,
+  state,
+  montoBebidaCu,
+  comidas,
+  bebidas,
+}) {
   const [nombre, setNombre] = useState("");
   const [comida, setComida] = useState("");
   const [valorComida, setValorComida] = useState("");
+  const [importePorBebida, setImportePorBebida] = useState("");
+  const [importePorPersona, setImportePorPersona] = useState("");
+
+  const importePorBebidaString = importePorBebida.toString();
+
+  const importePorPersonaString = importePorPersona.toString();
 
   const uniqueId = uuidv4(); // gegera un unico ID
+
+  /* useEffect(() => {
+    const traerTotalBebidasCu = montoBebidaCu.reduce(
+      (acc, elem) => (acc = parseInt(elem.totalBebidasCuString)),
+      0
+    );
+    setImportePorBebida(traerTotalBebidasCu);
+
+    const traerValorcomida = comidas.reduce(
+      (acc, elem) => (acc = parseInt(elem.valorComida)),
+      0
+    );
+
+    const calcImportePorPersona = traerValorcomida + traerTotalBebidasCu;
+
+    setImportePorPersona(calcImportePorPersona);
+  }, [comidas, bebidas, montoBebidaCu]);*/
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
       dispatch({
         type: "AGREGAR_COMIDA",
-        payload: { id: uniqueId, nombre, comida, valorComida }, // id: uniqueId genera id unico
+        payload: {
+          id: uniqueId,
+          nombre,
+          comida,
+          valorComida,
+          importePorBebida,
+          importePorPersona,
+        }, // id: uniqueId genera id unico
       });
       setNombre("");
       setComida("");
       setValorComida("");
+      setImportePorBebida("");
+      setImportePorPersona("");
     }
   };
 
@@ -48,11 +87,20 @@ export default function FormComidas({ dispatch, index, state }) {
           onClick={() => {
             dispatch({
               type: "AGREGAR_COMIDA",
-              payload: { id: uniqueId, nombre, comida, valorComida },
+              payload: {
+                id: uniqueId,
+                nombre,
+                comida,
+                valorComida,
+                importePorBebidaString,
+                importePorPersonaString,
+              },
             });
             setNombre("");
             setComida("");
             setValorComida("");
+            setImportePorBebida("");
+            setImportePorPersona("");
           }}
         >
           <BiSolidSave />

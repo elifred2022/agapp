@@ -89,7 +89,11 @@ export default function TaskApp() {
 
       <main>
         <h2 className="verde">Ingrese asistentes y consumo individual</h2>
-        <FormComidas dispatch={dispatch} />
+        <FormComidas
+          dispatch={dispatch}
+          montoBebidaCu={state.montoBebidaCu}
+          comidas={state.comidas}
+        />
         <ListaComidas
           state={state}
           dispatch={dispatch}
@@ -100,6 +104,12 @@ export default function TaskApp() {
           comidas={state.comidas}
           dispatch={dispatch}
           montoComidaGral={state.montoComidaGral}
+        />
+        <CalcBebidas
+          indicesComidas={state.indicesComidas}
+          bebidas={state.bebidas}
+          dispatch={dispatch}
+          state={state}
         />
         <h2 className="verde">Ingrese bebidas y consumo compartido</h2>
         <FormBebidas dispatch={dispatch} />
@@ -131,6 +141,7 @@ export default function TaskApp() {
         <InformeFinal
           state={state}
           montoBebidaCu={state.montoBebidaCu}
+          montoComidaGral={state.montoComidaGral}
           bebidas={state.bebidas}
           comidas={state.comidas}
           indicesComidas={state.indicesComidas}

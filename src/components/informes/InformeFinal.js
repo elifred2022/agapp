@@ -7,21 +7,40 @@ export default function InformeFinal({
   onChangeComidas,
   onDeleteComidas,
   resultado,
+  montoBebidaCu,
+  montoComidaGral,
 }) {
   const [totalFinalGral, setTotalFinalGral] = useState(0);
 
-  const traerResCuStore = resultado.reduce(
-    (acc, elem) => acc + parseInt(elem.resCuStore),
+  const totalFinalString = totalFinalGral.toString();
+
+  const traerTotalBebidasCu = montoBebidaCu.reduce(
+    (acc, elem) => (acc = parseInt(elem.totalBebidasCuString)),
     0
   );
 
-  function incrementTotalFinalGral() {
-    setTotalFinalGral((prevTotal) => (prevTotal = parseFloat(traerResCuStore)));
-  }
+  const traerTotalBebidasGral = montoBebidaCu.reduce(
+    (acc, elem) => (acc = parseInt(elem.totalBebidasGralString)),
+    0
+  );
 
-  const handleIncrementTotal = () => {
-    incrementTotalFinalGral();
-  };
+  const traerTotalComidaGral = montoComidaGral.reduce(
+    (acc, elem) => (acc = parseInt(elem.totalComidasGralString)),
+    0
+  );
+
+  useEffect(() => {
+    const calcTotalFinalGral = traerTotalComidaGral + traerTotalBebidasGral;
+
+    setTotalFinalGral(calcTotalFinalGral);
+
+    dispatch({
+      type: "AGREGAR_RESULTADO",
+      payload: {
+        totalFinalString,
+      },
+    });
+  }, [traerTotalComidaGral, traerTotalBebidasGral, totalFinalGral]);
 
   return (
     <>
@@ -56,8 +75,10 @@ export default function InformeFinal({
         </tbody>
       </table>
       <div>
-        <h2 className="yellow">Total a pagar: {totalFinalGral} </h2>
-        <button onClick={handleIncrementTotal}>Increment Total</button>
+        <h2 className="yellow">
+          Total a pagar sin desceunto: {totalFinalGral}{" "}
+        </h2>
+        <button>Increment Total</button>
       </div>
     </>
   );
@@ -156,7 +177,7 @@ function Foods({
         <td>$ {comida.valorComida}</td>
         <td>
           <p>{} </p>
-          <p>$ {totalBebidasCu.toFixed(2)}</p>
+          <p>$ {totalBebidasCuString}</p>
         </td>
         <td>
           <div className="botonera">
