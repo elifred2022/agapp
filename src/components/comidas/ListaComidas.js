@@ -62,7 +62,7 @@ export default function ListaComidas({
             />
           ))}
         </tbody>
-        <br></br>
+
         <tfoot>
           <tr>
             <th></th>
