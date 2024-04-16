@@ -13,27 +13,8 @@ export default function FormComidas({
   const [nombre, setNombre] = useState("");
   const [comida, setComida] = useState("");
   const [valorComida, setValorComida] = useState("");
-  const [importePorBebida, setImportePorBebida] = useState("");
-  const [importePorPersona, setImportePorPersona] = useState("");
-
-  const importePorBebidaString = importePorBebida.toString();
-
-  const importePorPersonaString = importePorPersona.toString();
 
   const uniqueId = uuidv4(); // gegera un unico ID
-
-  const traerTotalBebidasCu = montoBebidaCu.reduce(
-    (acc, elem) => (acc = parseInt(elem.totalBebidasCuString)),
-    0
-  );
-
-  const traerValorComida = comidas.reduce(
-    (acc, elem) => (acc = parseInt(elem.valorComida)),
-    0
-  );
-
-  const calcImportePorPersona =
-    parseInt(traerValorComida) + parseInt(traerTotalBebidasCu);
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
@@ -44,15 +25,11 @@ export default function FormComidas({
           nombre,
           comida,
           valorComida,
-          importePorBebidaString,
-          importePorPersonaString,
         }, // id: uniqueId genera id unico
       });
       setNombre("");
       setComida("");
       setValorComida("");
-      setImportePorBebida(traerTotalBebidasCu);
-      setImportePorPersona(calcImportePorPersona);
     }
   };
 
@@ -88,15 +65,11 @@ export default function FormComidas({
                 nombre,
                 comida,
                 valorComida,
-                importePorBebidaString,
-                importePorPersonaString,
               },
             });
             setNombre("");
             setComida("");
             setValorComida("");
-            setImportePorBebida(traerTotalBebidasCu);
-            setImportePorPersona(calcImportePorPersona);
           }}
         >
           <BiSolidSave />

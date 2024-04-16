@@ -8,6 +8,8 @@ export default function ListaComidas({
   dispatch,
   onChangeComidas,
   onDeleteComidas,
+  montoBebidaCu,
+  montoComidaGral,
 }) {
   const [totalIndex, setTotalIndex] = useState(state.comidas.length);
 
@@ -19,6 +21,19 @@ export default function ListaComidas({
     setTotalIndex(state.comidas.length);
   }, [state.comidas]);
 
+  const traerMontoGralComida = montoComidaGral.reduce(
+    (acc, elem) => (acc = parseInt(elem.totalComidasGralString)),
+    0
+  );
+
+  const traerMontoGralBebida = montoBebidaCu.reduce(
+    (acc, elem) => (acc = parseInt(elem.totalBebidasGralString)),
+    0
+  );
+
+  const calcTotalFinalGral =
+    parseInt(traerMontoGralComida) + parseInt(traerMontoGralBebida);
+
   return (
     <>
       <table className="styled-table">
@@ -28,9 +43,9 @@ export default function ListaComidas({
             <th>Nombre</th>
             <th>Plato</th>
             <th>Valor/plato</th>
-            <th>Iporte por bebida</th>
-            <th>Iporte a pagar</th>
-            <th>Act.</th>
+            <th>Importe por bebida</th>
+            <th>Importe total</th>
+            <th>Edit/Elim</th>
           </tr>
         </thead>
         <tbody>
@@ -43,18 +58,37 @@ export default function ListaComidas({
               state={state}
               index={index}
               dispatch={dispatch}
-              montoBebidaCu={state.montoBebidaCu}
+              montoBebidaCu={montoBebidaCu}
             />
           ))}
         </tbody>
+        <br></br>
+        <tfoot>
+          <tr>
+            <th></th>
+            <th></th>
+            <th>Totales</th>
+            <th>$ {traerMontoGralComida} </th>
+            <th>$ {traerMontoGralBebida}</th>
+            <th> $ {calcTotalFinalGral} </th>
+            <th> </th>
+          </tr>
+        </tfoot>
       </table>
     </>
   );
 }
 
-function Foods({ onChangeComidas, comida, index, dispatch, montoBebidaCu }) {
+function Foods({
+  onChangeComidas,
+  comida,
+  index,
+  dispatch,
+  montoBebidaCu,
+  bebidas,
+}) {
   const [isEditing, setIsEditing] = useState(false);
-  const [importePorPersona, setImportePorPersona] = useState("");
+  const [importePorPersona, setImportePorPersona] = useState(0);
 
   const importePorPersonaString = importePorPersona.toString();
 
@@ -66,11 +100,19 @@ function Foods({ onChangeComidas, comida, index, dispatch, montoBebidaCu }) {
   const calcImportePorPersona =
     parseInt(comida.valorComida) + parseInt(traerTotalBebidasCu);
 
+  useEffect(() => {
+    setImportePorPersona(calcImportePorPersona);
+    dispatch({
+      type: "AGREGAR_RESULTADO",
+      payload: { importePorPersonaString },
+    }); // aqui fue q pude pasar  el valor de totalIndex al padre en el estado de indice en App
+  }, [importePorPersona]);
+
   let foodContent;
   if (isEditing) {
     foodContent = (
       <>
-        <tr className="formulario">
+        <tr key={comida.id}>
           <td>{index + 1}.-</td>
           <td>
             <input
@@ -108,6 +150,8 @@ function Foods({ onChangeComidas, comida, index, dispatch, montoBebidaCu }) {
               }}
             />
           </td>
+          <td>${traerTotalBebidasCu}</td>
+          <td>${calcImportePorPersona}</td>
           <td>
             <button
               className="my-button_agregar"

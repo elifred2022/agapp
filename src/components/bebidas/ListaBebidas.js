@@ -19,7 +19,7 @@ export default function ListaBebidas({
             <th>Cantidad</th>
             <th>Valor bebida</th>
             <th>Total bebida</th>
-            <th>Act.-</th>
+            <th>Edit/Elim</th>
           </tr>
         </thead>
         <tbody>
@@ -64,7 +64,7 @@ function Bebidas({ state, bebidas, onChangeBebidas, bebida, index, dispatch }) {
   if (isEditing) {
     drinkContent = (
       <>
-        <tr className="formulario">
+        <tr>
           <td>{index + 1}.-</td>
           <td>
             <input

@@ -99,18 +99,10 @@ export default function TaskApp() {
           dispatch={dispatch}
           onDeleteComidas={handleDeleteComidas}
           onChangeComidas={handleChangeComidas}
-        />
-        <CalcComidas
-          comidas={state.comidas}
-          dispatch={dispatch}
+          montoBebidaCu={state.montoBebidaCu}
           montoComidaGral={state.montoComidaGral}
         />
-        <CalcBebidas
-          indicesComidas={state.indicesComidas}
-          bebidas={state.bebidas}
-          dispatch={dispatch}
-          state={state}
-        />
+
         <h2 className="verde">Ingrese bebidas y consumo compartido</h2>
         <FormBebidas dispatch={dispatch} />
         <ListaBebidas
