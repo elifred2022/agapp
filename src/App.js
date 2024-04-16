@@ -102,6 +102,11 @@ export default function TaskApp() {
           montoBebidaCu={state.montoBebidaCu}
           montoComidaGral={state.montoComidaGral}
         />
+        <CalcComidas
+          comidas={state.comidas}
+          dispatch={dispatch}
+          montoComidaGral={state.montoComidaGral}
+        />
 
         <h2 className="verde">Ingrese bebidas y consumo compartido</h2>
         <FormBebidas dispatch={dispatch} />

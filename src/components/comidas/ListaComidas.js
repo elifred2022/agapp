@@ -62,18 +62,6 @@ export default function ListaComidas({
             />
           ))}
         </tbody>
-
-        <tfoot>
-          <tr>
-            <th></th>
-            <th></th>
-            <th>Totales</th>
-            <th>$ {traerMontoGralComida} </th>
-            <th>$ {traerMontoGralBebida}</th>
-            <th> $ {calcTotalFinalGral} </th>
-            <th> </th>
-          </tr>
-        </tfoot>
       </table>
     </>
   );
