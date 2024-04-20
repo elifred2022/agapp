@@ -76,7 +76,7 @@ export default function InformeFinal({
       </table>
       <div>
         <h2 className="yellow">
-          Total a pagar sin desceunto: {totalFinalGral}{" "}
+          Total a pagar sin desceunto: {totalFinalGral}
         </h2>
         <button>Increment Total</button>
       </div>

@@ -45,6 +45,7 @@ export default function ListaComidas({
             <th>Valor/plato</th>
             <th>Importe por bebida</th>
             <th>Importe total</th>
+            <th>Paga en efectivo?</th>
             <th>Edit/Elim</th>
           </tr>
         </thead>
@@ -76,6 +77,7 @@ function Foods({
   bebidas,
 }) {
   const [isEditing, setIsEditing] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
   const [importePorPersona, setImportePorPersona] = useState(0);
 
   const importePorPersonaString = importePorPersona.toString();
@@ -140,6 +142,7 @@ function Foods({
           </td>
           <td>${traerTotalBebidasCu}</td>
           <td>${calcImportePorPersona}</td>
+          <td></td>
           <td>
             <button
               className="my-button_agregar"
@@ -151,6 +154,8 @@ function Foods({
         </tr>
       </>
     );
+  }
+  if (isChecked) {
   } else {
     foodContent = (
       <>
@@ -161,6 +166,11 @@ function Foods({
           <td>${comida.valorComida}</td>
           <td>${traerTotalBebidasCu}</td>
           <td>${calcImportePorPersona}</td>
+
+          <div className="botonera">
+            <input className="efectivo" type="checkbox" />
+            <p>Si</p>
+          </div>
 
           <td>
             <div className="botonera">
