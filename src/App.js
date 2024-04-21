@@ -135,8 +135,8 @@ export default function TaskApp() {
           resultadoFinal={state.resultadoFinal}
           onChangePorcentaje={handleChangePorcentaje}
         />
-        <h2 className="verde">Informe final</h2>
-        <InformeFinal
+        {/* <h2 className="verde">Informe final</h2>
+         <InformeFinal
           state={state}
           montoBebidaCu={state.montoBebidaCu}
           montoComidaGral={state.montoComidaGral}
@@ -146,7 +146,7 @@ export default function TaskApp() {
           montoPorcentaje={state.montoPorcentaje}
           dispatch={dispatch}
           resultado={state.resultado}
-        />
+  />*/}
       </main>
     </>
   );

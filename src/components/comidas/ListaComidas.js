@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { MdAutoDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import { BiSolidSave } from "react-icons/bi";
@@ -82,9 +82,11 @@ function Foods({
   const [isEditing, setIsEditing] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const [importePorPersona, setImportePorPersona] = useState(0);
-  const [importePorPersonaChecked, setImportePorPersonaChecked] = useState(0);
+  const [importePorPersonaChecked, setImportePorPersonaChecked] =
+    useState(importePorPersona);
 
-  const importePorPersonaString = importePorPersona.toString();
+  // PARA QUE SE ACTUALICE AL MISMO TIEMPO LA INTERFACE Y EL LOCALSOTRAGE valor de imorteporpersona
+  const importePorPersonaCheckedRef = useRef(importePorPersonaChecked); // SE USA EL HOOKS DE useRef para que la intarface y el localstorage se actualicen al mismp tiempo
 
   const importePorPersonaCheckedString = importePorPersonaChecked.toString();
 
@@ -97,16 +99,20 @@ function Foods({
     parseInt(comida.valorComida) + parseInt(traerTotalBebidasCu);
 
   useEffect(() => {
-    setImportePorPersona(calcImportePorPersona.toFixed(2));
+    setImportePorPersona(
+      (importePorPersonaCheckedRef.current = calcImportePorPersona.toFixed(2))
+    );
   }, [calcImportePorPersona]);
 
   useEffect(() => {
-    setImportePorPersonaChecked(importePorPersona);
+    setImportePorPersonaChecked(
+      (importePorPersonaCheckedRef.current = importePorPersona)
+    );
     dispatch({
       type: "AGREGAR_RESULTADO",
-      payload: { importePorPersonaCheckedString },
+      payload: { importePorPersonaCheckedRef },
     }); // aqui fue q pude pasar  el valor de totalIndex al padre en el estado de indice en App
-  }, [importePorPersonaChecked]);
+  }, [importePorPersona]);
 
   const traerPorcentajeEfectivo = montoPorcentaje.reduce(
     (acc, elem) => (acc = parseInt(elem.descuento)),
@@ -125,7 +131,10 @@ function Foods({
       if (traerPorcentajeEfectivo > 0) {
         pagoEfectivo =
           pagoDebito - (pagoDebito * traerPorcentajeEfectivo) / 100;
-        setImportePorPersona(pagoEfectivo.toFixed(2));
+        setImportePorPersona(
+          (importePorPersonaCheckedRef.current = pagoEfectivo.toFixed(2))
+        );
+
         //  dispatch({ type: "AGREGAR_RESULTADO", payload: { resCuStore } });
       } else {
         alert("Debe ingresar porcentaje");
@@ -136,7 +145,10 @@ function Foods({
       const pagoDebito = calcImportePorPersona;
       // parseInt(comida.valorComida) + parseInt(traerTotalBebidasCu);
 
-      setImportePorPersona(pagoDebito.toFixed(2));
+      setImportePorPersona(
+        (importePorPersonaCheckedRef.current = pagoDebito.toFixed(2))
+      );
+
       //  dispatch({ type: "AGREGAR_RESULTADO", payload: { resCuStore } });
     }
   };
