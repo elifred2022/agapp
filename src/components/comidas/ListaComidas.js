@@ -82,8 +82,7 @@ function Foods({
   const [isEditing, setIsEditing] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const [importePorPersona, setImportePorPersona] = useState(0);
-  const [importePorPersonaChecked, setImportePorPersonaChecked] =
-    useState(importePorPersona);
+  const [importePorPersonaChecked, setImportePorPersonaChecked] = useState(0);
 
   // PARA QUE SE ACTUALICE AL MISMO TIEMPO LA INTERFACE Y EL LOCALSOTRAGE valor de imorteporpersona
   const importePorPersonaCheckedRef = useRef(importePorPersonaChecked); // SE USA EL HOOKS DE useRef para que la intarface y el localstorage se actualicen al mismp tiempo
