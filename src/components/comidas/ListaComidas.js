@@ -78,6 +78,7 @@ function Foods({
   montoBebidaCu,
   montoPorcentaje,
   bebidas,
+  state,
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
@@ -85,9 +86,7 @@ function Foods({
   const [importePorPersonaChecked, setImportePorPersonaChecked] = useState(0);
 
   // PARA QUE SE ACTUALICE AL MISMO TIEMPO LA INTERFACE Y EL LOCALSOTRAGE valor de imorteporpersona
-  const importePorPersonaCheckedRef = useRef(importePorPersonaChecked); // SE USA EL HOOKS DE useRef para que la intarface y el localstorage se actualicen al mismp tiempo
-
-  const importePorPersonaCheckedString = importePorPersonaChecked.toString();
+  const importePorPersonaCheckedRef = useRef(importePorPersona); // SE USA EL HOOKS DE useRef para que la intarface y el localstorage se actualicen al mismp tiempo
 
   const traerTotalBebidasCu = montoBebidaCu.reduce(
     (acc, elem) => (acc = parseInt(elem.totalBebidasCuString)),
@@ -104,7 +103,7 @@ function Foods({
   }, [calcImportePorPersona]);
 
   useEffect(() => {
-    setImportePorPersonaChecked(
+    setImportePorPersona(
       (importePorPersonaCheckedRef.current = importePorPersona)
     );
     dispatch({
@@ -133,8 +132,6 @@ function Foods({
         setImportePorPersona(
           (importePorPersonaCheckedRef.current = pagoEfectivo.toFixed(2))
         );
-
-        //  dispatch({ type: "AGREGAR_RESULTADO", payload: { resCuStore } });
       } else {
         alert("Debe ingresar porcentaje");
         setIsChecked(false);
@@ -147,8 +144,6 @@ function Foods({
       setImportePorPersona(
         (importePorPersonaCheckedRef.current = pagoDebito.toFixed(2))
       );
-
-      //  dispatch({ type: "AGREGAR_RESULTADO", payload: { resCuStore } });
     }
   };
 
@@ -195,7 +190,7 @@ function Foods({
             />
           </td>
           <td>${traerTotalBebidasCu}</td>
-          <td>${importePorPersonaChecked}</td>
+          <td>${importePorPersona}</td>
           <td></td>
           <td>
             <button
@@ -218,6 +213,7 @@ function Foods({
           <td>${comida.valorComida}</td>
           <td>${traerTotalBebidasCu}</td>
           <td>${importePorPersona}</td>
+
           <td>
             <div className="botonera">
               <input

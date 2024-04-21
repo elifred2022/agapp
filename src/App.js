@@ -11,6 +11,7 @@ import InformeFinal from "./components/informes/InformeFinal.js";
 import CalcInformeFinal from "./components/informes/CalcInformeFinal.js";
 import FormPorcentaje from "./components/porcentaje/FormPorcentaje.js";
 import ListaPorcentaje from "./components/porcentaje/ListaPorcentaje.js";
+import TotalApagar from "./components/comidas/TotalApagar.js";
 
 export default function TaskApp() {
   const storedAlmacenPorcentajeEfectivo =
@@ -106,6 +107,11 @@ export default function TaskApp() {
         <CalcComidas
           comidas={state.comidas}
           dispatch={dispatch}
+          montoComidaGral={state.montoComidaGral}
+        />
+        <TotalApagar
+          dispatch={dispatch}
+          resultado={state.resultado}
           montoComidaGral={state.montoComidaGral}
         />
 
