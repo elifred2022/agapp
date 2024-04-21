@@ -34,12 +34,12 @@ export default function InformeFinal({
 
     setTotalFinalGral(calcTotalFinalGral);
 
-    dispatch({
+    /*  dispatch({
       type: "AGREGAR_RESULTADO",
       payload: {
         totalFinalString,
       },
-    });
+    });*/
   }, [traerTotalComidaGral, traerTotalBebidasGral, totalFinalGral]);
 
   return (
@@ -127,10 +127,10 @@ function Foods({
       parseInt(comida.valorComida) + parseInt(totalBebidasCuString);
 
     setResCuStore(pagoDebito.toFixed(2));
-    dispatch({
+    /*  dispatch({
       type: "AGREGAR_RESULTADO",
       payload: { resCuStore, totalBebidasCuString },
-    });
+    });*/
   }, [montoPorcentaje, bebidas]); //totalBebidasCu
 
   const handleChangeModoPago = (checked, resCuStore) => {
@@ -147,7 +147,7 @@ function Foods({
         pagoEfectivo =
           pagoDebito - (pagoDebito * traerPorcentajeEfectivo) / 100;
         setResCuStore(pagoEfectivo.toFixed(2));
-        dispatch({ type: "AGREGAR_RESULTADO", payload: { resCuStore } });
+        //  dispatch({ type: "AGREGAR_RESULTADO", payload: { resCuStore } });
       } else {
         alert("Debe ingresar porcentaje");
         setIsEfectivoCheck(false);
@@ -159,7 +159,7 @@ function Foods({
         parseInt(comida.valorComida) + parseInt(totalBebidasCu);
 
       setResCuStore(pagoDebito.toFixed(2));
-      dispatch({ type: "AGREGAR_RESULTADO", payload: { resCuStore } });
+      //  dispatch({ type: "AGREGAR_RESULTADO", payload: { resCuStore } });
     }
   };
 

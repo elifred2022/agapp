@@ -101,6 +101,7 @@ export default function TaskApp() {
           onChangeComidas={handleChangeComidas}
           montoBebidaCu={state.montoBebidaCu}
           montoComidaGral={state.montoComidaGral}
+          montoPorcentaje={state.montoPorcentaje}
         />
         <CalcComidas
           comidas={state.comidas}

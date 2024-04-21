@@ -16,11 +16,12 @@ const CalcInformeFinal = ({ dispatch, resultado, comidas, bebidas }) => {
     0
   );
 
-  const totalFinal = trarMontoComidaPorPersona + trarMontoBebidaPorPersona;
+  const totalPagarPorPersona =
+    trarMontoComidaPorPersona + trarMontoBebidaPorPersona;
 
   useEffect(() => {
     //const totalComidas = elementos.reduce((acc, elem) => acc + parseInt(elem.valorComida), 0);
-    setTotalFinalGral(totalFinal);
+    setTotalFinalGral(totalPagarPorPersona);
 
     dispatch({
       type: "AGREGAR_COMIDA",

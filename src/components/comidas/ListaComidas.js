@@ -10,6 +10,7 @@ export default function ListaComidas({
   onDeleteComidas,
   montoBebidaCu,
   montoComidaGral,
+  montoPorcentaje,
 }) {
   const [totalIndex, setTotalIndex] = useState(state.comidas.length);
 
@@ -60,6 +61,7 @@ export default function ListaComidas({
               index={index}
               dispatch={dispatch}
               montoBebidaCu={montoBebidaCu}
+              montoPorcentaje={montoPorcentaje}
             />
           ))}
         </tbody>
@@ -67,20 +69,24 @@ export default function ListaComidas({
     </>
   );
 }
-
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
 function Foods({
   onChangeComidas,
   comida,
   index,
   dispatch,
   montoBebidaCu,
+  montoPorcentaje,
   bebidas,
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const [importePorPersona, setImportePorPersona] = useState(0);
+  const [importePorPersonaChecked, setImportePorPersonaChecked] = useState(0);
 
   const importePorPersonaString = importePorPersona.toString();
+
+  const importePorPersonaCheckedString = importePorPersonaChecked.toString();
 
   const traerTotalBebidasCu = montoBebidaCu.reduce(
     (acc, elem) => (acc = parseInt(elem.totalBebidasCuString)),
@@ -91,12 +97,49 @@ function Foods({
     parseInt(comida.valorComida) + parseInt(traerTotalBebidasCu);
 
   useEffect(() => {
-    setImportePorPersona(calcImportePorPersona);
+    setImportePorPersona(calcImportePorPersona.toFixed(2));
+  }, [calcImportePorPersona]);
+
+  useEffect(() => {
+    setImportePorPersonaChecked(importePorPersona);
     dispatch({
       type: "AGREGAR_RESULTADO",
-      payload: { importePorPersonaString },
+      payload: { importePorPersonaCheckedString },
     }); // aqui fue q pude pasar  el valor de totalIndex al padre en el estado de indice en App
-  }, [importePorPersona]);
+  }, [importePorPersonaChecked]);
+
+  const traerPorcentajeEfectivo = montoPorcentaje.reduce(
+    (acc, elem) => (acc = parseInt(elem.descuento)),
+    0
+  );
+
+  const handleChangeModoPago = (checked) => {
+    setIsChecked(checked);
+
+    if (checked) {
+      // si paga en efectivo
+      const pagoDebito = calcImportePorPersona;
+
+      let pagoEfectivo = 0;
+
+      if (traerPorcentajeEfectivo > 0) {
+        pagoEfectivo =
+          pagoDebito - (pagoDebito * traerPorcentajeEfectivo) / 100;
+        setImportePorPersona(pagoEfectivo.toFixed(2));
+        //  dispatch({ type: "AGREGAR_RESULTADO", payload: { resCuStore } });
+      } else {
+        alert("Debe ingresar porcentaje");
+        setIsChecked(false);
+      }
+    } else {
+      // si paga en debito
+      const pagoDebito = calcImportePorPersona;
+      // parseInt(comida.valorComida) + parseInt(traerTotalBebidasCu);
+
+      setImportePorPersona(pagoDebito.toFixed(2));
+      //  dispatch({ type: "AGREGAR_RESULTADO", payload: { resCuStore } });
+    }
+  };
 
   let foodContent;
   if (isEditing) {
@@ -141,7 +184,7 @@ function Foods({
             />
           </td>
           <td>${traerTotalBebidasCu}</td>
-          <td>${calcImportePorPersona}</td>
+          <td>${importePorPersonaChecked}</td>
           <td></td>
           <td>
             <button
@@ -154,8 +197,6 @@ function Foods({
         </tr>
       </>
     );
-  }
-  if (isChecked) {
   } else {
     foodContent = (
       <>
@@ -165,12 +206,18 @@ function Foods({
           <td>{comida.comida}</td>
           <td>${comida.valorComida}</td>
           <td>${traerTotalBebidasCu}</td>
-          <td>${calcImportePorPersona}</td>
-
-          <div className="botonera">
-            <input className="efectivo" type="checkbox" />
-            <p>Si</p>
-          </div>
+          <td>${importePorPersona}</td>
+          <td>
+            <div className="botonera">
+              <input
+                value={isChecked}
+                className="efectivo"
+                type="checkbox"
+                onChange={(e) => handleChangeModoPago(e.target.checked)}
+                checked={isChecked}
+              />
+            </div>
+          </td>
 
           <td>
             <div className="botonera">
