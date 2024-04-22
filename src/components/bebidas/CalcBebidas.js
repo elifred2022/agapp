@@ -10,7 +10,7 @@ const CalcBebidas = ({ dispatch, bebidas, indicesComidas, comidas }) => {
   const totalBebidasGralString = totalBebidasGral.toString();
 
   const acumTotalBebidas = bebidas.reduce(
-    (acc, elem) => acc + parseInt(elem.totalBebida),
+    (acc, elem) => acc + parseInt(elem.totalBebidasString),
     0
   );
 
@@ -22,13 +22,16 @@ const CalcBebidas = ({ dispatch, bebidas, indicesComidas, comidas }) => {
     const totalBebidasCu1 =
       totalAsistentes > 0 ? acumTotalBebidas / totalAsistentes : 0; // asi co este codigo se evita inicializar en null totalAsistentes > 0 ? totalBebidas / totalAsistentes : 0;
 
-    setTotalBebidaCu(parseInt(totalBebidasCu1)); // tolocalstring para unidades de miles
+    setTotalBebidaCu(parseInt(totalBebidasCu1));
     dispatch({
       type: "AGREGAR_BEBIDACU",
-      payload: { totalBebidasGralString, totalBebidasCuString },
+      payload: {
+        totalBebidasGralString,
+        totalBebidasCuString,
+      },
     });
 
-    setTotalBebidasGral(acumTotalBebidas);
+    setTotalBebidasGral(parseInt(acumTotalBebidas));
   }, [
     totalBebidasCuString,
     totalBebidasGral,

@@ -108,7 +108,7 @@ function Foods({
     );
     dispatch({
       type: "AGREGAR_RESULTADO",
-      payload: { importePorPersonaCheckedRef },
+      payload: { importePorPersona },
     }); // aqui fue q pude pasar  el valor de totalIndex al padre en el estado de indice en App
   }, [importePorPersona]);
 

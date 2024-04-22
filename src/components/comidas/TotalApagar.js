@@ -1,9 +1,31 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
-const TotalApagar = ({ resultado, dispatch }) => {
-  const [totalApagar, setTotalApagar] = useState(0);
+const TotalApagar = ({
+  resultado,
+  dispatch,
+  bebidas,
+  indicesComidas,
+  comidas,
+  montoBebidaCu,
+}) => {
+  const [totalImportePorPersona, setTotalImportePorPersona] = useState(0);
 
-  return <h3 className="yellow">Total a pagar: $ </h3>;
+  const traerTotal = resultado.reduce((acc, elem) => {
+    return acc + parseInt(elem.importePorPersona);
+  }, 0);
+
+  useEffect(() => {
+    setTotalImportePorPersona(traerTotal);
+  }, [traerTotal]);
+
+  return (
+    <>
+      <div>
+        <h2>Total a pagar: total bebidas + total comidas</h2>
+        <p>${totalImportePorPersona}</p>
+      </div>
+    </>
+  );
 };
 
 export default TotalApagar;

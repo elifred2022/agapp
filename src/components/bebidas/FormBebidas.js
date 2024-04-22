@@ -14,7 +14,7 @@ export default function FormBebidas({ onAddComidas, dispatch }) {
 
   useEffect(() => {
     if (cantidadBebida && valorUnitBebida) {
-      setTotalBebida(parseFloat(cantidadBebida) * parseFloat(valorUnitBebida));
+      setTotalBebida(parseInt(cantidadBebida) * parseInt(valorUnitBebida));
     } else {
       setTotalBebida("");
     }
@@ -35,7 +35,7 @@ export default function FormBebidas({ onAddComidas, dispatch }) {
       setBebida("");
       setCantidadBebida("");
       setValorUnitBebida("");
-      //setTotalBebida("");
+      setTotalBebida("");
     }
   };
 
@@ -68,7 +68,7 @@ export default function FormBebidas({ onAddComidas, dispatch }) {
             setBebida("");
             setCantidadBebida("");
             setValorUnitBebida("");
-            //setTotalBebida("");
+            setTotalBebida("");
             dispatch({
               type: "AGREGAR_BEBIDA",
               payload: {

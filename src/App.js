@@ -113,6 +113,8 @@ export default function TaskApp() {
           dispatch={dispatch}
           resultado={state.resultado}
           montoComidaGral={state.montoComidaGral}
+          montoBebidaCu={state.montoBebidaCu}
+          comidas={state.comidas}
         />
 
         <h2 className="verde">Ingrese bebidas y consumo compartido</h2>
