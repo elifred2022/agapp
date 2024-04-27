@@ -102,15 +102,15 @@ function Foods({
     parseInt(comida.valorComida) + parseInt(traerTotalBebidasCu);
 
   useEffect(() => {
+    setImportePorPersona(calcImportePorPersona);
+  }, [calcImportePorPersona]);
+
+  useEffect(() => {
     dispatch({
       type: "AGREGAR_RESULTADO",
       payload: { importePorPersona },
     });
   }, [importePorPersona]);
-
-  useEffect(() => {
-    setImportePorPersona(calcImportePorPersona);
-  }, [calcImportePorPersona]);
 
   const traerPorcentajeEfectivo = montoPorcentaje.reduce(
     (acc, elem) => (acc = parseInt(elem.descuento)),
@@ -225,6 +225,7 @@ function Foods({
               <input
                 type="checkbox"
                 name="line"
+                autoComplete="new-checkbox"
                 checked={checkedItems.line || false}
                 onChange={handleCheckboxChange}
               />
