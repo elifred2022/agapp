@@ -103,6 +103,7 @@ export default function TaskApp() {
           montoBebidaCu={state.montoBebidaCu}
           montoComidaGral={state.montoComidaGral}
           montoPorcentaje={state.montoPorcentaje}
+          resultado={state.resultado}
         />
         <CalcComidas
           comidas={state.comidas}

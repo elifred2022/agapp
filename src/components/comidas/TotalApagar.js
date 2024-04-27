@@ -21,8 +21,8 @@ const TotalApagar = ({
   return (
     <>
       <div>
-        <h2>Total a pagar: total bebidas + total comidas</h2>
-        <p>${totalImportePorPersona}</p>
+        <h2>Total a pagar: </h2>
+        <p>$ falta funcion{/*totalImportePorPersona*/}</p>
       </div>
     </>
   );

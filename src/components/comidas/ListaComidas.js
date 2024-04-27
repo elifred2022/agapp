@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { MdAutoDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import { BiSolidSave } from "react-icons/bi";
+import Toggle from "react-toggle";
 
 export default function ListaComidas({
   state,
@@ -11,6 +12,7 @@ export default function ListaComidas({
   montoBebidaCu,
   montoComidaGral,
   montoPorcentaje,
+  resultado,
 }) {
   const [totalIndex, setTotalIndex] = useState(state.comidas.length);
 
@@ -47,7 +49,7 @@ export default function ListaComidas({
             <th>Valor/plato</th>
             <th>Importe por bebida</th>
             <th>Importe total</th>
-            <th>Si paga en efectivo active aca</th>
+            <th>Forma de pago</th>
             <th>Edit/Elim</th>
           </tr>
         </thead>
@@ -63,6 +65,7 @@ export default function ListaComidas({
               dispatch={dispatch}
               montoBebidaCu={montoBebidaCu}
               montoPorcentaje={montoPorcentaje}
+              resultado={resultado}
             />
           ))}
         </tbody>
@@ -80,6 +83,7 @@ function Foods({
   montoPorcentaje,
   bebidas,
   state,
+  resultado,
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
@@ -98,20 +102,15 @@ function Foods({
     parseInt(comida.valorComida) + parseInt(traerTotalBebidasCu);
 
   useEffect(() => {
-    setImportePorPersona(
-      (importePorPersonaCheckedRef.current = calcImportePorPersona.toFixed(2))
-    );
-  }, [calcImportePorPersona]);
-
-  useEffect(() => {
-    setImportePorPersona(
-      (importePorPersonaCheckedRef.current = importePorPersona)
-    );
     dispatch({
       type: "AGREGAR_RESULTADO",
       payload: { importePorPersona },
-    }); // aqui fue q pude pasar  el valor de totalIndex al padre en el estado de indice en App
+    });
   }, [importePorPersona]);
+
+  useEffect(() => {
+    setImportePorPersona(calcImportePorPersona);
+  }, [calcImportePorPersona]);
 
   const traerPorcentajeEfectivo = montoPorcentaje.reduce(
     (acc, elem) => (acc = parseInt(elem.descuento)),
@@ -147,6 +146,8 @@ function Foods({
       );
     }
   };
+
+  // funcion del toggle switch
 
   //// FUNCION CHECKBOX PARA TACHAR LA LINEA
 
@@ -223,64 +224,74 @@ function Foods({
             <label>
               <input
                 type="checkbox"
-                name="line1"
-                checked={checkedItems.line1 || false}
+                name="line"
+                checked={checkedItems.line || false}
                 onChange={handleCheckboxChange}
               />
             </label>
           </td>
           <td
             style={{
-              textDecoration: checkedItems.line1 ? "line-through" : "none",
+              textDecoration: checkedItems.line ? "line-through" : "none",
             }}
           >
             {index + 1}.-{" "}
           </td>
           <td
             style={{
-              textDecoration: checkedItems.line1 ? "line-through" : "none",
+              textDecoration: checkedItems.line ? "line-through" : "none",
             }}
           >
             {comida.nombre}
           </td>
           <td
             style={{
-              textDecoration: checkedItems.line1 ? "line-through" : "none",
+              textDecoration: checkedItems.line ? "line-through" : "none",
             }}
           >
             {comida.comida}
           </td>
           <td
             style={{
-              textDecoration: checkedItems.line1 ? "line-through" : "none",
+              textDecoration: checkedItems.line ? "line-through" : "none",
             }}
           >
             ${comida.valorComida}
           </td>
           <td
             style={{
-              textDecoration: checkedItems.line1 ? "line-through" : "none",
+              textDecoration: checkedItems.line ? "line-through" : "none",
             }}
           >
             ${traerTotalBebidasCu}
           </td>
           <td
             style={{
-              textDecoration: checkedItems.line1 ? "line-through" : "none",
+              textDecoration: checkedItems.line ? "line-through" : "none",
             }}
           >
             ${importePorPersona}
           </td>
 
-          <td>
-            <div className="botonera">
-              <input
-                value={isChecked}
-                className="efectivo"
-                type="checkbox"
-                onChange={(e) => handleChangeModoPago(e.target.checked)}
-                checked={isChecked}
-              />
+          <td
+            style={{
+              textDecoration: checkedItems.line ? "line-through" : "none",
+            }}
+          >
+            <div>
+              <p>Debito / Efectivo</p>
+
+              <label className="toggle-switch">
+                <input
+                  id="toggle-switch-input"
+                  value={isChecked}
+                  className="efectivo"
+                  type="checkbox"
+                  onChange={(e) => handleChangeModoPago(e.target.checked)}
+                  checked={isChecked}
+                />
+                <span className="toggle-switch-slider"></span>
+              </label>
             </div>
           </td>
 
