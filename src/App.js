@@ -110,13 +110,6 @@ export default function TaskApp() {
           dispatch={dispatch}
           montoComidaGral={state.montoComidaGral}
         />
-        <TotalApagar
-          dispatch={dispatch}
-          resultado={state.resultado}
-          montoComidaGral={state.montoComidaGral}
-          montoBebidaCu={state.montoBebidaCu}
-          comidas={state.comidas}
-        />
 
         <h2 className="verde">Ingrese bebidas y consumo compartido</h2>
         <FormBebidas dispatch={dispatch} />
@@ -144,18 +137,24 @@ export default function TaskApp() {
           resultadoFinal={state.resultadoFinal}
           onChangePorcentaje={handleChangePorcentaje}
         />
-        {/* <h2 className="verde">Informe final</h2>
-         <InformeFinal
+        <h2 className="verde">Informe final</h2>
+        <InformeFinal
           state={state}
+          dispatch={dispatch}
+          onDeleteComidas={handleDeleteComidas}
+          onChangeComidas={handleChangeComidas}
           montoBebidaCu={state.montoBebidaCu}
           montoComidaGral={state.montoComidaGral}
-          bebidas={state.bebidas}
-          comidas={state.comidas}
-          indicesComidas={state.indicesComidas}
           montoPorcentaje={state.montoPorcentaje}
+          resultado={state.resultado}
+        />
+        <TotalApagar
           dispatch={dispatch}
           resultado={state.resultado}
-  />*/}
+          montoComidaGral={state.montoComidaGral}
+          montoBebidaCu={state.montoBebidaCu}
+          comidas={state.comidas}
+        />
       </main>
     </>
   );

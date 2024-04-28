@@ -1,414 +1,296 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { MdAutoDelete } from "react-icons/md";
+import { FaEdit } from "react-icons/fa";
+import { BiSolidSave } from "react-icons/bi";
+import Toggle from "react-toggle";
 
-export default function InformeFinal({
+export default function ListaComidas({
   state,
   dispatch,
-  montoPorcentaje,
   onChangeComidas,
   onDeleteComidas,
-  resultado,
   montoBebidaCu,
   montoComidaGral,
+  montoPorcentaje,
+  resultado,
 }) {
-  const [totalFinalGral, setTotalFinalGral] = useState(0);
+  const [totalIndex, setTotalIndex] = useState(state.comidas.length);
 
-  const totalFinalString = totalFinalGral.toString();
+  useEffect(() => {
+    dispatch({ type: "AGREGAR_INDICE", payload: { totalIndex } }); // aqui fue q pude pasar  el valor de totalIndex al padre en el estado de indice en App
+  }, [totalIndex]);
+
+  useEffect(() => {
+    setTotalIndex(state.comidas.length);
+  }, [state.comidas]);
+
+  const traerMontoGralComida = montoComidaGral.reduce(
+    (acc, elem) => (acc = parseInt(elem.totalComidasGralString)),
+    0
+  );
+
+  const traerMontoGralBebida = montoBebidaCu.reduce(
+    (acc, elem) => (acc = parseInt(elem.totalBebidasGralString)),
+    0
+  );
+
+  const calcTotalFinalGral =
+    parseInt(traerMontoGralComida) + parseInt(traerMontoGralBebida);
+
+  return (
+    <>
+      <table className="styled-table">
+        <thead>
+          <tr>
+            <th>Pago?</th>
+            <th>Nº</th>
+            <th>Nombre</th>
+
+            <th>Valor/plato</th>
+            <th>Importe por bebida</th>
+            <th>Importe total</th>
+            <th>Forma de pago</th>
+          </tr>
+        </thead>
+        <tbody>
+          {state.comidas.map((comida, index) => (
+            <Foods
+              key={comida.id}
+              comida={comida}
+              onChangeComidas={onChangeComidas}
+              onDelete={onDeleteComidas}
+              state={state}
+              index={index}
+              dispatch={dispatch}
+              montoBebidaCu={montoBebidaCu}
+              montoPorcentaje={montoPorcentaje}
+              resultado={resultado}
+            />
+          ))}
+        </tbody>
+      </table>
+    </>
+  );
+}
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
+function Foods({
+  onChangeComidas,
+  comida,
+  index,
+  dispatch,
+  montoBebidaCu,
+  montoPorcentaje,
+  bebidas,
+  state,
+  resultado,
+}) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
+  const [importePorPersona, setImportePorPersona] = useState(0);
+  const [importePorPersonaChecked, setImportePorPersonaChecked] = useState(0);
+
+  // PARA QUE SE ACTUALICE AL MISMO TIEMPO LA INTERFACE Y EL LOCALSOTRAGE valor de imorteporpersona
+  const importePorPersonaCheckedRef = useRef(importePorPersona); // SE USA EL HOOKS DE useRef para que la intarface y el localstorage se actualicen al mismp tiempo
 
   const traerTotalBebidasCu = montoBebidaCu.reduce(
     (acc, elem) => (acc = parseInt(elem.totalBebidasCuString)),
     0
   );
 
-  const traerTotalBebidasGral = montoBebidaCu.reduce(
-    (acc, elem) => (acc = parseInt(elem.totalBebidasGralString)),
-    0
-  );
-
-  const traerTotalComidaGral = montoComidaGral.reduce(
-    (acc, elem) => (acc = parseInt(elem.totalComidasGralString)),
-    0
-  );
+  const calcImportePorPersona =
+    parseInt(comida.valorComida) + parseInt(traerTotalBebidasCu);
 
   useEffect(() => {
-    const calcTotalFinalGral = traerTotalComidaGral + traerTotalBebidasGral;
-
-    setTotalFinalGral(calcTotalFinalGral);
-
-    /*  dispatch({
-      type: "AGREGAR_RESULTADO",
-      payload: {
-        totalFinalString,
-      },
-    });*/
-  }, [traerTotalComidaGral, traerTotalBebidasGral, totalFinalGral]);
-
-  return (
-    <>
-      <table className="styled-table">
-        <thead>
-          <tr>
-            <th>Nº</th>
-            <th>Nombre</th>
-            <th>Importe plato</th>
-            <th>Importe bebidas</th>
-            <th>Paga en efectivo?</th>
-            <th>Importe a pagar</th>
-          </tr>
-        </thead>
-        <tbody>
-          {state.comidas.map((comida, index) => (
-            <Foods
-              key={comida.id}
-              comida={comida}
-              onChangeComidas={onChangeComidas}
-              onDelete={onDeleteComidas}
-              state={state}
-              index={index}
-              dispatch={dispatch}
-              bebidas={state.bebidas}
-              comidas={state.comidas}
-              indicesComidas={state.indicesComidas}
-              montoPorcentaje={montoPorcentaje}
-              resultado={state.resultado}
-            />
-          ))}
-        </tbody>
-      </table>
-      <div>
-        <h2 className="yellow">
-          Total a pagar sin desceunto: {totalFinalGral}
-        </h2>
-        <button>Increment Total</button>
-      </div>
-    </>
-  );
-}
-
-function Foods({
-  state,
-  onChangeComidas,
-  comida,
-  index,
-  bebidas,
-  comidas,
-  montoBebidaCu,
-  indicesComidas,
-  montoPorcentaje,
-  dispatch,
-  resultado,
-}) {
-  const [isEfectivoCheck, setIsEfectivoCheck] = useState(false);
-  const [resCuDeb, setResCuDeb] = useState(0);
-  const [resCuEfec, setResCuEfec] = useState(0);
-  const [resCuStore, setResCuStore] = useState(0);
-  const [totalBebidasCu, setTotalBebidaCu] = useState(0);
-  const [totalComidasCu, setTotalComidasCu] = useState(0);
-
-  const totalBebidasCuString = totalBebidasCu.toString();
-
-  const acumTotalBebidas = bebidas.reduce(
-    (acc, elem) => acc + parseInt(elem.totalBebidasString),
-    0
-  );
+    setImportePorPersona(calcImportePorPersona);
+  }, [calcImportePorPersona]);
 
   useEffect(() => {
-    const totalAsistentes = indicesComidas.reduce(
-      (acc, elem) => (acc = parseInt(elem.totalIndex)),
-      0
-    ); // quitando el + y dejando el = el contador de totalindex empieza en 1
-    const totalBebidasCu1 =
-      totalAsistentes > 0 ? acumTotalBebidas / totalAsistentes : 0; // asi co este codigo se evita inicializar en null totalAsistentes > 0 ? totalBebidas / totalAsistentes : 0;
-
-    setTotalBebidaCu(totalBebidasCu1); // tolocalstring para unidades de miles
-  }, [totalBebidasCu, acumTotalBebidas, indicesComidas, resCuEfec, resCuDeb]);
-
-  useEffect(() => {
-    const pagoDebito =
-      parseInt(comida.valorComida) + parseInt(totalBebidasCuString);
-
-    setResCuStore(pagoDebito.toFixed(2));
-    /*  dispatch({
-      type: "AGREGAR_RESULTADO",
-      payload: { resCuStore, totalBebidasCuString },
-    });*/
-  }, [montoPorcentaje, bebidas]); //totalBebidasCu
-
-  const handleChangeModoPago = (checked, resCuStore) => {
-    setIsEfectivoCheck(checked);
-
-    if (checked) {
-      // si paga en efectivo
-      const pagoDebito =
-        parseInt(comida.valorComida) + parseInt(totalBebidasCuString);
-
-      let pagoEfectivo = 0;
-
-      if (traerPorcentajeEfectivo > 0) {
-        pagoEfectivo =
-          pagoDebito - (pagoDebito * traerPorcentajeEfectivo) / 100;
-        setResCuStore(pagoEfectivo.toFixed(2));
-        //  dispatch({ type: "AGREGAR_RESULTADO", payload: { resCuStore } });
-      } else {
-        alert("Debe ingresar porcentaje");
-        setIsEfectivoCheck(false);
-      }
-    } else {
-      // si paga en debito
-
-      const pagoDebito =
-        parseInt(comida.valorComida) + parseInt(totalBebidasCu);
-
-      setResCuStore(pagoDebito.toFixed(2));
-      //  dispatch({ type: "AGREGAR_RESULTADO", payload: { resCuStore } });
-    }
-  };
-
-  const traerPorcentajeEfectivo = montoPorcentaje.reduce(
-    (acc, elem) => (acc = parseInt(elem.descuento)),
-    0
-  );
-
-  let infoContent;
-  infoContent = (
-    <>
-      <tr key={comida.id}>
-        <td>{index + 1}.- </td>
-        <td>{comida.nombre}</td>
-        <td>$ {comida.valorComida}</td>
-        <td>
-          <p>{} </p>
-          <p>$ {totalBebidasCuString}</p>
-        </td>
-        <td>
-          <div className="botonera">
-            <input
-              value={isEfectivoCheck}
-              className="efectivo"
-              type="checkbox"
-              onChange={(e) => handleChangeModoPago(e.target.checked)}
-              checked={isEfectivoCheck}
-            />
-            <p>Si</p>
-          </div>
-        </td>
-        <td>
-          <p> $ {resCuStore}</p>
-        </td>
-      </tr>
-    </>
-  );
-
-  return <>{<>{infoContent}</>}</>;
-}
-
-// OJO  ESTE CODIGO ABAJO ES PARA MODAL EDITING
-/*
-import { useState, useEffect } from "react";
-import { v4 as uuidv4 } from "uuid";
-
-export default function InformeFinal({
-  state,
-  dispatch,
-  montoPorcentaje,
-  onChangeComidas,
-  onDeleteComidas,
-  resultado,
-  resCuStore,
-}) {
-  return (
-    <>
-      <table className="styled-table">
-        <thead>
-          <tr>
-            <th>Nº</th>
-            <th>Nombre</th>
-            <th>Importe plato</th>
-            <th>Importe bebidas</th>
-            <th>Paga en efectivo?</th>
-            <th>Importe a pagar</th>
-          </tr>
-        </thead>
-        <tbody>
-          {state.comidas.map((comida, index) => (
-            <Foods
-              key={comida.id}
-              comida={comida}
-              onChangeComidas={onChangeComidas}
-              onDelete={onDeleteComidas}
-              state={state}
-              index={index}
-              dispatch={dispatch}
-              bebidas={state.bebidas}
-              comidas={state.comidas}
-              indicesComidas={state.indicesComidas}
-              montoPorcentaje={montoPorcentaje}
-              resultado={state.resultado}
-            />
-          ))}
-        </tbody>
-      </table>
-      <div>
-        <h2 className="yellow">Total a pagar: </h2>
-        <button>Calcular pago total</button>
-      </div>
-    </>
-  );
-}
-
-function Foods({
-  state,
-  onChangeComidas,
-  comida,
-  index,
-  bebidas,
-  comidas,
-  indicesComidas,
-  montoPorcentaje,
-  dispatch,
-  resultado,
-}) {
-  const [isEditing, setIsEditing] = useState(false);
-  const [isEfectivoCheck, setIsEfectivoCheck] = useState(false);
-  const [resCuDeb, setResCuDeb] = useState(0);
-  const [resCuEfec, setResCuEfec] = useState(0);
-  const [resCuStore, setResCuStore] = useState(0);
-  const [totalBebidasCu, setTotalBebidaCu] = useState(0);
-  const [totalComidasCu, setTotalComidasCu] = useState(0);
-
-  const acumTotalBebidas = bebidas.reduce(
-    (acc, elem) => acc + parseInt(elem.totalBebida),
-    0
-  );
-
-  useEffect(() => {
-    const totalAsistentes = indicesComidas.reduce(
-      (acc, elem) => (acc = parseInt(elem.totalIndex)),
-      0
-    ); // quitando el + y dejando el = el contador de totalindex empieza en 1
-    const totalBebidasCu1 =
-      totalAsistentes > 0 ? acumTotalBebidas / totalAsistentes : 0; // asi co este codigo se evita inicializar en null totalAsistentes > 0 ? totalBebidas / totalAsistentes : 0;
-
-    setTotalBebidaCu(totalBebidasCu1); // tolocalstring para unidades de miles
-  }, [totalBebidasCu, acumTotalBebidas, indicesComidas, resCuEfec, resCuDeb]);
-
-  const uniqueId = uuidv4();
-
-  useEffect(() => {
-    const pagoDebito = parseInt(comida.valorComida) + parseInt(totalBebidasCu);
-
-    setResCuDeb(pagoDebito.toFixed(2));
     dispatch({
       type: "AGREGAR_RESULTADO",
-      payload: { id: uniqueId, resCuDeb },
+      payload: { importePorPersona },
     });
-  }, [montoPorcentaje, totalBebidasCu]); //totalBebidasCu
-
-  const handleChangeModoPago = (checked) => {
-    setIsEfectivoCheck(checked);
-
-    if (checked) {
-      // si paga en efectivo
-      const pagoDebito =
-        parseInt(comida.valorComida) + parseInt(totalBebidasCu);
-
-      let pagoEfectivo = 0;
-
-      if (traerPorcentajeEfectivo > 0) {
-        pagoEfectivo =
-          pagoDebito - (pagoDebito * traerPorcentajeEfectivo) / 100;
-        setResCuEfec(pagoEfectivo.toFixed(2));
-        dispatch({
-          type: "AGREGAR_RESULTADO",
-          payload: { resCuEfec },
-        });
-      } else {
-        alert("Debe ingresar porcentaje");
-        setIsEfectivoCheck(false);
-      }
-    } else {
-      // si paga en debito
-      const pagoDebito =
-        parseInt(comida.valorComida) + parseInt(totalBebidasCu);
-
-      setResCuDeb(pagoDebito.toFixed(2));
-      dispatch({
-        type: "AGREGAR_RESULTADO",
-        payload: { resCuDeb },
-      });
-    }
-  };
+  }, [importePorPersona]);
 
   const traerPorcentajeEfectivo = montoPorcentaje.reduce(
     (acc, elem) => (acc = parseInt(elem.descuento)),
     0
   );
 
-  let informeFianl;
+  const handleChangeModoPago = (checked) => {
+    setIsChecked(checked);
 
+    if (checked) {
+      // si paga en efectivo
+      const pagoDebito = calcImportePorPersona;
+
+      let pagoEfectivo = 0;
+
+      if (traerPorcentajeEfectivo > 0) {
+        pagoEfectivo =
+          pagoDebito - (pagoDebito * traerPorcentajeEfectivo) / 100;
+        setImportePorPersona(
+          (importePorPersonaCheckedRef.current = pagoEfectivo.toFixed(2))
+        );
+      } else {
+        alert("Debe ingresar porcentaje");
+        setIsChecked(false);
+      }
+    } else {
+      // si paga en debito
+      const pagoDebito = calcImportePorPersona;
+      // parseInt(comida.valorComida) + parseInt(traerTotalBebidasCu);
+
+      setImportePorPersona(
+        (importePorPersonaCheckedRef.current = pagoDebito.toFixed(2))
+      );
+    }
+  };
+
+  // funcion del toggle switch
+
+  //// FUNCION CHECKBOX PARA TACHAR LA LINEA
+
+  const [checkedItems, setCheckedItems] = useState(false);
+  const handleCheckboxChange = (event) => {
+    const { name, checked } = event.target;
+    setCheckedItems({
+      ...checkedItems,
+      [name]: checked,
+    });
+  };
+
+  let foodContent;
   if (isEditing) {
-    informeFianl = (
+    foodContent = (
       <>
         <tr key={comida.id}>
-          <td>{index + 1}.- </td>
-          <td>{comida.nombre}</td>
-          <td>$ {comida.valorComida}</td>
+          <td>{index + 1}.-</td>
           <td>
-            <p>$ {totalBebidasCu.toFixed(2)}</p>
+            <input
+              value={comida.nombre}
+              onChange={(e) => {
+                onChangeComidas({
+                  type: "EDITAR_COMIDA",
+                  ...comida,
+                  nombre: e.target.value,
+                });
+              }}
+            />
           </td>
           <td>
-            <div className="botonera">
-              <input
-                value={isEfectivoCheck}
-                className="efectivo"
-                type="checkbox"
-                onChange={
-                  (e) =>
-                    setIsEditing(
-                      false
-                    ) 
-                }
-                checked={isEfectivoCheck}
-              />
-              <p>Si</p>
-            </div>
+            <input
+              value={comida.comida}
+              onChange={(e) => {
+                onChangeComidas({
+                  type: "EDITAR_COMIDA",
+                  ...comida,
+                  comida: e.target.value,
+                });
+              }}
+            />
           </td>
           <td>
-            <p> $ {resCuEfec}</p>
+            <input
+              value={comida.valorComida}
+              onChange={(e) => {
+                onChangeComidas({
+                  type: "EDITAR_COMIDA",
+                  ...comida,
+                  valorComida: e.target.value,
+                });
+              }}
+            />
+          </td>
+          <td>${traerTotalBebidasCu}</td>
+          <td>${importePorPersona}</td>
+          <td></td>
+          <td>
+            <button
+              className="my-button_agregar"
+              onClick={() => setIsEditing(false)}
+            >
+              <BiSolidSave />
+            </button>
           </td>
         </tr>
       </>
     );
   } else {
-    informeFianl = (
+    foodContent = (
       <>
         <tr key={comida.id}>
-          <td>{index + 1}.- </td>
-          <td>{comida.nombre}</td>
-          <td>$ {comida.valorComida}</td>
           <td>
-            <p>$ {totalBebidasCu.toFixed(2)}</p>
-          </td>
-          <td>
-            <div className="botonera">
+            <label>
               <input
-                value={isEfectivoCheck}
-                className="efectivo"
                 type="checkbox"
-                onChange={
-                  (e) => setIsEditing(true) //handleChangeModoPago(e.target.checked)
-                }
-                checked={isEfectivoCheck}
+                name="line"
+                autoComplete="new-checkbox"
+                checked={checkedItems.line || false}
+                onChange={handleCheckboxChange}
               />
-              <p>Si</p>
-            </div>
+            </label>
           </td>
-          <td>
-            <p> $ {resCuDeb}</p>
+          <td
+            style={{
+              textDecoration: checkedItems.line ? "line-through" : "none",
+            }}
+          >
+            {index + 1}.-{" "}
+          </td>
+          <td
+            style={{
+              textDecoration: checkedItems.line ? "line-through" : "none",
+            }}
+          >
+            {comida.nombre}
+          </td>
+
+          <td
+            style={{
+              textDecoration: checkedItems.line ? "line-through" : "none",
+            }}
+          >
+            ${comida.valorComida}
+          </td>
+          <td
+            style={{
+              textDecoration: checkedItems.line ? "line-through" : "none",
+            }}
+          >
+            ${traerTotalBebidasCu}
+          </td>
+          <td
+            style={{
+              textDecoration: checkedItems.line ? "line-through" : "none",
+            }}
+          >
+            ${importePorPersona}
+          </td>
+
+          <td
+            style={{
+              textDecoration: checkedItems.line ? "line-through" : "none",
+            }}
+          >
+            <div>
+              <p>Debito / Efectivo</p>
+
+              <label className="toggle-switch">
+                <input
+                  id="toggle-switch-input"
+                  value={isChecked}
+                  className="efectivo"
+                  type="checkbox"
+                  onChange={(e) => handleChangeModoPago(e.target.checked)}
+                  checked={isChecked}
+                />
+                <span className="toggle-switch-slider"></span>
+              </label>
+            </div>
           </td>
         </tr>
       </>
     );
   }
-
-  return <>{<>{informeFianl}</>}</>;
-}*/
+  return <>{<>{foodContent}</>}</>;
+}

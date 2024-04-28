@@ -42,14 +42,11 @@ export default function ListaComidas({
       <table className="styled-table">
         <thead>
           <tr>
-            <th>Pago?</th>
             <th>Nº</th>
             <th>Nombre</th>
             <th>Plato</th>
             <th>Valor/plato</th>
-            <th>Importe por bebida</th>
-            <th>Importe total</th>
-            <th>Forma de pago</th>
+
             <th>Edit/Elim</th>
           </tr>
         </thead>
@@ -220,81 +217,10 @@ function Foods({
     foodContent = (
       <>
         <tr key={comida.id}>
-          <td>
-            <label>
-              <input
-                type="checkbox"
-                name="line"
-                autoComplete="new-checkbox"
-                checked={checkedItems.line || false}
-                onChange={handleCheckboxChange}
-              />
-            </label>
-          </td>
-          <td
-            style={{
-              textDecoration: checkedItems.line ? "line-through" : "none",
-            }}
-          >
-            {index + 1}.-{" "}
-          </td>
-          <td
-            style={{
-              textDecoration: checkedItems.line ? "line-through" : "none",
-            }}
-          >
-            {comida.nombre}
-          </td>
-          <td
-            style={{
-              textDecoration: checkedItems.line ? "line-through" : "none",
-            }}
-          >
-            {comida.comida}
-          </td>
-          <td
-            style={{
-              textDecoration: checkedItems.line ? "line-through" : "none",
-            }}
-          >
-            ${comida.valorComida}
-          </td>
-          <td
-            style={{
-              textDecoration: checkedItems.line ? "line-through" : "none",
-            }}
-          >
-            ${traerTotalBebidasCu}
-          </td>
-          <td
-            style={{
-              textDecoration: checkedItems.line ? "line-through" : "none",
-            }}
-          >
-            ${importePorPersona}
-          </td>
-
-          <td
-            style={{
-              textDecoration: checkedItems.line ? "line-through" : "none",
-            }}
-          >
-            <div>
-              <p>Debito / Efectivo</p>
-
-              <label className="toggle-switch">
-                <input
-                  id="toggle-switch-input"
-                  value={isChecked}
-                  className="efectivo"
-                  type="checkbox"
-                  onChange={(e) => handleChangeModoPago(e.target.checked)}
-                  checked={isChecked}
-                />
-                <span className="toggle-switch-slider"></span>
-              </label>
-            </div>
-          </td>
+          <td>{index + 1}.- </td>
+          <td>{comida.nombre}</td>
+          <td>{comida.comida}</td>
+          <td>${comida.valorComida}</td>
 
           <td>
             <div className="botonera">
