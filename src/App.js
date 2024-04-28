@@ -148,12 +148,13 @@ export default function TaskApp() {
           montoPorcentaje={state.montoPorcentaje}
           resultado={state.resultado}
         />
-        <TotalApagar
-          dispatch={dispatch}
-          resultado={state.resultado}
-          montoComidaGral={state.montoComidaGral}
-          montoBebidaCu={state.montoBebidaCu}
+        <CalcInformeFinal
           comidas={state.comidas}
+          cuantoPago={state.cuantoPago}
+          montoTotal={state.total}
+          dispatch={dispatch}
+          state={state}
+          resultado={state.resultado}
         />
       </main>
     </>

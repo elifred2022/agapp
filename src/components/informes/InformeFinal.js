@@ -1,8 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import { MdAutoDelete } from "react-icons/md";
-import { FaEdit } from "react-icons/fa";
+import { v4 as uuidv4 } from "uuid";
 import { BiSolidSave } from "react-icons/bi";
-import Toggle from "react-toggle";
 
 export default function ListaComidas({
   state,
@@ -14,29 +12,6 @@ export default function ListaComidas({
   montoPorcentaje,
   resultado,
 }) {
-  const [totalIndex, setTotalIndex] = useState(state.comidas.length);
-
-  useEffect(() => {
-    dispatch({ type: "AGREGAR_INDICE", payload: { totalIndex } }); // aqui fue q pude pasar  el valor de totalIndex al padre en el estado de indice en App
-  }, [totalIndex]);
-
-  useEffect(() => {
-    setTotalIndex(state.comidas.length);
-  }, [state.comidas]);
-
-  const traerMontoGralComida = montoComidaGral.reduce(
-    (acc, elem) => (acc = parseInt(elem.totalComidasGralString)),
-    0
-  );
-
-  const traerMontoGralBebida = montoBebidaCu.reduce(
-    (acc, elem) => (acc = parseInt(elem.totalBebidasGralString)),
-    0
-  );
-
-  const calcTotalFinalGral =
-    parseInt(traerMontoGralComida) + parseInt(traerMontoGralBebida);
-
   return (
     <>
       <table className="styled-table">
@@ -45,7 +20,6 @@ export default function ListaComidas({
             <th>Pago?</th>
             <th>Nº</th>
             <th>Nombre</th>
-
             <th>Valor/plato</th>
             <th>Importe por bebida</th>
             <th>Importe total</th>
@@ -86,11 +60,14 @@ function Foods({
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
-  const [importePorPersona, setImportePorPersona] = useState(0);
-  const [importePorPersonaChecked, setImportePorPersonaChecked] = useState(0);
+  const [importePorPersonaDebito, setImportePorPersonaDebito] = useState(0);
+  const importePorPersonaDebitoString = importePorPersonaDebito.toString();
+  const [importePorPersonaEfectivo, setImportePorPersonaEfectivo] = useState(0);
+  const importePorPersonaEfectivoString = importePorPersonaEfectivo.toString();
 
   // PARA QUE SE ACTUALICE AL MISMO TIEMPO LA INTERFACE Y EL LOCALSOTRAGE valor de imorteporpersona
-  const importePorPersonaCheckedRef = useRef(importePorPersona); // SE USA EL HOOKS DE useRef para que la intarface y el localstorage se actualicen al mismp tiempo
+  const importePorPersonaDebitoRef = useRef(importePorPersonaDebito); // SE USA EL HOOKS DE useRef para que la intarface y el localstorage se actualicen al mismp tiempo
+  const importePorPersonaEfectivotoRef = useRef(importePorPersonaEfectivo);
 
   const traerTotalBebidasCu = montoBebidaCu.reduce(
     (acc, elem) => (acc = parseInt(elem.totalBebidasCuString)),
@@ -101,15 +78,14 @@ function Foods({
     parseInt(comida.valorComida) + parseInt(traerTotalBebidasCu);
 
   useEffect(() => {
-    setImportePorPersona(calcImportePorPersona);
-  }, [calcImportePorPersona]);
-
-  useEffect(() => {
+    setImportePorPersonaDebito(
+      (importePorPersonaDebitoRef.current = calcImportePorPersona.toFixed(2))
+    );
     dispatch({
       type: "AGREGAR_RESULTADO",
-      payload: { importePorPersona },
+      payload: { importePorPersonaDebitoRef },
     });
-  }, [importePorPersona]);
+  }, [calcImportePorPersona]);
 
   const traerPorcentajeEfectivo = montoPorcentaje.reduce(
     (acc, elem) => (acc = parseInt(elem.descuento)),
@@ -121,32 +97,34 @@ function Foods({
 
     if (checked) {
       // si paga en efectivo
-      const pagoDebito = calcImportePorPersona;
+      const calcImportePorPersona =
+        parseInt(comida.valorComida) + parseInt(traerTotalBebidasCu);
+
+      //const pagoDebito = importePorPersonaDebitoCheckedRef;
 
       let pagoEfectivo = 0;
 
       if (traerPorcentajeEfectivo > 0) {
         pagoEfectivo =
-          pagoDebito - (pagoDebito * traerPorcentajeEfectivo) / 100;
-        setImportePorPersona(
-          (importePorPersonaCheckedRef.current = pagoEfectivo.toFixed(2))
+          calcImportePorPersona -
+          (calcImportePorPersona * traerPorcentajeEfectivo) / 100;
+        setImportePorPersonaEfectivo(
+          (importePorPersonaEfectivotoRef.current = pagoEfectivo.toFixed(2))
         );
+        dispatch({
+          type: "AGREGAR_RESULTADO",
+          payload: { importePorPersonaEfectivotoRef },
+        });
       } else {
         alert("Debe ingresar porcentaje");
         setIsChecked(false);
       }
     } else {
-      // si paga en debito
-      const pagoDebito = calcImportePorPersona;
-      // parseInt(comida.valorComida) + parseInt(traerTotalBebidasCu);
-
-      setImportePorPersona(
-        (importePorPersonaCheckedRef.current = pagoDebito.toFixed(2))
+      setImportePorPersonaDebito(
+        (importePorPersonaDebitoRef.current = calcImportePorPersona.toFixed(2))
       );
     }
   };
-
-  // funcion del toggle switch
 
   //// FUNCION CHECKBOX PARA TACHAR LA LINEA
 
@@ -160,57 +138,80 @@ function Foods({
   };
 
   let foodContent;
-  if (isEditing) {
+  let modoPago;
+
+  if (isChecked) {
     foodContent = (
       <>
         <tr key={comida.id}>
-          <td>{index + 1}.-</td>
           <td>
-            <input
-              value={comida.nombre}
-              onChange={(e) => {
-                onChangeComidas({
-                  type: "EDITAR_COMIDA",
-                  ...comida,
-                  nombre: e.target.value,
-                });
-              }}
-            />
+            <label>
+              <input
+                type="checkbox"
+                name="line"
+                autoComplete="new-checkbox"
+                checked={checkedItems.line || false}
+                onChange={handleCheckboxChange}
+              />
+            </label>
           </td>
-          <td>
-            <input
-              value={comida.comida}
-              onChange={(e) => {
-                onChangeComidas({
-                  type: "EDITAR_COMIDA",
-                  ...comida,
-                  comida: e.target.value,
-                });
-              }}
-            />
+          <td
+            style={{
+              textDecoration: checkedItems.line ? "line-through" : "none",
+            }}
+          >
+            {index + 1}.-{" "}
           </td>
-          <td>
-            <input
-              value={comida.valorComida}
-              onChange={(e) => {
-                onChangeComidas({
-                  type: "EDITAR_COMIDA",
-                  ...comida,
-                  valorComida: e.target.value,
-                });
-              }}
-            />
+          <td
+            style={{
+              textDecoration: checkedItems.line ? "line-through" : "none",
+            }}
+          >
+            {comida.nombre}
           </td>
-          <td>${traerTotalBebidasCu}</td>
-          <td>${importePorPersona}</td>
-          <td></td>
-          <td>
-            <button
-              className="my-button_agregar"
-              onClick={() => setIsEditing(false)}
-            >
-              <BiSolidSave />
-            </button>
+
+          <td
+            style={{
+              textDecoration: checkedItems.line ? "line-through" : "none",
+            }}
+          >
+            ${comida.valorComida}
+          </td>
+          <td
+            style={{
+              textDecoration: checkedItems.line ? "line-through" : "none",
+            }}
+          >
+            ${traerTotalBebidasCu}
+          </td>
+          <td
+            style={{
+              textDecoration: checkedItems.line ? "line-through" : "none",
+            }}
+          >
+            {importePorPersonaEfectivo}
+          </td>
+
+          <td
+            style={{
+              textDecoration: checkedItems.line ? "line-through" : "none",
+            }}
+          >
+            <div>
+              <p>Deb / Efec</p>
+
+              <label className="toggle-switch">
+                <input
+                  id="toggle-switch-input"
+                  value={isChecked}
+                  className="efectivo"
+                  type="checkbox"
+                  onChange={(e) => handleChangeModoPago(e.target.checked)}
+                  checked={isChecked}
+                />
+                <span className="toggle-switch-slider"></span>
+              </label>
+            </div>
           </td>
         </tr>
       </>
@@ -264,7 +265,7 @@ function Foods({
               textDecoration: checkedItems.line ? "line-through" : "none",
             }}
           >
-            ${importePorPersona}
+            {importePorPersonaDebito}
           </td>
 
           <td
@@ -273,7 +274,7 @@ function Foods({
             }}
           >
             <div>
-              <p>Debito / Efectivo</p>
+              <p>Deb / Efec</p>
 
               <label className="toggle-switch">
                 <input

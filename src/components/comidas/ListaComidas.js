@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import { MdAutoDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import { BiSolidSave } from "react-icons/bi";
-import Toggle from "react-toggle";
 
 export default function ListaComidas({
   state,
@@ -23,19 +22,6 @@ export default function ListaComidas({
   useEffect(() => {
     setTotalIndex(state.comidas.length);
   }, [state.comidas]);
-
-  const traerMontoGralComida = montoComidaGral.reduce(
-    (acc, elem) => (acc = parseInt(elem.totalComidasGralString)),
-    0
-  );
-
-  const traerMontoGralBebida = montoBebidaCu.reduce(
-    (acc, elem) => (acc = parseInt(elem.totalBebidasGralString)),
-    0
-  );
-
-  const calcTotalFinalGral =
-    parseInt(traerMontoGralComida) + parseInt(traerMontoGralBebida);
 
   return (
     <>
@@ -83,13 +69,13 @@ function Foods({
   resultado,
 }) {
   const [isEditing, setIsEditing] = useState(false);
-  const [isChecked, setIsChecked] = useState(false);
-  const [importePorPersona, setImportePorPersona] = useState(0);
-  const [importePorPersonaChecked, setImportePorPersonaChecked] = useState(0);
+  //const [isChecked, setIsChecked] = useState(false);
+  //const [importePorPersona, setImportePorPersona] = useState(0);
+  //const [importePorPersonaChecked, setImportePorPersonaChecked] = useState(0);
 
   // PARA QUE SE ACTUALICE AL MISMO TIEMPO LA INTERFACE Y EL LOCALSOTRAGE valor de imorteporpersona
-  const importePorPersonaCheckedRef = useRef(importePorPersona); // SE USA EL HOOKS DE useRef para que la intarface y el localstorage se actualicen al mismp tiempo
-
+  // const importePorPersonaCheckedRef = useRef(importePorPersona); // SE USA EL HOOKS DE useRef para que la intarface y el localstorage se actualicen al mismp tiempo
+  /*
   const traerTotalBebidasCu = montoBebidaCu.reduce(
     (acc, elem) => (acc = parseInt(elem.totalBebidasCuString)),
     0
@@ -102,12 +88,7 @@ function Foods({
     setImportePorPersona(calcImportePorPersona);
   }, [calcImportePorPersona]);
 
-  useEffect(() => {
-    dispatch({
-      type: "AGREGAR_RESULTADO",
-      payload: { importePorPersona },
-    });
-  }, [importePorPersona]);
+  useEffect(() => {}, [importePorPersona]);
 
   const traerPorcentajeEfectivo = montoPorcentaje.reduce(
     (acc, elem) => (acc = parseInt(elem.descuento)),
@@ -155,7 +136,7 @@ function Foods({
       ...checkedItems,
       [name]: checked,
     });
-  };
+  };*/
 
   let foodContent;
   if (isEditing) {
@@ -199,9 +180,7 @@ function Foods({
               }}
             />
           </td>
-          <td>${traerTotalBebidasCu}</td>
-          <td>${importePorPersona}</td>
-          <td></td>
+
           <td>
             <button
               className="my-button_agregar"
