@@ -9,7 +9,7 @@ const CalcInformeFinal = ({ dispatch, resultado, comidas, bebidas }) => {
   // funcion acumuladores
 
   const traerValoresDebito = resultado.reduce(
-    (acc, elem) => acc + parseInt(elem.importePorPersonaDebito),
+    (acc, elem) => acc + parseInt(elem.importePorPersonaDebitoRef),
     0
   );
 

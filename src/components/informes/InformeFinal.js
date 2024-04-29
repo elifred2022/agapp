@@ -67,6 +67,7 @@ function Foods({
 
   // PARA QUE SE ACTUALICE AL MISMO TIEMPO LA INTERFACE Y EL LOCALSOTRAGE valor de imorteporpersona
   const importePorPersonaDebitoRef = useRef(importePorPersonaDebito); // SE USA EL HOOKS DE useRef para que la intarface y el localstorage se actualicen al mismp tiempo
+
   const importePorPersonaEfectivotoRef = useRef(importePorPersonaEfectivo);
 
   const traerTotalBebidasCu = montoBebidaCu.reduce(
