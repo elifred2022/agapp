@@ -147,6 +147,7 @@ export default function TaskApp() {
           montoComidaGral={state.montoComidaGral}
           montoPorcentaje={state.montoPorcentaje}
           resultado={state.resultado}
+          resultadoEfectivo={state.resultadoEfectivo}
         />
         <CalcInformeFinal
           comidas={state.comidas}
@@ -155,6 +156,7 @@ export default function TaskApp() {
           dispatch={dispatch}
           state={state}
           resultado={state.resultado}
+          resultadoEfectivo={state.resultadoEfectivo}
         />
       </main>
     </>

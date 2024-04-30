@@ -11,6 +11,7 @@ export default function ListaComidas({
   montoComidaGral,
   montoPorcentaje,
   resultado,
+  resultadoEfectivo,
 }) {
   return (
     <>
@@ -39,6 +40,7 @@ export default function ListaComidas({
               montoBebidaCu={montoBebidaCu}
               montoPorcentaje={montoPorcentaje}
               resultado={resultado}
+              resultadoEfectivo={resultadoEfectivo}
             />
           ))}
         </tbody>
@@ -57,6 +59,7 @@ function Foods({
   bebidas,
   state,
   resultado,
+  resultadoEfectivo,
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
@@ -64,6 +67,8 @@ function Foods({
   const importePorPersonaDebitoString = importePorPersonaDebito.toString();
   const [importePorPersonaEfectivo, setImportePorPersonaEfectivo] = useState(0);
   const importePorPersonaEfectivoString = importePorPersonaEfectivo.toString();
+
+  const [acumDebito, setAcumDebito] = useState(0);
 
   // PARA QUE SE ACTUALICE AL MISMO TIEMPO LA INTERFACE Y EL LOCALSOTRAGE valor de imorteporpersona
   const importePorPersonaDebitoRef = useRef(importePorPersonaDebito); // SE USA EL HOOKS DE useRef para que la intarface y el localstorage se actualicen al mismp tiempo
@@ -82,11 +87,14 @@ function Foods({
     setImportePorPersonaDebito(
       (importePorPersonaDebitoRef.current = calcImportePorPersona.toFixed(2))
     );
+  }, [calcImportePorPersona]);
+
+  useEffect(() => {
     dispatch({
       type: "AGREGAR_RESULTADO",
       payload: { importePorPersonaDebitoRef },
     });
-  }, [calcImportePorPersona]);
+  }, []);
 
   const traerPorcentajeEfectivo = montoPorcentaje.reduce(
     (acc, elem) => (acc = parseInt(elem.descuento)),
@@ -112,8 +120,9 @@ function Foods({
         setImportePorPersonaEfectivo(
           (importePorPersonaEfectivotoRef.current = pagoEfectivo.toFixed(2))
         );
+
         dispatch({
-          type: "AGREGAR_RESULTADO",
+          type: "AGREGAR_RESULTADOEFECTIVO",
           payload: { importePorPersonaEfectivotoRef },
         });
       } else {
@@ -294,5 +303,5 @@ function Foods({
       </>
     );
   }
-  return <>{<>{foodContent}</>}</>;
+  return <>{<>{foodContent} </>}</>;
 }

@@ -1,39 +1,44 @@
 import React from "react";
 import { useState, useEffect } from "react";
 
-const CalcInformeFinal = ({ dispatch, resultado, comidas, bebidas }) => {
+const CalcInformeFinal = ({
+  dispatch,
+  resultado,
+  resultadoEfectivo,
+  comidas,
+  bebidas,
+}) => {
   const [totalFinalGral, setTotalFinalGral] = useState(0);
   const [acumDebito, setAcumDebito] = useState(0);
   const [acumEfectivo, setAcumEfectivo] = useState(0);
 
   // funcion acumuladores
-
-  const traerValoresDebito = resultado.reduce(
-    (acc, elem) => acc + parseInt(elem.importePorPersonaDebitoRef),
+  const traerImporteDebito = resultado.reduce(
+    (acc, elem) => acc + parseInt(elem.importePorPersonaDebitoRef.current),
     0
   );
 
   useEffect(() => {
-    //const totalComidas = elementos.reduce((acc, elem) => acc + parseInt(elem.valorComida), 0);
-    setAcumDebito(traerValoresDebito);
-  }, [traerValoresDebito]);
+    setAcumDebito(traerImporteDebito);
+  }, [traerImporteDebito]);
 
-  const traerValoresEfectivo = resultado.reduce(
-    (acc, elem) => (acc = parseInt(elem.importePorPersonaEfectivo)),
+  const traerImporteEfectivo = resultadoEfectivo.reduce(
+    (acc, elem) => acc + parseInt(elem.importePorPersonaEfectivotoRef.current),
     0
   );
 
   useEffect(() => {
-    //const totalComidas = elementos.reduce((acc, elem) => acc + parseInt(elem.valorComida), 0);
-    setAcumEfectivo(traerValoresEfectivo);
-  }, [traerValoresEfectivo]);
+    setAcumEfectivo(traerImporteEfectivo);
+  }, [traerImporteEfectivo]);
 
   return (
     <>
-      <h2 className="yellow">
-        Total general a pagar con debito: ${" "}
-        {traerValoresDebito.toLocaleString()}
-      </h2>
+      <h3 className="yellow">
+        Total general a pagar con debito: $ {acumDebito.toLocaleString()}
+      </h3>
+      <h3 className="yellow">
+        Total general a pagar con efectivo: $ {acumEfectivo.toLocaleString()}
+      </h3>
     </>
   );
 };

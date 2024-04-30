@@ -6,6 +6,7 @@ export const initialState = {
   indicesComidas: [],
   montoBebidaCu: [],
   resultado: [],
+  resultadoEfectivo: [],
 };
 
 export default function Reducer(state, action) {
@@ -92,6 +93,12 @@ export default function Reducer(state, action) {
       return {
         ...state,
         resultado: [...state.resultado, action.payload],
+      };
+
+    case "AGREGAR_RESULTADOEFECTIVO":
+      return {
+        ...state,
+        resultadoEfectivo: [...state.resultadoEfectivo, action.payload],
       };
 
     case "AGREGAR_MONTOTOTALCOMIDA":
