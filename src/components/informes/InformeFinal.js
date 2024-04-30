@@ -87,14 +87,17 @@ function Foods({
     setImportePorPersonaDebito(
       (importePorPersonaDebitoRef.current = calcImportePorPersona.toFixed(2))
     );
-  }, [calcImportePorPersona]);
+  }, [traerTotalBebidasCu]);
 
   useEffect(() => {
-    dispatch({
-      type: "AGREGAR_RESULTADO",
-      payload: { importePorPersonaDebitoRef },
-    });
-  }, []);
+    if (traerTotalBebidasCu > 0) {
+      // para solo agregue al estado cuando tenga datos bebidascu
+      dispatch({
+        type: "AGREGAR_RESULTADO",
+        payload: { importePorPersonaDebitoRef },
+      });
+    }
+  }, [calcImportePorPersona]);
 
   const traerPorcentajeEfectivo = montoPorcentaje.reduce(
     (acc, elem) => (acc = parseInt(elem.descuento)),
@@ -114,9 +117,11 @@ function Foods({
       let pagoEfectivo = 0;
 
       if (traerPorcentajeEfectivo > 0) {
-        pagoEfectivo =
-          calcImportePorPersona -
+        let porcentaje =
           (calcImportePorPersona * traerPorcentajeEfectivo) / 100;
+
+        pagoEfectivo = calcImportePorPersona - porcentaje;
+
         setImportePorPersonaEfectivo(
           (importePorPersonaEfectivotoRef.current = pagoEfectivo.toFixed(2))
         );
@@ -125,6 +130,12 @@ function Foods({
           type: "AGREGAR_RESULTADOEFECTIVO",
           payload: { importePorPersonaEfectivotoRef },
         });
+
+        setImportePorPersonaDebito(
+          (importePorPersonaDebitoRef.current =
+            importePorPersonaDebitoRef.current -
+            importePorPersonaDebitoRef.current)
+        );
       } else {
         alert("Debe ingresar porcentaje");
         setIsChecked(false);
@@ -133,6 +144,16 @@ function Foods({
       setImportePorPersonaDebito(
         (importePorPersonaDebitoRef.current = calcImportePorPersona.toFixed(2))
       );
+
+      setImportePorPersonaEfectivo(
+        (importePorPersonaEfectivotoRef.current =
+          importePorPersonaEfectivotoRef.current -
+          importePorPersonaEfectivotoRef.current)
+      );
+      dispatch({
+        type: "AGREGAR_RESULTADO",
+        payload: { importePorPersonaDebitoRef },
+      });
     }
   };
 
