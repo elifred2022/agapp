@@ -60,6 +60,7 @@ function Foods({
   state,
   resultado,
   resultadoEfectivo,
+  handleClick,
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
@@ -68,7 +69,7 @@ function Foods({
   const [importePorPersonaEfectivo, setImportePorPersonaEfectivo] = useState(0);
   const importePorPersonaEfectivoString = importePorPersonaEfectivo.toString();
 
-  const uniqueId = uuidv4();
+  //const uniqueId = uuidv4();
 
   // PARA QUE SE ACTUALICE AL MISMO TIEMPO LA INTERFACE Y EL LOCALSOTRAGE valor de imorteporpersona
   const importePorPersonaDebitoRef = useRef(importePorPersonaDebito); // SE USA EL HOOKS DE useRef para que la intarface y el localstorage se actualicen al mismp tiempo
@@ -90,25 +91,12 @@ function Foods({
   }, [calcImportePorPersona]);
 
   useEffect(() => {
+    // agrega resultado efectivo solo cuando es checked
     dispatch({
       type: "AGREGAR_RESULTADO",
-      payload: { uniqueId, importePorPersonaDebitoRef },
+      payload: { importePorPersonaDebitoRef },
     });
   }, []);
-
-  /*
-  useEffect(() => {
-    if (traerTotalBebidasCu > 0) {
-      // para solo agregue al estado cuando tenga datos bebidascu
-      setImportePorPersonaDebito(
-        (importePorPersonaDebitoRef.current = calcImportePorPersona.toFixed(2))
-      );
-      dispatch({
-        type: "AGREGAR_RESULTADO",
-        payload: { importePorPersonaDebitoRef },
-      });
-    }
-  }, []);*/
 
   useEffect(() => {
     if (isChecked) {
@@ -181,7 +169,6 @@ function Foods({
   };
 
   let foodContent;
-  let modoPago;
 
   if (isChecked) {
     foodContent = (
