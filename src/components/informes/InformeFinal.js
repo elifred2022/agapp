@@ -68,7 +68,7 @@ function Foods({
   const [importePorPersonaEfectivo, setImportePorPersonaEfectivo] = useState(0);
   const importePorPersonaEfectivoString = importePorPersonaEfectivo.toString();
 
-  const [acumDebito, setAcumDebito] = useState(0);
+  const uniqueId = uuidv4();
 
   // PARA QUE SE ACTUALICE AL MISMO TIEMPO LA INTERFACE Y EL LOCALSOTRAGE valor de imorteporpersona
   const importePorPersonaDebitoRef = useRef(importePorPersonaDebito); // SE USA EL HOOKS DE useRef para que la intarface y el localstorage se actualicen al mismp tiempo
@@ -87,17 +87,38 @@ function Foods({
     setImportePorPersonaDebito(
       (importePorPersonaDebitoRef.current = calcImportePorPersona.toFixed(2))
     );
-  }, [traerTotalBebidasCu]);
+  }, [calcImportePorPersona]);
 
+  useEffect(() => {
+    dispatch({
+      type: "AGREGAR_RESULTADO",
+      payload: { uniqueId, importePorPersonaDebitoRef },
+    });
+  }, []);
+
+  /*
   useEffect(() => {
     if (traerTotalBebidasCu > 0) {
       // para solo agregue al estado cuando tenga datos bebidascu
+      setImportePorPersonaDebito(
+        (importePorPersonaDebitoRef.current = calcImportePorPersona.toFixed(2))
+      );
       dispatch({
         type: "AGREGAR_RESULTADO",
         payload: { importePorPersonaDebitoRef },
       });
     }
-  }, [calcImportePorPersona]);
+  }, []);*/
+
+  useEffect(() => {
+    if (isChecked) {
+      // agrega resultado efectivo solo cuando es checked
+      dispatch({
+        type: "AGREGAR_RESULTADOEFECTIVO",
+        payload: { importePorPersonaEfectivotoRef },
+      });
+    }
+  }, [isChecked]);
 
   const traerPorcentajeEfectivo = montoPorcentaje.reduce(
     (acc, elem) => (acc = parseInt(elem.descuento)),
@@ -126,11 +147,6 @@ function Foods({
           (importePorPersonaEfectivotoRef.current = pagoEfectivo.toFixed(2))
         );
 
-        dispatch({
-          type: "AGREGAR_RESULTADOEFECTIVO",
-          payload: { importePorPersonaEfectivotoRef },
-        });
-
         setImportePorPersonaDebito(
           (importePorPersonaDebitoRef.current =
             importePorPersonaDebitoRef.current -
@@ -150,10 +166,6 @@ function Foods({
           importePorPersonaEfectivotoRef.current -
           importePorPersonaEfectivotoRef.current)
       );
-      dispatch({
-        type: "AGREGAR_RESULTADO",
-        payload: { importePorPersonaDebitoRef },
-      });
     }
   };
 

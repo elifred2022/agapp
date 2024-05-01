@@ -42,22 +42,23 @@ export default function ListaBebidas({
 
 function Bebidas({ state, bebidas, onChangeBebidas, bebida, index, dispatch }) {
   const [isEditing, setIsEditing] = useState(false);
-  const [totalBebida, setTotalBebida] = useState(bebida.totalBebida);
+  const [totalBebida, setTotalBebida] = useState("");
+
+  const totalBebidasString = totalBebida.toString();
 
   useEffect(() => {
     if (bebida.cantidadBebida && bebida.valorUnitBebida) {
       setTotalBebida(
         parseFloat(bebida.cantidadBebida) * parseFloat(bebida.valorUnitBebida)
       );
+      onChangeBebidas({
+        type: "EDITAR_BEBIDA",
+        ...bebida,
+        totalBebidasString: totalBebidasString,
+      });
     } else {
       setTotalBebida("");
     }
-
-    onChangeBebidas({
-      type: "EDITAR_BEBIDA",
-      ...bebida,
-      totalBebida: totalBebida,
-    });
   }, [isEditing, totalBebida]);
 
   let drinkContent;

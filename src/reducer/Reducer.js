@@ -95,6 +95,15 @@ export default function Reducer(state, action) {
         resultado: [...state.resultado, action.payload],
       };
 
+    case "EDITAR_RESULTADO": {
+      return {
+        ...state,
+        resultado: state.resultado.map((resultado) =>
+          resultado.id === action.payload.id ? action.payload : resultado
+        ),
+      };
+    }
+
     case "AGREGAR_RESULTADOEFECTIVO":
       return {
         ...state,
