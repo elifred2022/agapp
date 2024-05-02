@@ -84,21 +84,20 @@ function Foods({
   const calcImportePorPersona =
     parseInt(comida.valorComida) + parseInt(traerTotalBebidasCu);
 
-  useEffect(() => {
+  /*  useEffect(() => {
     setImportePorPersonaDebito(
       (importePorPersonaDebitoRef.current = calcImportePorPersona.toFixed(2))
     );
-  }, [calcImportePorPersona]);
+  }, [calcImportePorPersona]);*/
 
-  useEffect(() => {
-    // agrega resultado efectivo solo cuando es checked
+  /* useEffect(() => {
     dispatch({
       type: "AGREGAR_RESULTADO",
       payload: { importePorPersonaDebitoRef },
     });
-  }, []);
+  }, []); */
 
-  useEffect(() => {
+  /* useEffect(() => {
     if (isChecked) {
       // agrega resultado efectivo solo cuando es checked
       dispatch({
@@ -106,22 +105,61 @@ function Foods({
         payload: { importePorPersonaEfectivotoRef },
       });
     }
-  }, [isChecked]);
+  }, [isChecked]);*/
 
   const traerPorcentajeEfectivo = montoPorcentaje.reduce(
     (acc, elem) => (acc = parseInt(elem.descuento)),
     0
   );
+  const [metodoPago, setMetodoPago] = useState("vacio");
 
-  const handleChangeModoPago = (checked) => {
-    setIsChecked(checked);
+  const handleChangeModoPago = (event) => {
+    setMetodoPago(event.target.value);
 
+    switch (metodoPago) {
+      case "debito":
+        // si paga en debito
+        setImportePorPersonaDebito(
+          (importePorPersonaDebitoRef.current =
+            calcImportePorPersona.toFixed(2))
+        );
+        // setMetodoPago("efectivo");
+        // alert(importePorPersonaDebito);
+        break;
+      case "efectivo":
+        // si paga en efectivo
+
+        let pagoEfectivo = 0;
+
+        if (traerPorcentajeEfectivo > 0) {
+          let porcentaje =
+            (calcImportePorPersona * traerPorcentajeEfectivo) / 100;
+
+          pagoEfectivo = calcImportePorPersona - porcentaje;
+
+          setImportePorPersonaEfectivo(
+            (importePorPersonaEfectivotoRef.current = pagoEfectivo.toFixed(2))
+          );
+
+          /*  setImportePorPersonaDebito(
+            (importePorPersonaDebitoRef.current =
+              importePorPersonaDebitoRef.current -
+              importePorPersonaDebitoRef.current)
+          );*/
+        } else {
+          alert("Debe ingresar porcentaje");
+          setIsChecked(false);
+        }
+        // setMetodoPago("debito");
+        //  alert(importePorPersonaEfectivo);
+        break;
+    }
+
+    /*
     if (checked) {
       // si paga en efectivo
       const calcImportePorPersona =
         parseInt(comida.valorComida) + parseInt(traerTotalBebidasCu);
-
-      //const pagoDebito = importePorPersonaDebitoCheckedRef;
 
       let pagoEfectivo = 0;
 
@@ -134,6 +172,11 @@ function Foods({
         setImportePorPersonaEfectivo(
           (importePorPersonaEfectivotoRef.current = pagoEfectivo.toFixed(2))
         );
+
+        dispatch({
+          type: "AGREGAR_RESULTADOEFECTIVO",
+          payload: { importePorPersonaEfectivotoRef },
+        });
 
         setImportePorPersonaDebito(
           (importePorPersonaDebitoRef.current =
@@ -149,13 +192,22 @@ function Foods({
         (importePorPersonaDebitoRef.current = calcImportePorPersona.toFixed(2))
       );
 
+      dispatch({
+        type: "AGREGAR_RESULTADO",
+        payload: { importePorPersonaDebitoRef },
+      });
+
       setImportePorPersonaEfectivo(
         (importePorPersonaEfectivotoRef.current =
           importePorPersonaEfectivotoRef.current -
           importePorPersonaEfectivotoRef.current)
       );
-    }
+    }*/
   };
+  /*
+  useEffect(() => {
+    setMetodoPago(metodoPago);
+  }, [metodoPago]);*/
 
   //// FUNCION CHECKBOX PARA TACHAR LA LINEA
 
@@ -170,7 +222,7 @@ function Foods({
 
   let foodContent;
 
-  if (isChecked) {
+  if (metodoPago === "efectivo") {
     foodContent = (
       <>
         <tr key={comida.id}>
@@ -228,25 +280,20 @@ function Foods({
             }}
           >
             <div>
-              <p>Deb / Efec</p>
-
-              <label className="toggle-switch">
-                <input
-                  id="toggle-switch-input"
-                  value={isChecked}
-                  className="efectivo"
-                  type="checkbox"
-                  onChange={(e) => handleChangeModoPago(e.target.checked)}
-                  checked={isChecked}
-                />
-                <span className="toggle-switch-slider"></span>
-              </label>
+              <td>
+                <label>
+                  <select value={metodoPago} onChange={handleChangeModoPago}>
+                    <option value="debito">Débito</option>
+                    <option value="efectivo">Efectivo</option>
+                  </select>
+                </label>
+              </td>
             </div>
           </td>
         </tr>
       </>
     );
-  } else {
+  } else if (metodoPago === "debito") {
     foodContent = (
       <>
         <tr key={comida.id}>
@@ -304,19 +351,86 @@ function Foods({
             }}
           >
             <div>
-              <p>Deb / Efec</p>
+              <td>
+                <label>
+                  <select value={metodoPago} onChange={handleChangeModoPago}>
+                    <option value="debito">Débito</option>
+                    <option value="efectivo">Efectivo</option>
+                  </select>
+                </label>
+              </td>
+            </div>
+          </td>
+        </tr>
+      </>
+    );
+  } else if (metodoPago === "vacio") {
+    foodContent = (
+      <>
+        <tr key={comida.id}>
+          <td>
+            <label>
+              <input
+                type="checkbox"
+                name="line"
+                autoComplete="new-checkbox"
+                checked={checkedItems.line || false}
+                onChange={handleCheckboxChange}
+              />
+            </label>
+          </td>
+          <td
+            style={{
+              textDecoration: checkedItems.line ? "line-through" : "none",
+            }}
+          >
+            {index + 1}.-{" "}
+          </td>
+          <td
+            style={{
+              textDecoration: checkedItems.line ? "line-through" : "none",
+            }}
+          >
+            {comida.nombre}
+          </td>
 
-              <label className="toggle-switch">
-                <input
-                  id="toggle-switch-input"
-                  value={isChecked}
-                  className="efectivo"
-                  type="checkbox"
-                  onChange={(e) => handleChangeModoPago(e.target.checked)}
-                  checked={isChecked}
-                />
-                <span className="toggle-switch-slider"></span>
-              </label>
+          <td
+            style={{
+              textDecoration: checkedItems.line ? "line-through" : "none",
+            }}
+          >
+            ${comida.valorComida}
+          </td>
+          <td
+            style={{
+              textDecoration: checkedItems.line ? "line-through" : "none",
+            }}
+          >
+            ${traerTotalBebidasCu}
+          </td>
+          <td
+            style={{
+              textDecoration: checkedItems.line ? "line-through" : "none",
+            }}
+          >
+            {importePorPersonaDebito}
+          </td>
+
+          <td
+            style={{
+              textDecoration: checkedItems.line ? "line-through" : "none",
+            }}
+          >
+            <div>
+              <td>
+                <label>
+                  <select value={metodoPago} onChange={handleChangeModoPago}>
+                    <option value="vacio"></option>
+                    <option value="debito">Débito</option>
+                    <option value="efectivo">Efectivo</option>
+                  </select>
+                </label>
+              </td>
             </div>
           </td>
         </tr>
