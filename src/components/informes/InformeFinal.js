@@ -68,6 +68,7 @@ function Foods({
   const importePorPersonaDebitoString = importePorPersonaDebito.toString();
   const [importePorPersonaEfectivo, setImportePorPersonaEfectivo] = useState(0);
   const importePorPersonaEfectivoString = importePorPersonaEfectivo.toString();
+  const [metodoPago, setMetodoPago] = useState("vacio");
 
   //const uniqueId = uuidv4();
 
@@ -84,11 +85,57 @@ function Foods({
   const calcImportePorPersona =
     parseInt(comida.valorComida) + parseInt(traerTotalBebidasCu);
 
-  /*  useEffect(() => {
+  /* useEffect(() => {
     setImportePorPersonaDebito(
       (importePorPersonaDebitoRef.current = calcImportePorPersona.toFixed(2))
     );
-  }, [calcImportePorPersona]);*/
+  }, [metodoPago]);*/
+
+  /* useEffect(() => {
+    let pagoEfectivo = 0;
+
+    let porcentaje = (calcImportePorPersona * traerPorcentajeEfectivo) / 100;
+
+    pagoEfectivo = calcImportePorPersona - porcentaje;
+
+    setImportePorPersonaEfectivo(
+      (importePorPersonaEfectivotoRef.current = pagoEfectivo.toFixed(2))
+    );
+  }, [metodoPago]);*/
+
+  function calcDebito() {
+    let pagoDebito = 0;
+
+    if (traerPorcentajeEfectivo > 0) {
+      pagoDebito = calcImportePorPersona;
+
+      setImportePorPersonaDebito(
+        (importePorPersonaDebitoRef.current = pagoDebito)
+      );
+    } else {
+      alert("Debe ingresar porcentaje");
+      //setMetodoPago("debito");
+    }
+    //setMetodoPago("debito");
+  }
+
+  function calcEfectivo() {
+    let pagoEfectivo = 0;
+
+    if (traerPorcentajeEfectivo > 0) {
+      let porcentaje = (calcImportePorPersona * traerPorcentajeEfectivo) / 100;
+
+      pagoEfectivo = calcImportePorPersona - porcentaje;
+
+      setImportePorPersonaEfectivo(
+        (importePorPersonaEfectivotoRef.current = pagoEfectivo)
+      );
+    } else {
+      alert("Debe ingresar porcentaje");
+      //setMetodoPago("vacio");
+    }
+    //setMetodoPago("vacio");
+  }
 
   /* useEffect(() => {
     dispatch({
@@ -111,47 +158,28 @@ function Foods({
     (acc, elem) => (acc = parseInt(elem.descuento)),
     0
   );
-  const [metodoPago, setMetodoPago] = useState("vacio");
 
   const handleChangeModoPago = (event) => {
-    setMetodoPago(event.target.value);
+    const newMetodoPago = event.target.value;
 
-    switch (metodoPago) {
+    setMetodoPago(newMetodoPago);
+
+    switch (newMetodoPago) {
       case "debito":
         // si paga en debito
-        setImportePorPersonaDebito(
-          (importePorPersonaDebitoRef.current =
-            calcImportePorPersona.toFixed(2))
-        );
+
+        calcDebito();
         // setMetodoPago("efectivo");
-        // alert(importePorPersonaDebito);
+
         break;
       case "efectivo":
         // si paga en efectivo
 
-        let pagoEfectivo = 0;
+        calcEfectivo();
+        //setMetodoPago("debito");
 
-        if (traerPorcentajeEfectivo > 0) {
-          let porcentaje =
-            (calcImportePorPersona * traerPorcentajeEfectivo) / 100;
-
-          pagoEfectivo = calcImportePorPersona - porcentaje;
-
-          setImportePorPersonaEfectivo(
-            (importePorPersonaEfectivotoRef.current = pagoEfectivo.toFixed(2))
-          );
-
-          /*  setImportePorPersonaDebito(
-            (importePorPersonaDebitoRef.current =
-              importePorPersonaDebitoRef.current -
-              importePorPersonaDebitoRef.current)
-          );*/
-        } else {
-          alert("Debe ingresar porcentaje");
-          setIsChecked(false);
-        }
-        // setMetodoPago("debito");
-        //  alert(importePorPersonaEfectivo);
+        break;
+      default:
         break;
     }
 
@@ -204,6 +232,7 @@ function Foods({
       );
     }*/
   };
+
   /*
   useEffect(() => {
     setMetodoPago(metodoPago);
