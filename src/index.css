@@ -130,6 +130,23 @@
   color: rgb(0, 255, 102); 
 }
 
+.red{
+  color: red; 
+}
+
+.selector{
+  color: yellow; 
+  background-color: #202020;
+}
+
+.btn-calc{
+  color: rgb(0, 255, 102); 
+  background-color: black;
+  width: 150px;
+  height: 50px;
+  font-size: 1.2em;
+}
+
 /*** botones ***/
 
 .my-button_agregar {
@@ -391,6 +408,31 @@ input:checked +.toggle-switch-slider:before {
 }
 
 
+/********/
+
+.yellow{
+  color: yellow; 
+}
+
+.verde{
+  color: rgb(0, 255, 102); 
+}
+
+.red{
+  color: red; 
+}
+
+.selector{
+  color: yellow; 
+  background-color: #202020;
+}
+
+.btn-calc{
+  color: rgb(0, 255, 102); 
+  background-color: black;
+  width: 150px;
+  height: 50px;
+}
 
 
 

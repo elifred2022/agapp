@@ -138,6 +138,10 @@ export default function TaskApp() {
           onChangePorcentaje={handleChangePorcentaje}
         />
         <h2 className="verde">Informe final</h2>
+        <h3 className="red">
+          Por favor, solo use esta seccion si ya termino de cargar todo el
+          consumo.
+        </h3>
         <InformeFinal
           state={state}
           dispatch={dispatch}

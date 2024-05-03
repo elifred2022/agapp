@@ -106,16 +106,26 @@ function Foods({
   function calcDebito() {
     let pagoDebito = 0;
 
+    pagoDebito = calcImportePorPersona;
+
+    setImportePorPersonaDebito(
+      (importePorPersonaDebitoRef.current = pagoDebito)
+    );
+    dispatch({
+      type: "AGREGAR_RESULTADO",
+      payload: { importePorPersonaDebitoRef },
+    });
+    /*
     if (traerPorcentajeEfectivo > 0) {
       pagoDebito = calcImportePorPersona;
 
       setImportePorPersonaDebito(
         (importePorPersonaDebitoRef.current = pagoDebito)
       );
-    } else {
+    } /* else {
       alert("Debe ingresar porcentaje");
-      //setMetodoPago("debito");
-    }
+      setMetodoPago("vacio");
+    }*/
     //setMetodoPago("debito");
   }
 
@@ -130,9 +140,13 @@ function Foods({
       setImportePorPersonaEfectivo(
         (importePorPersonaEfectivotoRef.current = pagoEfectivo)
       );
+      dispatch({
+        type: "AGREGAR_RESULTADOEFECTIVO",
+        payload: { importePorPersonaEfectivotoRef },
+      });
     } else {
       alert("Debe ingresar porcentaje");
-      //setMetodoPago("vacio");
+      setMetodoPago("vacio");
     }
     //setMetodoPago("vacio");
   }
@@ -160,8 +174,7 @@ function Foods({
   );
 
   const handleChangeModoPago = (event) => {
-    const newMetodoPago = event.target.value;
-
+    const newMetodoPago = event.target.value; // asi se actualiza inmediatamente al sellecionar debito o efectivo
     setMetodoPago(newMetodoPago);
 
     switch (newMetodoPago) {
@@ -169,14 +182,24 @@ function Foods({
         // si paga en debito
 
         calcDebito();
-        // setMetodoPago("efectivo");
+
+        setImportePorPersonaEfectivo(
+          (importePorPersonaEfectivotoRef.current =
+            importePorPersonaEfectivotoRef.current -
+            importePorPersonaEfectivotoRef.current)
+        );
 
         break;
       case "efectivo":
         // si paga en efectivo
 
         calcEfectivo();
-        //setMetodoPago("debito");
+
+        setImportePorPersonaDebito(
+          (importePorPersonaDebitoRef.current =
+            importePorPersonaDebitoRef.current -
+            importePorPersonaDebitoRef.current)
+        );
 
         break;
       default:
@@ -232,11 +255,6 @@ function Foods({
       );
     }*/
   };
-
-  /*
-  useEffect(() => {
-    setMetodoPago(metodoPago);
-  }, [metodoPago]);*/
 
   //// FUNCION CHECKBOX PARA TACHAR LA LINEA
 
@@ -311,9 +329,17 @@ function Foods({
             <div>
               <td>
                 <label>
-                  <select value={metodoPago} onChange={handleChangeModoPago}>
-                    <option value="debito">Débito</option>
-                    <option value="efectivo">Efectivo</option>
+                  <select
+                    className="selector"
+                    value={metodoPago}
+                    onChange={handleChangeModoPago}
+                  >
+                    <option className="yellow" value="debito">
+                      Débito
+                    </option>
+                    <option className="yellow" value="efectivo">
+                      Efectivo
+                    </option>
                   </select>
                 </label>
               </td>
@@ -382,9 +408,17 @@ function Foods({
             <div>
               <td>
                 <label>
-                  <select value={metodoPago} onChange={handleChangeModoPago}>
-                    <option value="debito">Débito</option>
-                    <option value="efectivo">Efectivo</option>
+                  <select
+                    className="selector"
+                    value={metodoPago}
+                    onChange={handleChangeModoPago}
+                  >
+                    <option className="yellow" value="debito">
+                      Débito
+                    </option>
+                    <option className="yellow" value="efectivo">
+                      Efectivo
+                    </option>
                   </select>
                 </label>
               </td>
@@ -453,10 +487,18 @@ function Foods({
             <div>
               <td>
                 <label>
-                  <select value={metodoPago} onChange={handleChangeModoPago}>
-                    <option value="vacio"></option>
-                    <option value="debito">Débito</option>
-                    <option value="efectivo">Efectivo</option>
+                  <select
+                    className="selector"
+                    value={metodoPago}
+                    onChange={handleChangeModoPago}
+                  >
+                    <option className="yellow" value="vacio"></option>
+                    <option className="yellow" value="debito">
+                      Débito
+                    </option>
+                    <option className="yellow" value="efectivo">
+                      Efectivo
+                    </option>
                   </select>
                 </label>
               </td>
