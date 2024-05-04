@@ -122,6 +122,14 @@ export default function Reducer(state, action) {
         montoBebidaCu: [...state.montoBebidaCu, action.payload],
       };
 
+    case "RESET":
+      return initialState;
+    // other action types...
+
+    case "RESET_RESULTADOS":
+      return { ...state, resultado: [], resultadoEfectivo: [] };
+    // other action types...
+
     default: {
       throw Error("Unknown action: " + action.type);
     }

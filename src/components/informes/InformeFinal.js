@@ -65,9 +65,9 @@ function Foods({
   const [isEditing, setIsEditing] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const [importePorPersonaDebito, setImportePorPersonaDebito] = useState(0);
-  const importePorPersonaDebitoString = importePorPersonaDebito.toString();
+
   const [importePorPersonaEfectivo, setImportePorPersonaEfectivo] = useState(0);
-  const importePorPersonaEfectivoString = importePorPersonaEfectivo.toString();
+
   const [metodoPago, setMetodoPago] = useState("vacio");
 
   //const uniqueId = uuidv4();
@@ -76,6 +76,10 @@ function Foods({
   const importePorPersonaDebitoRef = useRef(importePorPersonaDebito); // SE USA EL HOOKS DE useRef para que la intarface y el localstorage se actualicen al mismp tiempo
 
   const importePorPersonaEfectivotoRef = useRef(importePorPersonaEfectivo);
+
+  // const importePorPersonaDebitoString = importePorPersonaDebitoRef.toString();
+
+  // const importePorPersonaEfectivoString = importePorPersonaEfectivotoRef.toString();
 
   const traerTotalBebidasCu = montoBebidaCu.reduce(
     (acc, elem) => (acc = parseInt(elem.totalBebidasCuString)),
@@ -109,7 +113,7 @@ function Foods({
     pagoDebito = calcImportePorPersona;
 
     setImportePorPersonaDebito(
-      (importePorPersonaDebitoRef.current = pagoDebito)
+      parseInt((importePorPersonaDebitoRef.current = pagoDebito))
     );
     dispatch({
       type: "AGREGAR_RESULTADO",
@@ -138,7 +142,7 @@ function Foods({
       pagoEfectivo = calcImportePorPersona - porcentaje;
 
       setImportePorPersonaEfectivo(
-        (importePorPersonaEfectivotoRef.current = pagoEfectivo)
+        parseInt((importePorPersonaEfectivotoRef.current = pagoEfectivo))
       );
       dispatch({
         type: "AGREGAR_RESULTADOEFECTIVO",
@@ -183,11 +187,11 @@ function Foods({
 
         calcDebito();
 
-        setImportePorPersonaEfectivo(
+        /*  setImportePorPersonaEfectivo(
           (importePorPersonaEfectivotoRef.current =
             importePorPersonaEfectivotoRef.current -
             importePorPersonaEfectivotoRef.current)
-        );
+        );*/
 
         break;
       case "efectivo":
@@ -195,11 +199,11 @@ function Foods({
 
         calcEfectivo();
 
-        setImportePorPersonaDebito(
+        /*  setImportePorPersonaDebito(
           (importePorPersonaDebitoRef.current =
             importePorPersonaDebitoRef.current -
             importePorPersonaDebitoRef.current)
-        );
+        );*/
 
         break;
       default:

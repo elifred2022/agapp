@@ -43,6 +43,23 @@ export default function TaskApp() {
     });
   } */
 
+  // FUNCION PARA RESETEAR EL RESULTADO
+  const [resetResults, setResetResults] = useState(false);
+  const [resetStateRender, setResetStateRender] = useState(false);
+
+  useEffect(() => {
+    if (resetResults) {
+      window.location.reload();
+    }
+  }, [resetResults]);
+
+  useEffect(() => {
+    if (resetStateRender) {
+      window.location.reload();
+    }
+  }, [resetStateRender]);
+  /////////////////////////////////////////////////////////////////////
+
   function handleChangeComidas(comidaId) {
     dispatch({
       type: "EDITAR_COMIDA",
@@ -78,11 +95,13 @@ export default function TaskApp() {
     });
   }
 
-  const eliminarPorcentaje = (index) => {
-    const nuevaPorcentaje = [...almacenPorcentEfectivo];
-    nuevaPorcentaje.splice(index, 1);
-    setAlmacenPorcentEfectivo(nuevaPorcentaje);
-  };
+  function resetState() {
+    dispatch({ type: "RESET" });
+  }
+
+  function resetResultado() {
+    dispatch({ type: "RESET_RESULTADOS" });
+  }
 
   return (
     <>
@@ -125,7 +144,7 @@ export default function TaskApp() {
           dispatch={dispatch}
           state={state}
         />
-        <h2 className="verde">Descuento por efectivo</h2>
+        <h2 className="verde">Ingrese porcentaje de descuento</h2>
         <FormPorcentaje
           dispatch={dispatch}
           montoPorcentaje={state.montoPorcentaje}
@@ -162,6 +181,29 @@ export default function TaskApp() {
           resultado={state.resultado}
           resultadoEfectivo={state.resultadoEfectivo}
         />
+        <button
+          className="btn-calc"
+          onClick={() => {
+            if (window.confirm("¿Estás seguro de borrar calculo?")) {
+              resetResultado();
+              setResetResults(true);
+            }
+          }}
+        >
+          Reset resultados
+        </button>
+
+        <button
+          className="btn-calc"
+          onClick={() => {
+            if (window.confirm("¿Estás seguro de borrar todo?")) {
+              resetState();
+              setResetStateRender(true);
+            }
+          }}
+        >
+          Limpiar todo
+        </button>
       </main>
     </>
   );
