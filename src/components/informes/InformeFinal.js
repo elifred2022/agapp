@@ -24,6 +24,7 @@ export default function ListaComidas({
             <th>Valor/plato</th>
             <th>Importe por bebida</th>
             <th>Importe total</th>
+            <th>Cambio</th>
             <th>Forma de pago</th>
           </tr>
         </thead>
@@ -86,26 +87,18 @@ function Foods({
     0
   );
 
+  const traerPorcentajeEfectivo = montoPorcentaje.reduce(
+    (acc, elem) => (acc = parseInt(elem.descuento)),
+    0
+  );
+
   const calcImportePorPersona =
     parseInt(comida.valorComida) + parseInt(traerTotalBebidasCu);
 
-  /* useEffect(() => {
-    setImportePorPersonaDebito(
-      (importePorPersonaDebitoRef.current = calcImportePorPersona.toFixed(2))
-    );
-  }, [metodoPago]);*/
+  const calcImportePorPersonaPorcentaje =
+    (calcImportePorPersona * traerPorcentajeEfectivo) / 100;
 
-  /* useEffect(() => {
-    let pagoEfectivo = 0;
-
-    let porcentaje = (calcImportePorPersona * traerPorcentajeEfectivo) / 100;
-
-    pagoEfectivo = calcImportePorPersona - porcentaje;
-
-    setImportePorPersonaEfectivo(
-      (importePorPersonaEfectivotoRef.current = pagoEfectivo.toFixed(2))
-    );
-  }, [metodoPago]);*/
+  const cambioDebito = 0;
 
   function calcDebito() {
     let pagoDebito = 0;
@@ -119,19 +112,39 @@ function Foods({
       type: "AGREGAR_RESULTADO",
       payload: { importePorPersonaDebitoRef },
     });
-    /*
-    if (traerPorcentajeEfectivo > 0) {
-      pagoDebito = calcImportePorPersona;
 
-      setImportePorPersonaDebito(
-        (importePorPersonaDebitoRef.current = pagoDebito)
-      );
-    } /* else {
-      alert("Debe ingresar porcentaje");
-      setMetodoPago("vacio");
-    }*/
-    //setMetodoPago("debito");
+    // update the comidas state with the new values valorBebidaCuString, and cambioString
+
+    //const newNombre = comida.nombre;
+    //const newComida = comida.comida;
+    //const newValorComida = comida.valorComida;
+    //const newValorBebidaCu = traerTotalBebidasCu;
+    const newImporteTotalCu = calcImportePorPersona;
+    const newCambioDebito = cambioDebito;
+    const newFormaPago = "debito";
+    // const newCambioString = 1;
+
+    dispatch({
+      type: "EDITAR_COMIDA",
+      payload: {
+        id: comida.id,
+        nombre: comida.nombre,
+        comida: comida.comida,
+        valorComida: comida.valorComida,
+        //valorBebidaCuString: montoBebidaCu.totalBebidasCuString,
+        changes: {
+          ...comida,
+
+          valorBebidaCu: traerTotalBebidasCu,
+          importeTotalCu: newImporteTotalCu,
+          cambio: newCambioDebito,
+          formaPago: newFormaPago,
+        },
+      },
+    });
   }
+
+  const cambioEfectivo = "formula de cambio";
 
   function calcEfectivo() {
     let pagoEfectivo = 0;
@@ -148,34 +161,37 @@ function Foods({
         type: "AGREGAR_RESULTADOEFECTIVO",
         payload: { importePorPersonaEfectivotoRef },
       });
+
+      // UPDATE ESTADOS EFECTIVOS
+
+      const newImporteTotalCuEfectivo =
+        calcImportePorPersona - calcImportePorPersonaPorcentaje;
+      const newCambioEfectivo = cambioEfectivo;
+      const newFormaPagoEfectivo = "efectivo";
+
+      dispatch({
+        type: "EDITAR_COMIDA",
+        payload: {
+          id: comida.id,
+          nombre: comida.nombre,
+          comida: comida.comida,
+          valorComida: comida.valorComida,
+
+          changes: {
+            ...comida,
+
+            valorBebidaCu: traerTotalBebidasCu,
+            importeTotalCuString: newImporteTotalCuEfectivo,
+            cambio: newCambioEfectivo,
+            formaPago: newFormaPagoEfectivo,
+          },
+        },
+      });
     } else {
       alert("Debe ingresar porcentaje");
       setMetodoPago("vacio");
     }
-    //setMetodoPago("vacio");
   }
-
-  /* useEffect(() => {
-    dispatch({
-      type: "AGREGAR_RESULTADO",
-      payload: { importePorPersonaDebitoRef },
-    });
-  }, []); */
-
-  /* useEffect(() => {
-    if (isChecked) {
-      // agrega resultado efectivo solo cuando es checked
-      dispatch({
-        type: "AGREGAR_RESULTADOEFECTIVO",
-        payload: { importePorPersonaEfectivotoRef },
-      });
-    }
-  }, [isChecked]);*/
-
-  const traerPorcentajeEfectivo = montoPorcentaje.reduce(
-    (acc, elem) => (acc = parseInt(elem.descuento)),
-    0
-  );
 
   const handleChangeModoPago = (event) => {
     const newMetodoPago = event.target.value; // asi se actualiza inmediatamente al sellecionar debito o efectivo
@@ -187,77 +203,16 @@ function Foods({
 
         calcDebito();
 
-        /*  setImportePorPersonaEfectivo(
-          (importePorPersonaEfectivotoRef.current =
-            importePorPersonaEfectivotoRef.current -
-            importePorPersonaEfectivotoRef.current)
-        );*/
-
         break;
       case "efectivo":
         // si paga en efectivo
 
         calcEfectivo();
 
-        /*  setImportePorPersonaDebito(
-          (importePorPersonaDebitoRef.current =
-            importePorPersonaDebitoRef.current -
-            importePorPersonaDebitoRef.current)
-        );*/
-
         break;
       default:
         break;
     }
-
-    /*
-    if (checked) {
-      // si paga en efectivo
-      const calcImportePorPersona =
-        parseInt(comida.valorComida) + parseInt(traerTotalBebidasCu);
-
-      let pagoEfectivo = 0;
-
-      if (traerPorcentajeEfectivo > 0) {
-        let porcentaje =
-          (calcImportePorPersona * traerPorcentajeEfectivo) / 100;
-
-        pagoEfectivo = calcImportePorPersona - porcentaje;
-
-        setImportePorPersonaEfectivo(
-          (importePorPersonaEfectivotoRef.current = pagoEfectivo.toFixed(2))
-        );
-
-        dispatch({
-          type: "AGREGAR_RESULTADOEFECTIVO",
-          payload: { importePorPersonaEfectivotoRef },
-        });
-
-        setImportePorPersonaDebito(
-          (importePorPersonaDebitoRef.current =
-            importePorPersonaDebitoRef.current -
-            importePorPersonaDebitoRef.current)
-        );
-      } else {
-        alert("Debe ingresar porcentaje");
-        setIsChecked(false);
-      }
-    } else {
-      setImportePorPersonaDebito(
-        (importePorPersonaDebitoRef.current = calcImportePorPersona.toFixed(2))
-      );
-
-      dispatch({
-        type: "AGREGAR_RESULTADO",
-        payload: { importePorPersonaDebitoRef },
-      });
-
-      setImportePorPersonaEfectivo(
-        (importePorPersonaEfectivotoRef.current =
-          importePorPersonaEfectivotoRef.current -
-          importePorPersonaEfectivotoRef.current)
-      );
-    }*/
   };
 
   //// FUNCION CHECKBOX PARA TACHAR LA LINEA
@@ -315,14 +270,22 @@ function Foods({
               textDecoration: checkedItems.line ? "line-through" : "none",
             }}
           >
-            ${traerTotalBebidasCu}
+            $ {traerTotalBebidasCu}
           </td>
           <td
             style={{
               textDecoration: checkedItems.line ? "line-through" : "none",
             }}
           >
-            {importePorPersonaEfectivo}
+            $ {importePorPersonaEfectivo}
+          </td>
+
+          <td
+            style={{
+              textDecoration: checkedItems.line ? "line-through" : "none",
+            }}
+          >
+            {comida.cambio}
           </td>
 
           <td
@@ -387,21 +350,28 @@ function Foods({
               textDecoration: checkedItems.line ? "line-through" : "none",
             }}
           >
-            ${comida.valorComida}
+            $ {comida.valorComida}
           </td>
           <td
             style={{
               textDecoration: checkedItems.line ? "line-through" : "none",
             }}
           >
-            ${traerTotalBebidasCu}
+            $ {traerTotalBebidasCu}
           </td>
           <td
             style={{
               textDecoration: checkedItems.line ? "line-through" : "none",
             }}
           >
-            {importePorPersonaDebito}
+            $ {importePorPersonaDebito}
+          </td>
+          <td
+            style={{
+              textDecoration: checkedItems.line ? "line-through" : "none",
+            }}
+          >
+            $ {cambioDebito}
           </td>
 
           <td
@@ -473,14 +443,21 @@ function Foods({
               textDecoration: checkedItems.line ? "line-through" : "none",
             }}
           >
-            ${traerTotalBebidasCu}
+            $ {traerTotalBebidasCu}
           </td>
           <td
             style={{
               textDecoration: checkedItems.line ? "line-through" : "none",
             }}
           >
-            {importePorPersonaDebito}
+            $ {calcImportePorPersona}
+          </td>
+          <td
+            style={{
+              textDecoration: checkedItems.line ? "line-through" : "none",
+            }}
+          >
+            {comida.cambio}
           </td>
 
           <td

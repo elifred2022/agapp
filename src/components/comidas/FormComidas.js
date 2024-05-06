@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { v4 as uuidv4 } from "uuid"; // biblioteca para generar ID unico
 import { BiSolidSave } from "react-icons/bi";
 
@@ -13,8 +13,29 @@ export default function FormComidas({
   const [nombre, setNombre] = useState("");
   const [comida, setComida] = useState("");
   const [valorComida, setValorComida] = useState("");
+  const [valorBebidaCu, setValorBebidaCu] = useState("");
+  //const valorBebidaCuString = valorBebidaCu.toString();
+  const [importeTotalCu, setImporteTotalCu] = useState("");
+  //const importeTotalCuString = importeTotalCu.toString();
+  const [cambio, setCambio] = useState("");
+  // const cambioString = cambio.toString();
+  const [formaPago, setFormarPAgo] = useState("vacio");
 
   const uniqueId = uuidv4(); // gegera un unico ID
+
+  const importePorPersonaDebitoRef = useRef(importeTotalCu);
+
+  const traerTotalBebidasCu = montoBebidaCu.reduce(
+    (acc, elem) => (acc = parseInt(elem.totalBebidasCuString)),
+    0
+  );
+
+  const traerValorComidaCu = comidas.reduce(
+    (acc, elem) => (acc = parseInt(elem.valorComida)),
+    0
+  );
+
+  const calcImportePorPersona = parseInt() + parseInt(traerTotalBebidasCu);
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
@@ -25,11 +46,19 @@ export default function FormComidas({
           nombre,
           comida,
           valorComida,
+          valorBebidaCu,
+          importeTotalCu,
+          cambio,
+          formaPago,
         }, // id: uniqueId genera id unico
       });
       setNombre("");
       setComida("");
       setValorComida("");
+      setValorBebidaCu("");
+      setImporteTotalCu("");
+      setCambio("");
+      setFormarPAgo("vacio");
     }
   };
 
@@ -65,11 +94,19 @@ export default function FormComidas({
                 nombre,
                 comida,
                 valorComida,
+                valorBebidaCu,
+                importeTotalCu,
+                cambio,
+                formaPago,
               },
             });
             setNombre("");
             setComida("");
             setValorComida("");
+            setValorBebidaCu("");
+            setImporteTotalCu("");
+            setCambio("");
+            setFormarPAgo("");
           }}
         >
           <BiSolidSave />
