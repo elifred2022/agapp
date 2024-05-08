@@ -98,8 +98,8 @@ export default function Reducer(state, action) {
     case "EDITAR_RESULTADO": {
       return {
         ...state,
-        resultado: state.resultado.map((resultado) =>
-          resultado.id === action.payload.id ? action.payload : resultado
+        resultado: state.resultado.map((result) =>
+          result.id === action.payload.id ? action.payload : result
         ),
       };
     }

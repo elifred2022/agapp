@@ -13,13 +13,13 @@ export default function FormComidas({
   const [nombre, setNombre] = useState("");
   const [comida, setComida] = useState("");
   const [valorComida, setValorComida] = useState("");
-  const [valorBebidaCu, setValorBebidaCu] = useState("");
-  //const valorBebidaCuString = valorBebidaCu.toString();
-  const [importeTotalCu, setImporteTotalCu] = useState("");
-  //const importeTotalCuString = importeTotalCu.toString();
+  const [valorBebidaCu, setValorBebidaCu] = useState(0);
+  const valorBebidaCuString = valorBebidaCu.toString();
+  const [importeTotalCu, setImporteTotalCu] = useState(0);
+  const importeTotalCuString = importeTotalCu.toString();
   const [cambio, setCambio] = useState("");
   // const cambioString = cambio.toString();
-  const [formaPago, setFormarPAgo] = useState("vacio");
+  const [formaPago, setFormarPAgo] = useState("inicial");
 
   const uniqueId = uuidv4(); // gegera un unico ID
 
@@ -46,8 +46,8 @@ export default function FormComidas({
           nombre,
           comida,
           valorComida,
-          valorBebidaCu,
-          importeTotalCu,
+          valorBebidaCu: valorBebidaCuString,
+          importeTotalCu: importeTotalCuString,
           cambio,
           formaPago,
         }, // id: uniqueId genera id unico
@@ -58,7 +58,7 @@ export default function FormComidas({
       setValorBebidaCu("");
       setImporteTotalCu("");
       setCambio("");
-      setFormarPAgo("vacio");
+      setFormarPAgo("inicial");
     }
   };
 

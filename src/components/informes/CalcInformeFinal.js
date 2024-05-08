@@ -10,6 +10,7 @@ const CalcInformeFinal = ({
 }) => {
   const [totalFinalGral, setTotalFinalGral] = useState(0);
   const [acumDebito, setAcumDebito] = useState(0);
+  const acumDebitoString = acumDebito.toString();
   const [acumEfectivo, setAcumEfectivo] = useState(0);
   const [acumTotal, setAcumTotal] = useState(0);
 
@@ -18,34 +19,46 @@ const CalcInformeFinal = ({
     (acc, elem) => acc + parseInt(elem.importePorPersonaDebitoRef.current),
     0
   );
-  /*
+
+  const traerImporteDebitoSelecc = comidas.reduce(
+    (acc, elem) => acc + parseInt(elem.importeTotalCu),
+    0
+  );
+
   useEffect(() => {
-    setAcumDebito(traerImporteDebito);
-  }, [traerImporteDebito]);*/
+    setAcumDebito(traerImporteDebitoSelecc);
+  }, [traerImporteDebitoSelecc]);
+
+  console.log(traerImporteDebitoSelecc);
 
   const traerImporteEfectivo = resultadoEfectivo.reduce(
     (acc, elem) => acc + parseInt(elem.importePorPersonaEfectivotoRef.current),
     0
   );
 
+  // importeTotalCu
+
+  const traerImporteTotalCu = comidas.reduce(
+    (acc, elem) => acc + parseInt(elem.importeTotalCu),
+    0
+  );
+
   const calcTotalApagar =
-    parseInt(traerImporteDebito) + parseInt(traerImporteEfectivo);
+    parseInt(traerImporteDebitoSelecc) + parseInt(traerImporteEfectivo);
 
   function botonCalculoTotal() {
-    setAcumDebito(traerImporteDebito);
+    setAcumDebito(traerImporteDebitoSelecc);
     setAcumEfectivo(traerImporteEfectivo);
     setAcumTotal(calcTotalApagar);
   }
 
   return (
     <>
-      <h3 className="yellow">Total debito: $ {acumDebito.toLocaleString()}</h3>
+      <h3 className="yellow">Total debito: $ {acumDebitoString}</h3>
       <h3 className="yellow">
         Total efectivo: $ {acumEfectivo.toLocaleString()}
       </h3>
-      <h3 className="yellow">
-        Total general a pagar: $ {acumTotal.toLocaleString()}
-      </h3>
+      <h3 className="yellow">Total general a pagar: $ {calcTotalApagar}</h3>
 
       <button className="btn-calc" onClick={botonCalculoTotal}>
         Calcular totales

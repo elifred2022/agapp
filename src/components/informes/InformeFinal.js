@@ -69,7 +69,7 @@ function Foods({
 
   const [importePorPersonaEfectivo, setImportePorPersonaEfectivo] = useState(0);
 
-  const [metodoPago, setMetodoPago] = useState("vacio");
+  const [metodoPago, setMetodoPago] = useState("inicial");
 
   //const uniqueId = uuidv4();
 
@@ -98,6 +98,52 @@ function Foods({
   const calcImportePorPersonaPorcentaje =
     (calcImportePorPersona * traerPorcentajeEfectivo) / 100;
 
+  useEffect(() => {
+    let pagoDebito = 0;
+
+    pagoDebito = calcImportePorPersona;
+
+    setImportePorPersonaDebito(
+      parseInt((importePorPersonaDebitoRef.current = pagoDebito))
+    );
+
+    /*
+    dispatch({
+      type: "AGREGAR_RESULTADO",
+      payload: { importePorPersonaDebitoRef },
+    });*/
+
+    // update the comidas state with the new values valorBebidaCuString, and cambioString
+
+    const newImporteTotalCu = calcImportePorPersona;
+    const newCambioDebito = cambioDebito;
+    const newFormaPago = "debito";
+
+    // PASAR A STRING
+    let valorBebidaCuStr = traerTotalBebidasCu.toString();
+    let importeTotalCuStr = newImporteTotalCu.toString();
+    let cambioStr = newCambioDebito.toString();
+
+    dispatch({
+      type: "EDITAR_COMIDA",
+      payload: {
+        id: comida.id,
+        nombre: comida.nombre,
+        comida: comida.comida,
+        valorComida: comida.valorComida,
+        valorBebidaCuString: montoBebidaCu.totalBebidasCuString,
+        changes: {
+          ...comida,
+
+          valorBebidaCu: valorBebidaCuStr,
+          importeTotalCu: importeTotalCuStr,
+          cambio: cambioStr,
+          formaPago: newFormaPago,
+        },
+      },
+    });
+  }, [calcImportePorPersona]);
+
   const cambioDebito = 0;
 
   function calcDebito() {
@@ -108,21 +154,17 @@ function Foods({
     setImportePorPersonaDebito(
       parseInt((importePorPersonaDebitoRef.current = pagoDebito))
     );
-    dispatch({
-      type: "AGREGAR_RESULTADO",
-      payload: { importePorPersonaDebitoRef },
-    });
 
     // update the comidas state with the new values valorBebidaCuString, and cambioString
 
-    //const newNombre = comida.nombre;
-    //const newComida = comida.comida;
-    //const newValorComida = comida.valorComida;
-    //const newValorBebidaCu = traerTotalBebidasCu;
     const newImporteTotalCu = calcImportePorPersona;
     const newCambioDebito = cambioDebito;
     const newFormaPago = "debito";
-    // const newCambioString = 1;
+
+    // PASAR A STRING
+    let valorBebidaCuStr = traerTotalBebidasCu.toString();
+    let importeTotalCuStr = newImporteTotalCu.toString();
+    let cambioStr = newCambioDebito.toString();
 
     dispatch({
       type: "EDITAR_COMIDA",
@@ -135,13 +177,23 @@ function Foods({
         changes: {
           ...comida,
 
-          valorBebidaCu: traerTotalBebidasCu,
-          importeTotalCu: newImporteTotalCu,
-          cambio: newCambioDebito,
+          valorBebidaCu: valorBebidaCuStr,
+          importeTotalCu: importeTotalCuStr,
+          cambio: cambioStr,
           formaPago: newFormaPago,
         },
       },
     });
+
+    let newImportePorPersonaDebitoRef = newCambioDebito.toString();
+
+    /*  dispatch({
+      type: "EDITAR_RESULTADO",
+      payload: {
+        ...resultado,
+        importePorPersonaDebitoRef: importeTotalCuStr,
+      },
+    }); */
   }
 
   const cambioEfectivo = "formula de cambio";
@@ -157,10 +209,6 @@ function Foods({
       setImportePorPersonaEfectivo(
         parseInt((importePorPersonaEfectivotoRef.current = pagoEfectivo))
       );
-      dispatch({
-        type: "AGREGAR_RESULTADOEFECTIVO",
-        payload: { importePorPersonaEfectivotoRef },
-      });
 
       // UPDATE ESTADOS EFECTIVOS
 
@@ -168,6 +216,19 @@ function Foods({
         calcImportePorPersona - calcImportePorPersonaPorcentaje;
       const newCambioEfectivo = cambioEfectivo;
       const newFormaPagoEfectivo = "efectivo";
+
+      // PASAR A STRING
+      let valorBebidaCuStr = traerTotalBebidasCu.toString();
+      let importeTotalCuStr = newImporteTotalCuEfectivo.toString();
+      let cambioStr = newCambioEfectivo.toString();
+
+      /*   dispatch({
+        type: "EDITAR_RESULTADO",
+        payload: {
+          ...resultado,
+          importePorPersonaDebitoRef: importeTotalCuStr,
+        },
+      }); */
 
       dispatch({
         type: "EDITAR_COMIDA",
@@ -180,16 +241,16 @@ function Foods({
           changes: {
             ...comida,
 
-            valorBebidaCu: traerTotalBebidasCu,
-            importeTotalCuString: newImporteTotalCuEfectivo,
-            cambio: newCambioEfectivo,
+            valorBebidaCu: valorBebidaCuStr,
+            importeTotalCu: importeTotalCuStr,
+            cambio: cambioStr,
             formaPago: newFormaPagoEfectivo,
           },
         },
       });
     } else {
       alert("Debe ingresar porcentaje");
-      setMetodoPago("vacio");
+      setMetodoPago("inicial");
     }
   }
 
@@ -263,7 +324,7 @@ function Foods({
               textDecoration: checkedItems.line ? "line-through" : "none",
             }}
           >
-            ${comida.valorComida}
+            $ {comida.valorComida}
           </td>
           <td
             style={{
@@ -401,7 +462,7 @@ function Foods({
         </tr>
       </>
     );
-  } else if (metodoPago === "vacio") {
+  } else if (metodoPago === "inicial") {
     foodContent = (
       <>
         <tr key={comida.id}>
@@ -473,7 +534,9 @@ function Foods({
                     value={metodoPago}
                     onChange={handleChangeModoPago}
                   >
-                    <option className="yellow" value="vacio"></option>
+                    <option className="yellow" value="inicial">
+                      Form pago
+                    </option>
                     <option className="yellow" value="debito">
                       Débito
                     </option>
